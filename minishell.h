@@ -47,10 +47,9 @@ char	**commandsplit(char *line);
 char	**parstoken(char *line);
 t_link	*linkinit(char **cmd, char **env);
 t_link	*parspipe(char **token, char **ev);
-t_bool	returnbuiltin(t_link *cmd);
-t_bool	returncommand(t_link *cmd);
-t_bool	returnother(t_link *cmd);
-t_bool	returndollar_signal(t_link *cmd);
+void	givegoodpath(t_link *cmd);
+void	execbuiltin(t_link *cmd);
 void	execcmd(t_link *cmd);
+void	execdollar(t_link *cmd);
 
 #endif

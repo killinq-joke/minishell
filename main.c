@@ -6,22 +6,11 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/10 16:51:34 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/10 20:54:39 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_link	*linkinit(char **cmd, char **env)
-{
-	t_link	*new;
-
-	new = calloc(1, sizeof (t_link));
-	new->env = env;
-	new->command = cmd;
-	new->next = NULL;
-	return (new);
-}
 
 int	counttoken(char *line)
 {
@@ -72,6 +61,35 @@ int	counttoken(char *line)
 		i++;
 	}
 	return (count);
+}
+
+char	*parsenv(char *line)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (line[i])
+	{
+		
+		if (line[i] == QUOTE)
+		{
+			while (line[i] != QUOTE)
+				i++;
+		}
+		if (line[i] == '$')
+		{
+			if (line[i + 1] != SPACE)
+			{
+				j = -1;
+				while (line[++j] && line[j] != SPACE)
+					;
+				ft_substr(line, i, j);
+			}
+		}
+		i++;
+	}
+	return ();
 }
 
 unsigned int	wordlen(char *line)
@@ -153,6 +171,7 @@ int	main(int ac, char **av, char **ev)
 	{
 		line = readline("minishell> ");
 		add_history(line);
+		line = parsenv(line);
 		tokens = parstoken(line);
 		if (tokens)
 		{
