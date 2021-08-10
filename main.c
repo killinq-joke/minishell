@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/10 12:00:05 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/10 13:50:42 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,36 +32,46 @@ int	counttoken(char *line)
 
 	count = 0;
 	i = 0;
-	if (line[i])
+	if (line[i] && line[i] != SPACE && line[i] != DQUOTE && line[i] != QUOTE)
 		count++;
 	while (line[i])
 	{
 		if (line[i] == SPACE)
 		{
+			printf("space ---> %s\n", &line[i]);
 			while (line[i] == SPACE)
 				i++;
-			count++;
+			if (line[i])
+				count++;
 		}
 		if (line[i] == DQUOTE)
 		{
 			i++;
+			printf("wow ---> %s\n", &line[i]);
 			while (line[i] != DQUOTE && line[i])
 				i++;
-			if (line[i])
+			if (line[i] == DQUOTE)
 				i++;
 			else
+			{
 				ft_puterr("error: unclosed dquotes not supported\n");
+				return (-1);
+			}
 			count++;
 		}
 		if (line[i] == QUOTE)
 		{
+			printf("wow ---> %s\n", &line[i]);
 			i++;
 			while (line[i] != QUOTE && line[i])
 				i++;
-			if (line[i])
+			if (line[i] == QUOTE)
 				i++;
 			else
+			{
 				ft_puterr("error: unclosed quotes not supported\n");
+				return (-1);
+			}
 			count++;
 		}
 		i++;
@@ -96,24 +106,38 @@ unsigned int	wordlen(char *line)
 	return (i);
 }
 
+int	spacecount(char *line)
+{
+	int	nb;
+
+	nb = 0;
+	while (line[nb] && line[nb] == SPACE)
+		nb++;
+	return (nb);
+}
+
 char	**commandsplit(char *line)
 {
-	char			**split;
-	unsigned int	i;
-	unsigned int	j;
-	unsigned int	wordcount;
+	char	**split;
+	int		i;
+	size_t	j;
+	int		wordcount;
 
 	wordcount = counttoken(line);
+	if (wordcount == -1)
+		return (NULL);
+	split = calloc(wordcount + 1, sizeof (char *));
 	j = 0;
 	i = 0;
 	while (i < wordcount && j < ft_strlen(line))
 	{
 		split[i] = ft_substr(line, j, wordlen(&line[j]));
-		printf("%u\n", wordlen(&line[j]));
+		//printf("%u\n", wordlen(&line[j]));
 		j += wordlen(&line[j]) + 1;
 		i++;
 	}
-	printf("count == %d\n", counttoken(line));
+	split[i] = NULL;
+	printf("count == %d\n", wordcount);
 	return (split);
 }
 
@@ -128,7 +152,10 @@ int	main(int ac, char **av, char **ev)
 	{
 		line = readline("minishell> ");
 		add_history(line);
-		basepars(line);
+		if (parspipe(line))
+		{
+			//interpret
+		}
 	}
 	return (0);
 }

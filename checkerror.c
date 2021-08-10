@@ -6,21 +6,21 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/10 11:56:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/10 12:03:22 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/10 12:05:49 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_space(char *str)
+t_bool	check_space(char *str)
 {
 	int	i;
 
 	i = -1;
 	while (str[++i])
 		if (str[i] != ' ')
-			return (1);
-	return (0);
+			return (true);
+	return (false);
 }
 
 int	check_double_or_simple_quotes(char *str, int i, char c)

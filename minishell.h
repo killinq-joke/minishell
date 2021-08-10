@@ -23,7 +23,7 @@
 # include "libft.h"
 
 # define QUOTE 39
-# define DQUOTE 35
+# define DQUOTE 34
 # define SPACE 32
 
 typedef struct s_link	t_link;
@@ -44,6 +44,7 @@ typedef struct s_link
 }				t_link;
 
 t_bool	checkerror(char *line);
+char	**commandsplit(char *line);
 t_link	*parspipe(char *line);
 t_bool	returnbuiltin(t_link *cmd);
 t_bool	returncommand(t_link *cmd);
