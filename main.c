@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/10 20:54:39 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/10 23:54:21 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,31 +65,54 @@ int	counttoken(char *line)
 
 char	*parsenv(char *line)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	*res;
+	char	*tmp;
+	char	*env;
 
+	res = calloc(1, sizeof (char));
 	i = 0;
 	while (line[i])
 	{
-		
 		if (line[i] == QUOTE)
 		{
 			while (line[i] != QUOTE)
+			{
+				tmp = res;
+				res = ft_joinchar(tmp, line[i]);
+				free(tmp);
 				i++;
+			}
 		}
 		if (line[i] == '$')
 		{
 			if (line[i + 1] != SPACE)
 			{
-				j = -1;
-				while (line[++j] && line[j] != SPACE)
-					;
-				ft_substr(line, i, j);
+				j = 0;
+				while (line[i + j + 1] && line[i + j + 1] != SPACE
+					&& line[i + j + 1] != QUOTE && line[i + j + 1] != DQUOTE)
+					j++;
+				env = ft_substr(&line[1], i, j);
+				printf("%s\n", env);
+				tmp = res;
+				res = ft_strjoin(tmp, getenv(env));
+				free(tmp);
+				free(env);
+				i += j;
 			}
 		}
+		else
+		{
+			tmp = res;
+			res = ft_joinchar(tmp, line[i]);
+			free(tmp);
+		}
+		printf("%s\n", res);
 		i++;
 	}
-	return ();
+	//res[i] = 0;
+	return (res);
 }
 
 unsigned int	wordlen(char *line)
@@ -160,6 +183,7 @@ char	**commandsplit(char *line)
 int	main(int ac, char **av, char **ev)
 {
 	char	*line;
+	char	*tmp;
 	char	**tokens;
 	t_link	*head;
 	t_link	*current;
@@ -171,7 +195,9 @@ int	main(int ac, char **av, char **ev)
 	{
 		line = readline("minishell> ");
 		add_history(line);
-		line = parsenv(line);
+		tmp = line;
+		line = parsenv(tmp);
+		free(tmp);
 		tokens = parstoken(line);
 		if (tokens)
 		{
