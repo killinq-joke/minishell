@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/10 13:50:42 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/10 13:59:11 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	counttoken(char *line)
 	{
 		if (line[i] == SPACE)
 		{
-			printf("space ---> %s\n", &line[i]);
 			while (line[i] == SPACE)
 				i++;
 			if (line[i])
@@ -47,7 +46,6 @@ int	counttoken(char *line)
 		if (line[i] == DQUOTE)
 		{
 			i++;
-			printf("wow ---> %s\n", &line[i]);
 			while (line[i] != DQUOTE && line[i])
 				i++;
 			if (line[i] == DQUOTE)
@@ -61,7 +59,6 @@ int	counttoken(char *line)
 		}
 		if (line[i] == QUOTE)
 		{
-			printf("wow ---> %s\n", &line[i]);
 			i++;
 			while (line[i] != QUOTE && line[i])
 				i++;
@@ -103,6 +100,7 @@ unsigned int	wordlen(char *line)
 	else
 		while (line[i] != SPACE && line[i])
 			i++;
+	printf("%u <-- len\n", i);
 	return (i);
 }
 
@@ -122,6 +120,7 @@ char	**commandsplit(char *line)
 	int		i;
 	size_t	j;
 	int		wordcount;
+	int		len;
 
 	wordcount = counttoken(line);
 	if (wordcount == -1)
@@ -131,9 +130,11 @@ char	**commandsplit(char *line)
 	i = 0;
 	while (i < wordcount && j < ft_strlen(line))
 	{
-		split[i] = ft_substr(line, j, wordlen(&line[j]));
+		len = wordlen(&line[j]);
+		split[i] = ft_substr(line, j, len);
 		//printf("%u\n", wordlen(&line[j]));
-		j += wordlen(&line[j]) + 1;
+		j += len;
+		j += spacecount(&line[j]);
 		i++;
 	}
 	split[i] = NULL;
