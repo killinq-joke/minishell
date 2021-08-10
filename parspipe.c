@@ -6,25 +6,67 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:28:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/10 13:47:28 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/10 16:50:25 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_link	*parspipe(char *line)
+char	**parstoken(char *line)
 {
-	char	**args;
+	char	**tokens;
 	int		i;
 
-	args = commandsplit(line);
-	if (args == NULL)
-		return (NULL);
+	tokens = commandsplit(line);
 	i = 0;
-	while (args[i])
+	while (tokens && tokens[i])
 	{
-		printf("%s\n", args[i]);
+		printf("%s\n", tokens[i]);
 		i++;
 	}
-	return NULL;
+	return (tokens);
+}
+
+char	**parscmd(char **tokens, size_t *i)
+{
+	size_t	len;
+	size_t	j;
+	char	**command;
+
+	len = 0;
+	while (tokens[*i + len] && ft_strcmp(tokens[*i + len], "|"))
+		len++;
+	command = calloc(len + 1, sizeof (char *));
+	j = 0;
+	while (j < len)
+	{
+		command[j] = ft_strdup(tokens[*i]);
+		j++;
+		(*i)++;
+	}
+	command[j] = NULL;
+	return (command);
+}
+
+t_link	*parspipe(char **tokens, char **ev)
+{
+	t_link	*head;
+	t_link	*current;
+	size_t	i;
+
+	i = 0;
+	head = linkinit(NULL, ev);
+	current = head;
+	while (tokens[i])
+	{
+		current->command = parscmd(tokens, &i);
+		if (tokens[i] && !ft_strcmp(tokens[i], "|"))
+			i++;
+		if (!tokens[i])
+			break ;
+		current->next = linkinit(NULL, ev);
+		current = current->next;
+	}
+	free(tokens);
+	return (head);
 }

@@ -35,8 +35,7 @@ typedef enum e_bool {
 
 typedef struct s_link
 {
-	char	*command;
-	char	**args;
+	char	**command;
 	t_bool	operator;
 	char	**env;
 	int		fd_tmp;
@@ -45,7 +44,9 @@ typedef struct s_link
 
 t_bool	checkerror(char *line);
 char	**commandsplit(char *line);
-t_link	*parspipe(char *line);
+char	**parstoken(char *line);
+t_link	*linkinit(char **cmd, char **env);
+t_link	*parspipe(char **token, char **ev);
 t_bool	returnbuiltin(t_link *cmd);
 t_bool	returncommand(t_link *cmd);
 t_bool	returnother(t_link *cmd);
