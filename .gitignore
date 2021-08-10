@@ -1,0 +1,11 @@
+*.swp
+*.o
+.DS_Store
+a.out
+*.dSYM
+minishell
+*.a
+.vscode
+-n
+zak
+test*
