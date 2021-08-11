@@ -27,17 +27,26 @@
 # define SPACE 32
 
 typedef struct s_link	t_link;
+typedef struct s_env	t_env;
 
 typedef enum e_bool {
 	false,
 	true,
 }				t_bool;
 
+typedef struct s_env
+{
+	char	*name;
+	char	*value;
+	t_env	*next;
+}				t_env;
+
 typedef struct s_link
 {
 	char	**command;
 	t_bool	operator;
-	char	**env;
+	char	**path;
+	t_env	*env;
 	int		fd_tmp;
 	t_link	*next;
 }				t_link;

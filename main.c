@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/11 18:33:22 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/11 20:01:23 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	counttoken(char *line)
 		if (line[i] == DQUOTE)
 		{
 			i++;
-			while (line[i] != DQUOTE && line[i])
+			while (line[i] && line[i] != DQUOTE)
 				i++;
 			if (line[i] == DQUOTE)
 				i++;
@@ -47,10 +47,12 @@ int	counttoken(char *line)
 		if (line[i] == QUOTE)
 		{
 			i++;
-			while (line[i] != QUOTE && line[i])
+			while (line[i] && line[i] != QUOTE)
 				i++;
 			if (line[i] == QUOTE)
+			{
 				i++;
+			}
 			else
 			{
 				ft_puterr("error: unclosed quotes not supported\n");
@@ -77,7 +79,11 @@ char	*parsenv(char *line)
 	{
 		if (line[i] == QUOTE)
 		{
-			while (line[i] != QUOTE)
+			tmp = res;
+			res = ft_joinchar(tmp, line[i]);
+			free(tmp);
+			i++;
+			while (line[i] && line[i] != QUOTE)
 			{
 				tmp = res;
 				res = ft_joinchar(tmp, line[i]);
@@ -87,7 +93,7 @@ char	*parsenv(char *line)
 		}
 		if (line[i] == '$')
 		{
-			if (line[i + 1] != SPACE)
+			if (line[i] && line[i + 1] != SPACE)
 			{
 				j = 0;
 				while (line[i + j + 1] && line[i + j + 1] != SPACE
@@ -161,7 +167,7 @@ char	**commandsplit(char *line)
 	int		len;
 
 	wordcount = counttoken(line);
-	if (wordcount == -1)
+	if (wordcount == -1 || !wordcount)
 		return (NULL);
 	split = calloc(wordcount + 1, sizeof (char *));
 	j = 0;

@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/10 20:55:02 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/11 18:24:49 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/11 19:47:38 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,5 @@ char	*ft_joinchar(char *str, char c)
 		i++;
 	}
 	join[i] = c;
-	i++;
-	join[i] = '\0';
 	return (join);
 }
