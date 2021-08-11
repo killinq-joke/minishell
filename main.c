@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/11 18:01:30 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/11 18:33:22 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ char	*parsenv(char *line)
 		printf("%s\n", res);
 		i++;
 	}
-	//res[i] = 0;
 	return (res);
 }
 
@@ -162,7 +161,7 @@ char	**commandsplit(char *line)
 	int		len;
 
 	wordcount = counttoken(line);
-	if (wordcount == -1 || !wordcount)
+	if (wordcount == -1)
 		return (NULL);
 	split = calloc(wordcount + 1, sizeof (char *));
 	j = 0;
@@ -199,7 +198,7 @@ int	main(int ac, char **av, char **ev)
 		line = parsenv(tmp);
 		free(tmp);
 		tokens = parstoken(line);
-		if (tokens)
+		if (tokens && splitlen(tokens))
 		{
 			head = parspipe(tokens, ev);
 			current = head;

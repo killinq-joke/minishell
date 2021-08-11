@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   split.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/18 12:01:36 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/11 18:25:10 by ztouzri          ###   ########.fr       */
+/*   Created: 2021/08/11 18:27:36 by ztouzri           #+#    #+#             */
+/*   Updated: 2021/08/11 18:28:36 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-size_t	ft_strlen(const char *s)
+size_t	splitlen(char **split)
 {
 	size_t	i;
 
 	i = 0;
-	while (s && s[i])
+	while (split && split[i])
 		i++;
 	return (i);
 }

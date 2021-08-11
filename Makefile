@@ -6,7 +6,7 @@
 #    By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/02 09:47:58 by ztouzri           #+#    #+#              #
-#    Updated: 2021/08/10 12:15:21 by ztouzri          ###   ########.fr        #
+#    Updated: 2021/08/11 18:29:11 by ztouzri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror -g -fsanitize=address
 LIB		= libft.a
 
-SRCS	= main.c parspipe.c checkerror.c
+SRCS	= main.c parspipe.c checkerror.c split.c
 OBJS	= $(SRCS:c=o)
 
 .c.o:

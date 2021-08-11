@@ -52,4 +52,6 @@ void	execbuiltin(t_link *cmd);
 void	execcmd(t_link *cmd);
 void	execdollar(t_link *cmd);
 
+size_t	splitlen(char **split);
+
 #endif
