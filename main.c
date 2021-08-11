@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/10 23:54:21 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/11 18:01:30 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ char	**commandsplit(char *line)
 	int		len;
 
 	wordcount = counttoken(line);
-	if (wordcount == -1)
+	if (wordcount == -1 || !wordcount)
 		return (NULL);
 	split = calloc(wordcount + 1, sizeof (char *));
 	j = 0;
