@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/12 17:41:25 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/12 21:04:27 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ char	*parsenv(char *line)
 	int		j;
 	char	*res;
 	char	*tmp;
+	char	*tmp1;
 	char	*env;
+	int		status;
 
 	res = calloc(1, sizeof (char));
 	i = 0;
@@ -102,9 +104,23 @@ char	*parsenv(char *line)
 					&& line[i + j + 1] != QUOTE && line[i + j + 1] != DQUOTE)
 					j++;
 				env = ft_substr(&line[1], i, j);
-				tmp = res;
-				res = ft_strjoin(tmp, getenv(env));
-				free(tmp);
+				if (!ft_strcmp(env, "?"))
+				{
+					//a modifier
+					WEXITSTATUS(status);
+					tmp = res;
+					tmp1 = ft_itoa(status);
+					res = ft_strjoin(tmp, tmp1);
+					printf("%d\n", status);
+					free(tmp1);
+					free(tmp);
+				}
+				else
+				{
+					tmp = res;
+					res = ft_strjoin(tmp, getenv(env));
+					free(tmp);
+				}
 				free(env);
 				i += j;
 			}
@@ -198,17 +214,20 @@ char	**commandsplit(char *line)
 	return (split);
 }
 
-int	main(int ac, char **av)//, char **ev)
+int	main(int ac, char **av, char **ev)
 {
 	char	*line;
 	char	*tmp;
 	char	**tokens;
 	t_link	*head;
 	t_link	*current;
+	t_env	*env;
 	int		i;
 
 	(void)ac;
 	(void)av;
+	env = envmaker(ev);
+	printenv(env);
 	while (1)
 	{
 		line = readline("minishell> ");
@@ -238,7 +257,6 @@ int	main(int ac, char **av)//, char **ev)
 				}
 				current = current->next;
 			}
-			//interpret
 		}
 	}
 	return (0);

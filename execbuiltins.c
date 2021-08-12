@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/12 17:43:26 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/12 21:01:25 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	echo(t_link *cmd)
 	while (cmd->command[i])
 	{
 		ft_putstr(cmd->command[i]);
-		if (args[i + 1])
+		if (cmd->command[i + 1])
 			ft_putchar(' ');
 		i++;
 	}
@@ -108,20 +108,21 @@ void	cd(char **args)
 	// execve("/bin/ls", (char *[]){"/bin/ls", NULL}, NULL);
 }
 
-void	execbuiltins(t_link *cmd)
+void	execbuiltins(t_link *cmd, t_env *env)
 {
 	if (ft_strcmp(cmd->command[0], "pwd") == 0)
-		// appeller fonction pwd;
+		pwd();
 	if (ft_strcmp(cmd->command[0], "echo") == 0)
-		// appeller fonction echo;
+		echo(cmd);
 	if (ft_strcmp(cmd->command[0], "env") == 0)
+		printenv(env);
 		// appeller fonction env;
-	if (ft_strcmp(cmd->command[0], "cd") == 0)
+	//if (ft_strcmp(cmd->command[0], "cd") == 0)
 		// appeller fonction cd;
-	if (ft_strcmp(cmd->command[0], "export") == 0)
+	//if (ft_strcmp(cmd->command[0], "export") == 0)
 		// appeller fonction export;
-	if (ft_strcmp(cmd->command[0], "unset") == 0)
+	//if (ft_strcmp(cmd->command[0], "unset") == 0)
 		// appeller fonction unset;
 	if (ft_strcmp(cmd->command[0], "exit") == 0)
-		// appeller fonction exit;
+		exit(0);
 }

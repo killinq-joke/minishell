@@ -16,6 +16,10 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/wait.h>
+# include <sys/types.h>
+# include <sys/time.h>
+# include <sys/resource.h>
 # include <signal.h>
 # include <errno.h>
 # include <unistd.h>
@@ -60,6 +64,9 @@ void	givegoodpath(t_link *cmd);
 void	execbuiltin(t_link *cmd);
 void	execcmd(t_link *cmd);
 void	execdollar(t_link *cmd);
+t_env	*envinit(char *name, char *value);
+t_env	*envmaker(char **env);
+void	printenv(t_env *env);
 
 size_t	splitlen(char **split);
 

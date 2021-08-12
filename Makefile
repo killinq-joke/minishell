@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mout <mout@student.42.fr>                  +#+  +:+       +#+         #
+#    By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/02 09:47:58 by ztouzri           #+#    #+#              #
-#    Updated: 2021/08/12 09:37:41 by mout             ###   ########.fr        #
+#    Updated: 2021/08/12 20:59:45 by ztouzri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror -g -fsanitize=address
 LIB		= libft.a
 
-SRCS	= main.c parspipe.c checkerror.c split.c
+SRCS	= main.c parspipe.c checkerror.c split.c env.c
 OBJS	= $(SRCS:c=o)
 
 .c.o:
