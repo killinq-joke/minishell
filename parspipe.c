@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parspipe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mout <mout@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:28:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/12 09:01:52 by mout             ###   ########.fr       */
+/*   Updated: 2021/08/12 17:37:23 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	**parstoken(char *line)
 	i = 0;
 	while (tokens && tokens[i])
 	{
-		printf("%s\n", tokens[i]);
+		//printf("%s\n", tokens[i]);
 		i++;
 	}
 	return (tokens);

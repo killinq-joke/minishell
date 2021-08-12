@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mout <mout@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/12 12:43:44 by mout             ###   ########.fr       */
+/*   Updated: 2021/08/12 17:41:25 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ char	*parsenv(char *line)
 					&& line[i + j + 1] != QUOTE && line[i + j + 1] != DQUOTE)
 					j++;
 				env = ft_substr(&line[1], i, j);
-				//printf("%s\n", env);
 				tmp = res;
 				res = ft_strjoin(tmp, getenv(env));
 				free(tmp);
@@ -116,12 +115,7 @@ char	*parsenv(char *line)
 			res = ft_joinchar(tmp, line[i]);
 			free(tmp);
 		}
-		//printf("%s\n", res);
-		//ft_putstr(res);
 		i++;
-		//{
-		//	printf("%s\n", res);
-		//}
 	}
 	return (res);
 }
@@ -164,7 +158,7 @@ unsigned int	wordlen(char *line)
 			}
 			i++;
 		}
-	printf("%u <-- len\n", i);
+	//printf("%u <-- len\n", i);
 	return (i);
 }
 
@@ -201,7 +195,6 @@ char	**commandsplit(char *line)
 		i++;
 	}
 	split[i] = NULL;
-	//printf("count == %d\n", wordcount);
 	return (split);
 }
 
@@ -221,6 +214,9 @@ int	main(int ac, char **av)//, char **ev)
 		line = readline("minishell> ");
 		add_history(line);
 		tmp = line;
+		line = ft_strtrim(line, " ");
+		free(tmp);
+		tmp = line;
 		line = parsenv(tmp);
 		free(tmp);
 		tokens = parstoken(line);
@@ -230,10 +226,13 @@ int	main(int ac, char **av)//, char **ev)
 			current = head;
 			while (current)
 			{
-				printf("--------------------------------------------------------------------------------\n");
+				printf("----------------------------------------------------------\n");
 				i = 0;
 				while (current->command[i])
 				{
+					tmp = current->command[i];
+					current->command[i] = ft_trimquotes(current->command[i]);
+					free(tmp);
 					printf("%s\n", current->command[i]);
 					i++;
 				}

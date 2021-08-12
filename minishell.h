@@ -24,7 +24,7 @@
 
 # define QUOTE '\''
 # define DQUOTE '"'
-//# define SPACE 32
+# define SPACE 32
 
 typedef struct s_link	t_link;
 typedef struct s_env	t_env;
