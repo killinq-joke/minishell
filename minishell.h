@@ -50,6 +50,7 @@ typedef struct s_link
 	char	**command;
 	t_bool	operator;
 	char	**path;
+	char	*path_bis;
 	t_env	*env;
 	int		fd_tmp;
 	t_link	*next;
@@ -60,14 +61,14 @@ char	**commandsplit(char *line);
 char	**parstoken(char *line);
 t_link	*linkinit(char **cmd);
 t_link	*parspipe(char **token);
-void	givegoodpath(t_link *cmd);
+void	give_good_path(t_link *cmd);
 void	execbuiltin(t_link *cmd);
 void	execcmd(t_link *cmd);
 void	execdollar(t_link *cmd);
 t_env	*envinit(char *name, char *value);
 t_env	*envmaker(char **env);
 void	printenv(t_env *env);
-
+void	givepath(t_env *path, t_link *cmd);
 size_t	splitlen(char **split);
 
 #endif

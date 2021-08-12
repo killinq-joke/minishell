@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/12 21:04:27 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/12 21:33:28 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,7 @@ int	main(int ac, char **av, char **ev)
 	char	*line;
 	char	*tmp;
 	char	**tokens;
-	t_link	*head;
+	t_link	*cmd;
 	t_link	*current;
 	t_env	*env;
 	int		i;
@@ -227,35 +227,38 @@ int	main(int ac, char **av, char **ev)
 	(void)ac;
 	(void)av;
 	env = envmaker(ev);
-	printenv(env);
 	while (1)
 	{
 		line = readline("minishell> ");
 		add_history(line);
-		tmp = line;
-		line = ft_strtrim(line, " ");
-		free(tmp);
-		tmp = line;
-		line = parsenv(tmp);
-		free(tmp);
-		tokens = parstoken(line);
-		if (tokens && splitlen(tokens))
+		if (checkerror(line) == true)
 		{
-			head = parspipe(tokens);
-			current = head;
-			while (current)
+			tmp = line;
+			line = ft_strtrim(line, " ");
+			free(tmp);
+			tmp = line;
+			line = parsenv(tmp);
+			free(tmp);
+			tokens = parstoken(line);
+			if (tokens && splitlen(tokens))
 			{
-				printf("----------------------------------------------------------\n");
-				i = 0;
-				while (current->command[i])
+				cmd = parspipe(tokens);
+				give_good_path(cmd);
+				current = cmd;
+				while (current)
 				{
-					tmp = current->command[i];
-					current->command[i] = ft_trimquotes(current->command[i]);
-					free(tmp);
-					printf("%s\n", current->command[i]);
-					i++;
+					printf("----------------------------------------------------------\n");
+					i = 0;
+					while (current->command[i])
+					{
+						tmp = current->command[i];
+						current->command[i] = ft_trimquotes(current->command[i]);
+						free(tmp);
+						printf("%s\n", current->command[i]);
+						i++;
+					}
+					current = current->next;
 				}
-				current = current->next;
 			}
 		}
 	}

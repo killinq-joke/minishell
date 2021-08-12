@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 20:46:33 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/12 21:13:52 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/12 21:29:04 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	printenv(t_env *env)
 	current = env;
 	while (current)
 	{
-		printf("%s\n", current->name, current->value);
+		printf("%s=%s\n", current->name, current->value);
 		current = current->next;
 	}
 }
