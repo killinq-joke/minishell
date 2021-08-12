@@ -6,7 +6,7 @@
 /*   By: mout <mout@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/12 12:03:55 by mout             ###   ########.fr       */
+/*   Updated: 2021/08/12 12:43:44 by mout             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,21 @@ unsigned int	wordlen(char *line)
 	}
 	else
 		while (line[i] != SPACE && line[i])
+		{
+			if (line[i] == QUOTE)
+			{
+				i++;
+				while (line[i] != QUOTE && line[i])
+					i++;
+			}
+			else if (line[i] == DQUOTE)
+			{
+				i++;
+				while (line[i] != DQUOTE && line[i])
+					i++;
+			}
 			i++;
+		}
 	printf("%u <-- len\n", i);
 	return (i);
 }
