@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/13 00:48:58 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/13 00:52:09 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,14 @@ void	cd(t_link *cmd)
 	else
 		path = cmd->command[1];
 	if (chdir(path) == -1)
-	{
-		execve("/bin/ls", NULL, NULL);
 		cderror(path);
-	}
-	// execve("/bin/ls", (char *[]){"/bin/ls", NULL}, NULL);
+}
+
+void	export(t_link *cmd, t_env *env)
+{
+	int	i;
+
+	i = 1;
 }
 
 void	execbuiltins(t_link *cmd, t_env *env)
@@ -112,9 +115,8 @@ void	execbuiltins(t_link *cmd, t_env *env)
 		printenv(env);
 	if (ft_strcmp(cmd->command[0], "cd") == 0)
 		cd(cmd);
-		// appeller fonction cd;
-	//if (ft_strcmp(cmd->command[0], "export") == 0)
-		// appeller fonction export;
+	if (ft_strcmp(cmd->command[0], "export") == 0)
+		export(cmd, env);
 	//if (ft_strcmp(cmd->command[0], "unset") == 0)
 		// appeller fonction unset;
 	if (ft_strcmp(cmd->command[0], "exit") == 0)
