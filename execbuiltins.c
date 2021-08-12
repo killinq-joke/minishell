@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/13 00:39:45 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/13 00:48:58 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,12 @@ void	cderror(char *path)
 		ft_puterr("Not a directory\n");
 }
 
-void	cd(char **args)
+void	cd(t_link *cmd)
 {
 	int		len;
 	char	*path;
 
-	len = splitlen(args);
+	len = linklen(cmd);
 	if (!len)
 	{
 		path = getenv("HOME");
@@ -93,9 +93,12 @@ void	cd(char **args)
 		}
 	}
 	else
-		path = args[0];
+		path = cmd->command[1];
 	if (chdir(path) == -1)
+	{
+		execve("/bin/ls", NULL, NULL);
 		cderror(path);
+	}
 	// execve("/bin/ls", (char *[]){"/bin/ls", NULL}, NULL);
 }
 
@@ -107,8 +110,8 @@ void	execbuiltins(t_link *cmd, t_env *env)
 		echo(cmd);
 	if (ft_strcmp(cmd->command[0], "env") == 0)
 		printenv(env);
-		// appeller fonction env;
-	//if (ft_strcmp(cmd->command[0], "cd") == 0)
+	if (ft_strcmp(cmd->command[0], "cd") == 0)
+		cd(cmd);
 		// appeller fonction cd;
 	//if (ft_strcmp(cmd->command[0], "export") == 0)
 		// appeller fonction export;
