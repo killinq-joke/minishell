@@ -6,18 +6,17 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:28:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/12 17:37:23 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/12 23:54:50 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_link	*linkinit(char **cmd)//, char **env)
+t_link	*linkinit(char **cmd)
 {
 	t_link	*new;
 
 	new = calloc(1, sizeof (t_link));
-	//new->env = env;
 	new->command = cmd;
 	new->next = NULL;
 	return (new);

@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/12 21:01:25 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/13 00:39:45 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	echo(t_link *cmd)
 	int		i;
 
 	nl = true;
-	i = 0;
+	i = 1;
 	while (cmd->command[i] && !ft_strcmp(cmd->command[i], "-n"))
 	{
 		nl = false;
@@ -35,22 +35,13 @@ void	echo(t_link *cmd)
 		ft_putchar('\n');
 }
 
-void	env(char **ev)
-{
-	int	i;
-
-	i = 0;
-	while (ev[i])
-		printf("%s\n", ev[i++]);
-}
-
 void	pwd(void)
 {
 	char	*workingdir;
 
 	workingdir = getcwd(NULL, 0);
 	if (workingdir)
-		ft_putstr(workingdir);
+		ft_putstrnl(workingdir);
 	if (errno)
 	{
 		if (errno == EACCES)
@@ -124,5 +115,8 @@ void	execbuiltins(t_link *cmd, t_env *env)
 	//if (ft_strcmp(cmd->command[0], "unset") == 0)
 		// appeller fonction unset;
 	if (ft_strcmp(cmd->command[0], "exit") == 0)
+	{
+		ft_putstrnl("exit");
 		exit(0);
+	}
 }

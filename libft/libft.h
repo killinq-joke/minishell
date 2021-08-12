@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/18 11:11:30 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/12 17:20:27 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/13 00:11:20 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,6 @@ int			*ft_tabncpy(int *tab, int size);
 void		ft_swap(int *a, int *b);
 char		*ft_joinchar(char *str, char c);
 char		*ft_trimquotes(char *str);
+void		ft_putstrnl(const char *str);
 
 #endif

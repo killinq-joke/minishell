@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/12 21:33:28 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/13 00:13:20 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,9 +220,9 @@ int	main(int ac, char **av, char **ev)
 	char	*tmp;
 	char	**tokens;
 	t_link	*cmd;
-	t_link	*current;
 	t_env	*env;
-	int		i;
+	//t_link	*current;
+	//int		i;
 
 	(void)ac;
 	(void)av;
@@ -243,22 +243,23 @@ int	main(int ac, char **av, char **ev)
 			if (tokens && splitlen(tokens))
 			{
 				cmd = parspipe(tokens);
-				give_good_path(cmd);
-				current = cmd;
-				while (current)
-				{
-					printf("----------------------------------------------------------\n");
-					i = 0;
-					while (current->command[i])
-					{
-						tmp = current->command[i];
-						current->command[i] = ft_trimquotes(current->command[i]);
-						free(tmp);
-						printf("%s\n", current->command[i]);
-						i++;
-					}
-					current = current->next;
-				}
+				givepath(env, cmd);
+				give_good_path(cmd, env);
+				//current = cmd;
+				//while (current)
+				//{
+				//	printf("----------------------------------------------------------\n");
+				//	i = 0;
+				//	while (current->command[i])
+				//	{
+				//		tmp = current->command[i];
+				//		current->command[i] = ft_trimquotes(current->command[i]);
+				//		free(tmp);
+				//		printf("%s\n", current->command[i]);
+				//		i++;
+				//	}
+				//	current = current->next;
+				//}
 			}
 		}
 	}

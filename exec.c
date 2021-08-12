@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	give_good_path(t_link *cmd)
+void	give_good_path(t_link *cmd, t_env *env)
 {
 	if ((ft_strcmp(cmd->command[0], "echo") == 0)
 		|| (ft_strcmp(cmd->command[0], "cd") == 0)
@@ -21,7 +21,7 @@ void	give_good_path(t_link *cmd)
 		|| (ft_strcmp(cmd->command[0], "export") == 0)
 		|| (ft_strcmp(cmd->command[0], "unset") == 0)
 		|| (ft_strcmp(cmd->command[0], "env") == 0))
-		execbuiltin(cmd);
+		execbuiltins(cmd, env);
 	else
 		execcmd(cmd);
 }
@@ -38,7 +38,7 @@ t_bool	good_path_for_cmd(t_link *cmd)
 
 void	givepath(t_env *path, t_link *cmd)
 {
-	t_env *actuel;
+	t_env	*actuel;
 
 	actuel = path;
 	while (actuel)
@@ -55,12 +55,11 @@ void	execcmd(t_link *cmd)
 	char	**path;
 	char	*tmp;
 
-	if (good_path_for_cmd(cmd) == true)
+	if (good_path_for_cmd(cmd) == false)
 	{
 		if (fork() == 0)
 			if (execve(cmd->command[0], cmd->command, NULL) == -1)
 				exit(0);
-		wait(0);
 	}
 	else
 	{
@@ -70,15 +69,15 @@ void	execcmd(t_link *cmd)
 		{
 			if (fork() == 0)
 			{
+				tmp = path[i];
+				path[i] = ft_joinchar(path[i], '/');
+				free(tmp);
 				tmp = cmd->command[0];
 				cmd->command[0] = ft_strjoin(path[i], cmd->command[0]);
 				free(tmp);
 				if (execve(cmd->command[0], cmd->command, NULL) == -1)
-				{
 					exit(0);
-				}
 			}
-			wait(0);
 		}
 	}
 }
