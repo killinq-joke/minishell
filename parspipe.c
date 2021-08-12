@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   parspipe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mout <mout@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:28:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/11 19:19:32 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/12 09:01:52 by mout             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_link	*linkinit(char **cmd, char **env)
+t_link	*linkinit(char **cmd)//, char **env)
 {
 	t_link	*new;
 
 	new = calloc(1, sizeof (t_link));
-	new->env = env;
+	//new->env = env;
 	new->command = cmd;
 	new->next = NULL;
 	return (new);
@@ -59,14 +59,14 @@ char	**parscmd(char **tokens, size_t *i)
 	return (command);
 }
 
-t_link	*parspipe(char **tokens, char **ev)
+t_link	*parspipe(char **tokens)
 {
 	t_link	*head;
 	t_link	*current;
 	size_t	i;
 
 	i = 0;
-	head = linkinit(NULL, ev);
+	head = linkinit(NULL);
 	current = head;
 	while (tokens[i])
 	{
@@ -75,7 +75,7 @@ t_link	*parspipe(char **tokens, char **ev)
 			i++;
 		if (!tokens[i])
 			break ;
-		current->next = linkinit(NULL, ev);
+		current->next = linkinit(NULL);
 		current = current->next;
 	}
 	free(tokens);

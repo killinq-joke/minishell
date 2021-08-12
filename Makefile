@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+         #
+#    By: mout <mout@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/02 09:47:58 by ztouzri           #+#    #+#              #
-#    Updated: 2021/08/11 18:29:11 by ztouzri          ###   ########.fr        #
+#    Updated: 2021/08/12 09:37:41 by mout             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ all:	$(NAME)
 $(NAME):	$(OBJS)
 	make -C libft
 	mv libft/$(LIB) .
-	$(CC) $(CFLAGS) $(OBJS) $(LIB) -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIB)  -lreadline -o $(NAME)
 
 clean:
 	$(RM) $(OBJS) $(LIB)

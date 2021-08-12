@@ -22,9 +22,9 @@
 # include <fcntl.h>
 # include "libft.h"
 
-# define QUOTE 39
-# define DQUOTE 34
-# define SPACE 32
+# define QUOTE '\''
+# define DQUOTE '"'
+//# define SPACE 32
 
 typedef struct s_link	t_link;
 typedef struct s_env	t_env;
@@ -54,8 +54,8 @@ typedef struct s_link
 t_bool	checkerror(char *line);
 char	**commandsplit(char *line);
 char	**parstoken(char *line);
-t_link	*linkinit(char **cmd, char **env);
-t_link	*parspipe(char **token, char **ev);
+t_link	*linkinit(char **cmd);
+t_link	*parspipe(char **token);
 void	givegoodpath(t_link *cmd);
 void	execbuiltin(t_link *cmd);
 void	execcmd(t_link *cmd);

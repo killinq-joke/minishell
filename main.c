@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mout <mout@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/11 20:01:23 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/12 12:03:55 by mout             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,7 @@ int	counttoken(char *line)
 			i++;
 			while (line[i] && line[i] != DQUOTE)
 				i++;
-			if (line[i] == DQUOTE)
-				i++;
-			else
+			if (line[i] != DQUOTE)
 			{
 				ft_puterr("error: unclosed dquotes not supported\n");
 				return (-1);
@@ -49,17 +47,15 @@ int	counttoken(char *line)
 			i++;
 			while (line[i] && line[i] != QUOTE)
 				i++;
-			if (line[i] == QUOTE)
-			{
-				i++;
-			}
-			else
+			if (line[i] != QUOTE)
 			{
 				ft_puterr("error: unclosed quotes not supported\n");
 				return (-1);
 			}
 			count++;
 		}
+		if (!line[i])
+			break ;
 		i++;
 	}
 	return (count);
@@ -77,7 +73,7 @@ char	*parsenv(char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] == QUOTE)
+		if (line[i] && line[i] == QUOTE)
 		{
 			tmp = res;
 			res = ft_joinchar(tmp, line[i]);
@@ -90,8 +86,14 @@ char	*parsenv(char *line)
 				free(tmp);
 				i++;
 			}
+			if (line[i] && line[i] == QUOTE)
+			{
+				tmp = res;
+				res = ft_joinchar(tmp, line[i]);
+				free(tmp);
+			}
 		}
-		if (line[i] == '$')
+		else if (line[i] && line[i] == '$')
 		{
 			if (line[i] && line[i + 1] != SPACE)
 			{
@@ -100,7 +102,7 @@ char	*parsenv(char *line)
 					&& line[i + j + 1] != QUOTE && line[i + j + 1] != DQUOTE)
 					j++;
 				env = ft_substr(&line[1], i, j);
-				printf("%s\n", env);
+				//printf("%s\n", env);
 				tmp = res;
 				res = ft_strjoin(tmp, getenv(env));
 				free(tmp);
@@ -114,8 +116,12 @@ char	*parsenv(char *line)
 			res = ft_joinchar(tmp, line[i]);
 			free(tmp);
 		}
-		printf("%s\n", res);
+		//printf("%s\n", res);
+		//ft_putstr(res);
 		i++;
+		//{
+		//	printf("%s\n", res);
+		//}
 	}
 	return (res);
 }
@@ -181,11 +187,11 @@ char	**commandsplit(char *line)
 		i++;
 	}
 	split[i] = NULL;
-	printf("count == %d\n", wordcount);
+	//printf("count == %d\n", wordcount);
 	return (split);
 }
 
-int	main(int ac, char **av, char **ev)
+int	main(int ac, char **av)//, char **ev)
 {
 	char	*line;
 	char	*tmp;
@@ -206,7 +212,7 @@ int	main(int ac, char **av, char **ev)
 		tokens = parstoken(line);
 		if (tokens && splitlen(tokens))
 		{
-			head = parspipe(tokens, ev);
+			head = parspipe(tokens);
 			current = head;
 			while (current)
 			{
