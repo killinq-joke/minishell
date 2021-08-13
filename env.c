@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 20:46:33 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/12 21:29:04 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/13 23:54:23 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*getname(char *envstr)
 	if (!envstr)
 		return (NULL);
 	i = 0;
-	while (envstr[i] && envstr[i] != '=')
+	while (envstr[i] && envstr[i] != SPACE && envstr[i] != '=')
 		i++;
 	return (ft_substr(envstr, 0, i));
 }
@@ -66,7 +66,8 @@ void	printenv(t_env *env)
 	current = env;
 	while (current)
 	{
-		printf("%s=%s\n", current->name, current->value);
+		if (ft_strlen(current->value))
+			printf("%s=%s\n", current->name, current->value);
 		current = current->next;
 	}
 }

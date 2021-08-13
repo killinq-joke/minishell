@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/13 00:52:09 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/14 00:12:26 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,55 @@ void	cd(t_link *cmd)
 		cderror(path);
 }
 
-void	export(t_link *cmd, t_env *env)
+char	*getvalue(const char *name)
 {
 	int	i;
+	int	len;
 
-	i = 1;
+	if (!name)
+		return (ft_strdup(""));
+	i = 0;
+	while (name[i] && name[i] != '=')
+		i++;
+	if (name[i] == '=')
+		i++;
+	len = 0;
+	while (name[len])
+		len++;
+	return (ft_substr(name, i, len));
+}
+
+void	export(char **command, t_env *env)
+{
+	int		i;
+	t_env	*current;
+
+	current = env;
+	if (splitlen(command) == 1)
+	{
+		while (current)
+		{
+			if (current->value)
+				printf("declare -x %s=\"%s\"\n", current->name, current->value);
+			else
+				printf("declare -x %s\n", current->name);
+			current = current->next;
+		}
+	}
+	else
+	{
+		while (current->next)
+			current = current->next;
+		i = 1;
+		while (command[i])
+		{
+			current->next = envinit(getname(command[i]), getvalue(command[i]));
+			current = current->next;
+			//printf("%s\n", command[i]);
+			//printf("%s\n", getname(command[i]));
+			i++;
+		}
+	}
 }
 
 void	execbuiltins(t_link *cmd, t_env *env)
@@ -116,7 +160,8 @@ void	execbuiltins(t_link *cmd, t_env *env)
 	if (ft_strcmp(cmd->command[0], "cd") == 0)
 		cd(cmd);
 	if (ft_strcmp(cmd->command[0], "export") == 0)
-		export(cmd, env);
+		export(cmd->command, env);
+		
 	//if (ft_strcmp(cmd->command[0], "unset") == 0)
 		// appeller fonction unset;
 	if (ft_strcmp(cmd->command[0], "exit") == 0)

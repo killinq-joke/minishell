@@ -70,6 +70,7 @@ t_env	*envmaker(char **env);
 void	printenv(t_env *env);
 void	givepath(t_env *path, t_link *cmd);
 size_t	splitlen(char **split);
+char	*getname(char *envstr);
 size_t	linklen(t_link *head);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/13 00:13:20 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/13 15:21:46 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,6 @@ unsigned int	wordlen(char *line)
 			}
 			i++;
 		}
-	//printf("%u <-- len\n", i);
 	return (i);
 }
 
