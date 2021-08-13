@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/14 00:12:26 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/14 00:25:45 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,9 @@ char	*getvalue(const char *name)
 		i++;
 	if (name[i] == '=')
 		i++;
-	len = 0;
+	else
+		return (NULL);
+	len = i;
 	while (name[len])
 		len++;
 	return (ft_substr(name, i, len));
@@ -142,8 +144,6 @@ void	export(char **command, t_env *env)
 		{
 			current->next = envinit(getname(command[i]), getvalue(command[i]));
 			current = current->next;
-			//printf("%s\n", command[i]);
-			//printf("%s\n", getname(command[i]));
 			i++;
 		}
 	}
