@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/14 13:59:26 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/14 16:31:46 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,10 +151,10 @@ void	export(char **command, t_env *env)
 
 void	freeenv(t_env *node)
 {
-	if (node->value)
-		free(node->value);
-	if (node->name)
-		free(node->name);
+	//if (node->value)
+	//	free(node->value);
+	//if (node->name)
+	//	free(node->name);
 	free(node);
 }
 
@@ -163,8 +163,7 @@ void	unset(char **namelist, t_all *all)
 	int		i;
 	int		isfirst;
 	t_env	*current;
-	//t_env	*prev;
-	//t_env	*tmp;
+	t_env	*tmp;
 
 	isfirst = true;
 	current = all->headenv;
@@ -177,18 +176,24 @@ void	unset(char **namelist, t_all *all)
 		i = 0;
 		while (namelist[i])
 		{
-			if (isfirst && !ft_strcmp(current->name, namelist[i]))
+			if (!ft_strcmp(current->name, namelist[i]))
 			{
-				all->headenv = current->next;
-				//freeenv(current);
-				return ;
-			}
-			else if (!ft_strcmp(current->name, namelist[i]))
-			{
-				return ;
+				if (isfirst)
+				{
+					all->headenv = current->next;
+					freeenv(current);
+					return ;
+				}
+				else
+				{
+					tmp->next = current->next;
+					freeenv(current);
+					return ;
+				}
 			}
 			i++;
 		}
+		tmp = current;
 		current = current->next;
 		isfirst = false;
 	}
@@ -201,10 +206,7 @@ void	execbuiltins(t_all *all)
 	if (ft_strcmp(all->headcmd->command[0], "echo") == 0)
 		echo(all->headcmd);
 	if (ft_strcmp(all->headcmd->command[0], "env") == 0)
-	{
-		printf("salut\n");
 		printenv(all->headenv);
-	}
 	if (ft_strcmp(all->headcmd->command[0], "cd") == 0)
 		cd(all->headcmd);
 	if (ft_strcmp(all->headcmd->command[0], "export") == 0)
