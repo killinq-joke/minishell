@@ -32,11 +32,18 @@
 
 typedef struct s_link	t_link;
 typedef struct s_env	t_env;
+typedef struct s_all	t_all;
 
 typedef enum e_bool {
 	false,
 	true,
 }				t_bool;
+
+typedef struct s_all
+{
+	t_env	*headenv;
+	t_link	*headcmd;
+}				t_all;
 
 typedef struct s_env
 {
@@ -61,8 +68,8 @@ char	**commandsplit(char *line);
 char	**parstoken(char *line);
 t_link	*linkinit(char **cmd);
 t_link	*parspipe(char **token);
-void	give_good_path(t_link *cmd, t_env *env);
-void	execbuiltins(t_link *cmd, t_env *env);
+void	give_good_path(t_all *all);
+void	execbuiltins(t_all *all);
 void	execcmd(t_link *cmd);
 void	execdollar(t_link *cmd);
 t_env	*envinit(char *name, char *value);
@@ -72,5 +79,6 @@ void	givepath(t_env *path, t_link *cmd);
 size_t	splitlen(char **split);
 char	*getname(char *envstr);
 size_t	linklen(t_link *head);
+size_t	envlen(t_env *head);
 
 #endif

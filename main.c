@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/13 15:21:46 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/14 14:04:15 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,14 +218,11 @@ int	main(int ac, char **av, char **ev)
 	char	*line;
 	char	*tmp;
 	char	**tokens;
-	t_link	*cmd;
-	t_env	*env;
-	//t_link	*current;
-	//int		i;
+	t_all	all;
 
 	(void)ac;
 	(void)av;
-	env = envmaker(ev);
+	all.headenv = envmaker(ev);
 	while (1)
 	{
 		line = readline("minishell> ");
@@ -241,9 +238,9 @@ int	main(int ac, char **av, char **ev)
 			tokens = parstoken(line);
 			if (tokens && splitlen(tokens))
 			{
-				cmd = parspipe(tokens);
-				givepath(env, cmd);
-				give_good_path(cmd, env);
+				all.headcmd = parspipe(tokens);
+				givepath(all.headenv, all.headcmd);
+				give_good_path(&all);
 				//current = cmd;
 				//while (current)
 				//{

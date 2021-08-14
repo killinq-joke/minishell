@@ -12,18 +12,18 @@
 
 #include "minishell.h"
 
-void	give_good_path(t_link *cmd, t_env *env)
+void	give_good_path(t_all *all)
 {
-	if ((ft_strcmp(cmd->command[0], "echo") == 0)
-		|| (ft_strcmp(cmd->command[0], "cd") == 0)
-		|| (ft_strcmp(cmd->command[0], "pwd") == 0)
-		|| (ft_strcmp(cmd->command[0], "exit") == 0)
-		|| (ft_strcmp(cmd->command[0], "export") == 0)
-		|| (ft_strcmp(cmd->command[0], "unset") == 0)
-		|| (ft_strcmp(cmd->command[0], "env") == 0))
-		execbuiltins(cmd, env);
+	if ((ft_strcmp(all->headcmd->command[0], "echo") == 0)
+		|| (ft_strcmp(all->headcmd->command[0], "cd") == 0)
+		|| (ft_strcmp(all->headcmd->command[0], "pwd") == 0)
+		|| (ft_strcmp(all->headcmd->command[0], "exit") == 0)
+		|| (ft_strcmp(all->headcmd->command[0], "export") == 0)
+		|| (ft_strcmp(all->headcmd->command[0], "unset") == 0)
+		|| (ft_strcmp(all->headcmd->command[0], "env") == 0))
+		execbuiltins(all);
 	else
-		execcmd(cmd);
+		execcmd(all->headcmd);
 }
 
 t_bool	good_path_for_cmd(t_link *cmd)
