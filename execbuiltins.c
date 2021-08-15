@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/14 17:12:14 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/15 15:52:33 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,13 @@ void	cderror(char *path)
 		ft_puterr("Not a directory\n");
 }
 
-void	cd(t_link *cmd)
+void	cd(t_link *cmd, t_env *env)
 {
-	int		len;
 	char	*path;
 
-	len = linklen(cmd);
-	if (!len)
+	if (linklen(cmd) == 1)
 	{
-		path = getenv("HOME");
+		path = ft_getenv("HOME", env);
 		if (!path)
 		{
 			ft_puterr("cd: HOME not set\n");
@@ -208,7 +206,7 @@ void	execbuiltins(t_all *all)
 	if (ft_strcmp(all->headcmd->command[0], "env") == 0)
 		printenv(all->headenv);
 	if (ft_strcmp(all->headcmd->command[0], "cd") == 0)
-		cd(all->headcmd);
+		cd(all->headcmd, all->headenv);
 	if (ft_strcmp(all->headcmd->command[0], "export") == 0)
 		export(all->headcmd->command, all->headenv);
 	if (ft_strcmp(all->headcmd->command[0], "unset") == 0)

@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/11 18:27:36 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/14 12:20:10 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/15 15:37:59 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,18 @@ size_t	envlen(t_env *head)
 		i++;
 	}
 	return (i);
+}
+
+char	*ft_getenv(const char *name, t_env *env)
+{
+	t_env	*current;
+
+	current = env;
+	while (current)
+	{
+		if (!ft_strcmp(name, current->name))
+			return (current->value);
+		current = current->next;
+	}
+	return (NULL);
 }

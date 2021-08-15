@@ -80,5 +80,6 @@ size_t	splitlen(char **split);
 char	*getname(char *envstr);
 size_t	linklen(t_link *head);
 size_t	envlen(t_env *head);
+char	*ft_getenv(const char *name, t_env *env);
 
 #endif

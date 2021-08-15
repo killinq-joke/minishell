@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/14 14:04:15 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/15 15:37:34 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,14 @@ int	counttoken(char *line)
 	return (count);
 }
 
-char	*parsenv(char *line)
+char	*parsenv(char *line, t_env *env)
 {
 	int		i;
 	int		j;
 	char	*res;
 	char	*tmp;
 	char	*tmp1;
-	char	*env;
+	char	*name;
 	int		status;
 
 	res = calloc(1, sizeof (char));
@@ -103,8 +103,8 @@ char	*parsenv(char *line)
 				while (line[i + j + 1] && line[i + j + 1] != SPACE
 					&& line[i + j + 1] != QUOTE && line[i + j + 1] != DQUOTE)
 					j++;
-				env = ft_substr(&line[1], i, j);
-				if (!ft_strcmp(env, "?"))
+				name = ft_substr(&line[1], i, j);
+				if (!ft_strcmp(name, "?"))
 				{
 					//a modifier
 					WEXITSTATUS(status);
@@ -118,7 +118,7 @@ char	*parsenv(char *line)
 				else
 				{
 					tmp = res;
-					res = ft_strjoin(tmp, getenv(env));
+					res = ft_strjoin(tmp, ft_getenv(name, env));
 					free(tmp);
 				}
 				free(env);
@@ -233,7 +233,7 @@ int	main(int ac, char **av, char **ev)
 			line = ft_strtrim(line, " ");
 			free(tmp);
 			tmp = line;
-			line = parsenv(tmp);
+			line = parsenv(tmp, all.headenv);
 			free(tmp);
 			tokens = parstoken(line);
 			if (tokens && splitlen(tokens))
