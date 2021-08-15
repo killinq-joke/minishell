@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/15 15:37:34 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/15 19:07:26 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,20 +79,20 @@ char	*parsenv(char *line, t_env *env)
 		{
 			tmp = res;
 			res = ft_joinchar(tmp, line[i]);
-			free(tmp);
+			//free(tmp);
 			i++;
 			while (line[i] && line[i] != QUOTE)
 			{
 				tmp = res;
 				res = ft_joinchar(tmp, line[i]);
-				free(tmp);
+				//free(tmp);
 				i++;
 			}
 			if (line[i] && line[i] == QUOTE)
 			{
 				tmp = res;
 				res = ft_joinchar(tmp, line[i]);
-				free(tmp);
+				//free(tmp);
 			}
 		}
 		else if (line[i] && line[i] == '$')
@@ -112,16 +112,16 @@ char	*parsenv(char *line, t_env *env)
 					tmp1 = ft_itoa(status);
 					res = ft_strjoin(tmp, tmp1);
 					printf("%d\n", status);
-					free(tmp1);
-					free(tmp);
+					//free(tmp1);
+					//free(tmp);
 				}
 				else
 				{
 					tmp = res;
 					res = ft_strjoin(tmp, ft_getenv(name, env));
-					free(tmp);
+					//free(tmp);
 				}
-				free(env);
+				//free(env);
 				i += j;
 			}
 		}
@@ -129,7 +129,7 @@ char	*parsenv(char *line, t_env *env)
 		{
 			tmp = res;
 			res = ft_joinchar(tmp, line[i]);
-			free(tmp);
+			//free(tmp);
 		}
 		i++;
 	}
@@ -239,23 +239,23 @@ int	main(int ac, char **av, char **ev)
 			if (tokens && splitlen(tokens))
 			{
 				all.headcmd = parspipe(tokens);
-				givepath(all.headenv, all.headcmd);
+				all.headcmd->path_bis = ft_getenv("PATH", all.headenv);
 				give_good_path(&all);
-				//current = cmd;
-				//while (current)
-				//{
-				//	printf("----------------------------------------------------------\n");
-				//	i = 0;
-				//	while (current->command[i])
-				//	{
-				//		tmp = current->command[i];
-				//		current->command[i] = ft_trimquotes(current->command[i]);
-				//		free(tmp);
-				//		printf("%s\n", current->command[i]);
-				//		i++;
-				//	}
-				//	current = current->next;
-				//}
+				t_link *current = all.headcmd;
+				while (current)
+				{
+					printf("----------------------------------------------------------\n");
+					int i = 0;
+					while (current->command[i])
+					{
+						tmp = current->command[i];
+						current->command[i] = ft_trimquotes(current->command[i]);
+						//free(tmp);
+						printf("%s\n", current->command[i]);
+						i++;
+					}
+					current = current->next;
+				}
 			}
 		}
 	}

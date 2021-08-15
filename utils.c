@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/11 18:27:36 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/15 15:37:59 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/15 19:08:23 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*ft_getenv(const char *name, t_env *env)
 	while (current)
 	{
 		if (!ft_strcmp(name, current->name))
-			return (current->value);
+			return (ft_strdup(current->value));
 		current = current->next;
 	}
 	return (NULL);

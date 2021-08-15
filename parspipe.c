@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:28:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/12 23:54:50 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/15 19:05:13 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,6 @@ t_link	*parspipe(char **tokens)
 		current->next = linkinit(NULL);
 		current = current->next;
 	}
-	free(tokens);
+	//free(tokens);
 	return (head);
 }
