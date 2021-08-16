@@ -36,11 +36,15 @@ t_bool	good_path_for_cmd(t_link *cmd)
 		return (false);
 }
 
-void	givepath(t_env *env, t_link *cmd)
+int		execplusredir(t_link *cmd)
 {
-	(void)env;
-	(void)cmd;
-	//all->headcmd->path_bis = ft_getenv("PATH", all->headenv);
+	//if (!ft_strcmp(">", cmd->command[1]))
+	//{
+		
+	//}
+	if (execve(cmd->command[0], cmd->command, NULL) == -1)
+		return (-1);
+	return (0);
 }
 
 void	execcmd(t_link *cmd)
@@ -65,10 +69,11 @@ void	execcmd(t_link *cmd)
 			{
 				tmp = path[i];
 				path[i] = ft_joinchar(path[i], '/');
-				//free(tmp);
+				free(tmp);
 				tmp = cmd->command[0];
 				cmd->command[0] = ft_strjoin(path[i], cmd->command[0]);
-				//free(tmp);
+				free(tmp);
+				//if (execplusredir(cmd) == -1)
 				if (execve(cmd->command[0], cmd->command, NULL) == -1)
 					exit(0);
 			}

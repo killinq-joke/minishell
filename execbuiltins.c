@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/15 19:05:25 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/16 11:01:29 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,10 +150,10 @@ void	export(char **command, t_env *env)
 void	freeenv(t_env *node)
 {
 	//if (node->value)
-	//	//free(node->value);
+	//	free(node->value);
 	//if (node->name)
-	//	//free(node->name);
-	////free(node);
+	//	free(node->name);
+	//free(node);
 	(void)node;
 }
 
@@ -169,7 +169,7 @@ void	unset(char **namelist, t_all *all)
 	if (!namelist || !all->headenv)
 		return ;
 	if (envlen(all->headenv) == 1)
-		//freeenv(all->headenv);
+		freeenv(all->headenv);
 	while (current)
 	{
 		i = 0;
@@ -180,13 +180,13 @@ void	unset(char **namelist, t_all *all)
 				if (isfirst)
 				{
 					all->headenv = current->next;
-					//freeenv(current);
+					freeenv(current);
 					return ;
 				}
 				else
 				{
 					tmp->next = current->next;
-					//freeenv(current);
+					freeenv(current);
 					return ;
 				}
 			}
