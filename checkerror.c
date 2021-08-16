@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/10 11:56:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/10 12:05:49 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/17 01:52:43 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,26 @@ int	check_double_or_simple_quotes(char *str, int i, char c)
 	return (0);
 }
 
+t_bool	checkredir(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_strncmp(">|", &str[i], 2))
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 t_bool	checkerror(char *line)
 {
 	int	i;
 
 	i = 0;
-	if (!line || (check_space(line) == false))
+	if (!line || !check_space(line) || !checkredir(line))
 		return (false);
 	while (line[i])
 	{
@@ -60,5 +74,7 @@ t_bool	checkerror(char *line)
 		}
 		i++;
 	}
+	if (ft_isin("|><", line[ft_strlen(line) - 1]))
+		return (false);
 	return (true);
 }

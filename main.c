@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/16 16:14:26 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/17 01:49:42 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,10 +131,13 @@ char	*parsenv(char *line, t_env *env)
 		{
 			if (line[i] == DQUOTE)
 				indquote = !indquote;
-			if (ft_isin("><|", line[i]) && !indquote)
+			if ((!ft_strncmp(">>", &line[i], 2) || !ft_strncmp("<<", &line[i], 2)) && !indquote)
 			{
 				tmp = res;
 				res = ft_joinchar(tmp, ' ');
+				free(tmp);
+				tmp = res;
+				res = ft_joinchar(tmp, line[i++]);
 				free(tmp);
 				tmp = res;
 				res = ft_joinchar(tmp, line[i]);
@@ -143,13 +146,10 @@ char	*parsenv(char *line, t_env *env)
 				res = ft_joinchar(tmp, ' ');
 				free(tmp);
 			}
-			else if ((!ft_strncmp(">>", &line[i], 2) || !ft_strncmp("<<", &line[i], 2)) && !indquote)
+			else if (ft_isin("><|", line[i]) && !indquote)
 			{
 				tmp = res;
 				res = ft_joinchar(tmp, ' ');
-				free(tmp);
-				tmp = res;
-				res = ft_joinchar(tmp, line[i++]);
 				free(tmp);
 				tmp = res;
 				res = ft_joinchar(tmp, line[i]);
@@ -281,11 +281,11 @@ int	main(int ac, char **av, char **ev)
 	{
 		line = readline("minishell> ");
 		add_history(line);
+		tmp = line;
+		line = ft_strtrim(line, " ");
+		free(tmp);
 		if (checkerror(line) == true)
 		{
-			tmp = line;
-			line = ft_strtrim(line, " ");
-			free(tmp);
 			tmp = line;
 			line = parsenv(tmp, all.headenv);
 			free(tmp);
