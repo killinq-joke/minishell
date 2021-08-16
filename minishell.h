@@ -55,7 +55,7 @@ typedef struct s_env
 typedef struct s_link
 {
 	char	**command;
-	t_bool	operator;
+	char	operator;
 	char	**path;
 	char	*path_bis;
 	t_env	*env;

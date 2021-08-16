@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:28:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/16 11:01:29 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/16 13:19:12 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,7 @@ char	**parstoken(char *line)
 	tokens = commandsplit(line);
 	i = 0;
 	while (tokens && tokens[i])
-	{
-		//printf("%s\n", tokens[i]);
 		i++;
-	}
 	return (tokens);
 }
 

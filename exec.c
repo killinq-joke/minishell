@@ -38,10 +38,10 @@ t_bool	good_path_for_cmd(t_link *cmd)
 
 int		execplusredir(t_link *cmd)
 {
-	//if (!ft_strcmp(">", cmd->command[1]))
-	//{
+	if (!ft_strcmp(">", cmd->command[1]))
+	{
 		
-	//}
+	}
 	if (execve(cmd->command[0], cmd->command, NULL) == -1)
 		return (-1);
 	return (0);

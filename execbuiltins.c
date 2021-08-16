@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/16 11:01:29 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/16 13:32:01 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,9 +151,9 @@ void	freeenv(t_env *node)
 {
 	//if (node->value)
 	//	free(node->value);
-	//if (node->name)
-	//	free(node->name);
-	//free(node);
+	if (node->name)
+		free(node->name);
+	free(node);
 	(void)node;
 }
 

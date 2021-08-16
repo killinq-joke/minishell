@@ -39,11 +39,11 @@
 
 void	minishell(t_all *all, t_link *cmd)
 {
-	(void)all;
 	t_link	*actuel;
 	int		fd[2];
 	int		tmp;
-	//char	buffer[1000];
+
+	(void)all;
 	actuel = cmd;
 	while (actuel)
 	{

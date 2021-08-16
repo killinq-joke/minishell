@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/16 11:35:21 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/16 14:32:45 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,11 @@ char	*parsenv(char *line, t_env *env)
 	char	*tmp1;
 	char	*name;
 	int		status;
+	t_bool	indquote;
 
 	res = calloc(1, sizeof (char));
 	i = 0;
+	indquote = false;
 	while (line[i])
 	{
 		if (line[i] && line[i] == QUOTE)
@@ -126,38 +128,43 @@ char	*parsenv(char *line, t_env *env)
 		}
 		else
 		{
-			if (ft_isin("><|", line[i]))
+			if (line[i] == DQUOTE)
+				indquote = !indquote;
+			if (!indquote)
 			{
-				tmp = res;
-				res = ft_joinchar(tmp, ' ');
-				free(tmp);
-				tmp = res;
-				res = ft_joinchar(tmp, line[i]);
-				free(tmp);
-				tmp = res;
-				res = ft_joinchar(tmp, ' ');
-				free(tmp);
-			}
-			else if (!ft_strncmp(">>", &line[i], 2) || !ft_strncmp("<<", &line[i], 2))
-			{
-				tmp = res;
-				res = ft_joinchar(tmp, ' ');
-				free(tmp);
-				tmp = res;
-				res = ft_joinchar(tmp, line[i++]);
-				free(tmp);
-				tmp = res;
-				res = ft_joinchar(tmp, line[i]);
-				free(tmp);
-				tmp = res;
-				res = ft_joinchar(tmp, ' ');
-				free(tmp);
-			}
-			else
-			{
-				tmp = res;
-				res = ft_joinchar(tmp, line[i]);
-				free(tmp);
+				if (ft_isin("><|", line[i]))
+				{
+					tmp = res;
+					res = ft_joinchar(tmp, ' ');
+					free(tmp);
+					tmp = res;
+					res = ft_joinchar(tmp, line[i]);
+					free(tmp);
+					tmp = res;
+					res = ft_joinchar(tmp, ' ');
+					free(tmp);
+				}
+				else if (!ft_strncmp(">>", &line[i], 2) || !ft_strncmp("<<", &line[i], 2))
+				{
+					tmp = res;
+					res = ft_joinchar(tmp, ' ');
+					free(tmp);
+					tmp = res;
+					res = ft_joinchar(tmp, line[i++]);
+					free(tmp);
+					tmp = res;
+					res = ft_joinchar(tmp, line[i]);
+					free(tmp);
+					tmp = res;
+					res = ft_joinchar(tmp, ' ');
+					free(tmp);
+				}
+				else
+				{
+					tmp = res;
+					res = ft_joinchar(tmp, line[i]);
+					free(tmp);
+				}
 			}
 		}
 		i++;
@@ -282,7 +289,6 @@ int	main(int ac, char **av, char **ev)
 			free(tmp);
 			tmp = line;
 			line = parsenv(tmp, all.headenv);
-			printf("%s\n", line);
 			free(tmp);
 			tokens = parstoken(line);
 			if (tokens && splitlen(tokens))
@@ -291,7 +297,7 @@ int	main(int ac, char **av, char **ev)
 				all.headcmd->path_bis = ft_getenv("PATH", all.headenv);
 				printlink(all.headcmd);
 				//give_good_path(&all);
-				minishell(&all, all.headcmd);
+				//minishell(&all, all.headcmd);
 			}
 		}
 	}
