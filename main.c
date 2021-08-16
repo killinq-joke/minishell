@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/16 14:32:45 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/16 16:14:26 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	counttoken(char *line)
 
 	count = 0;
 	i = 0;
+	printf("%s\n", line);
 	if (line[i] && line[i] != SPACE && line[i] != DQUOTE && line[i] != QUOTE)
 		count++;
 	while (line[i])
@@ -130,45 +131,43 @@ char	*parsenv(char *line, t_env *env)
 		{
 			if (line[i] == DQUOTE)
 				indquote = !indquote;
-			if (!indquote)
+			if (ft_isin("><|", line[i]) && !indquote)
 			{
-				if (ft_isin("><|", line[i]))
-				{
-					tmp = res;
-					res = ft_joinchar(tmp, ' ');
-					free(tmp);
-					tmp = res;
-					res = ft_joinchar(tmp, line[i]);
-					free(tmp);
-					tmp = res;
-					res = ft_joinchar(tmp, ' ');
-					free(tmp);
-				}
-				else if (!ft_strncmp(">>", &line[i], 2) || !ft_strncmp("<<", &line[i], 2))
-				{
-					tmp = res;
-					res = ft_joinchar(tmp, ' ');
-					free(tmp);
-					tmp = res;
-					res = ft_joinchar(tmp, line[i++]);
-					free(tmp);
-					tmp = res;
-					res = ft_joinchar(tmp, line[i]);
-					free(tmp);
-					tmp = res;
-					res = ft_joinchar(tmp, ' ');
-					free(tmp);
-				}
-				else
-				{
-					tmp = res;
-					res = ft_joinchar(tmp, line[i]);
-					free(tmp);
-				}
+				tmp = res;
+				res = ft_joinchar(tmp, ' ');
+				free(tmp);
+				tmp = res;
+				res = ft_joinchar(tmp, line[i]);
+				free(tmp);
+				tmp = res;
+				res = ft_joinchar(tmp, ' ');
+				free(tmp);
+			}
+			else if ((!ft_strncmp(">>", &line[i], 2) || !ft_strncmp("<<", &line[i], 2)) && !indquote)
+			{
+				tmp = res;
+				res = ft_joinchar(tmp, ' ');
+				free(tmp);
+				tmp = res;
+				res = ft_joinchar(tmp, line[i++]);
+				free(tmp);
+				tmp = res;
+				res = ft_joinchar(tmp, line[i]);
+				free(tmp);
+				tmp = res;
+				res = ft_joinchar(tmp, ' ');
+				free(tmp);
+			}
+			else
+			{
+				tmp = res;
+				res = ft_joinchar(tmp, line[i]);
+				free(tmp);
 			}
 		}
 		i++;
 	}
+	printf("----%s\n", res);
 	return (res);
 }
 
