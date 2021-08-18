@@ -40,9 +40,10 @@ int		execplusredir(t_link *cmd)
 {
 	if (!ft_strcmp(">", cmd->command[1]))
 	{
-		
+		if (execve(cmd->command[0], cmd->command, NULL) == -1)
+			return (-1);
 	}
-	if (execve(cmd->command[0], cmd->command, NULL) == -1)
+	else if (execve(cmd->command[0], cmd->command, NULL) == -1)
 		return (-1);
 	return (0);
 }
@@ -55,7 +56,7 @@ void	execcmd(t_link *cmd)
 
 	if (good_path_for_cmd(cmd) == false)
 	{
-		if (fork() == 0)
+		// if (fork() == 0)
 			if (execve(cmd->command[0], cmd->command, NULL) == -1)
 				exit(0);
 	}
@@ -65,18 +66,19 @@ void	execcmd(t_link *cmd)
 		path = ft_split(cmd->path_bis, ':');
 		while (path[++i])
 		{
-			if (fork() == 0)
-			{
+			// if (fork() == 0)
+			// {
 				tmp = path[i];
 				path[i] = ft_joinchar(path[i], '/');
 				free(tmp);
 				tmp = cmd->command[0];
 				cmd->command[0] = ft_strjoin(path[i], cmd->command[0]);
 				free(tmp);
-				//if (execplusredir(cmd) == -1)
-				if (execve(cmd->command[0], cmd->command, NULL) == -1)
+				if (execplusredir(cmd) == -1)
 					exit(0);
-			}
+				// if (execve(cmd->command[0], cmd->command, NULL) == -1)
+				// 	exit(0);
+			// }
 		}
 	}
 }

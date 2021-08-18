@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:28:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/16 13:19:12 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/18 20:06:45 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_link	*linkinit(char **cmd)
 {
 	t_link	*new;
 
-	new = calloc(1, sizeof (t_link));
+	new = ft_calloc(1, sizeof (t_link));
 	new->command = cmd;
 	new->next = NULL;
 	return (new);
@@ -43,7 +43,7 @@ char	**parscmd(char **tokens, size_t *i)
 	len = 0;
 	while (tokens[*i + len] && ft_strcmp(tokens[*i + len], "|"))
 		len++;
-	command = calloc(len + 1, sizeof (char *));
+	command = ft_calloc(len + 1, sizeof (char *));
 	j = 0;
 	while (j < len)
 	{

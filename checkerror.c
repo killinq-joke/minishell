@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/10 11:56:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/17 02:20:49 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/17 02:29:45 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ t_bool	checkerror(char *line)
 	while (line[i])
 	{
 		if (line[i] == ';' || line[i] == '\\' || !ft_strncmp(">|", &line[i], 2)
-			|| !ft_strncmp("<>", &line[i], 2) || !ft_strncmp("><", &line[i], 2)
-			|| !ft_strncmp("<|", &line[i], 2) || !ft_strncmp(">>>", &line[i], 3)
+			|| !ft_strncmp("<|", &line[i], 2) || !ft_strncmp("<>", &line[i], 2)
+			|| !ft_strncmp("><", &line[i], 2) || !ft_strncmp(">>>", &line[i], 3)
 			|| !ft_strncmp("<<<", &line[i], 3))
 			return (false);
 		if (line[i] == '"')

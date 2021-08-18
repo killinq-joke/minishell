@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/17 01:53:49 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/18 20:06:38 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	counttoken(char *line)
 
 	count = 0;
 	i = 0;
-	printf("%s\n", line);
 	if (line[i] && line[i] != SPACE && line[i] != DQUOTE && line[i] != QUOTE)
 		count++;
 	while (line[i])
@@ -73,7 +72,7 @@ char	*parsenv(char *line, t_env *env)
 	int		status;
 	t_bool	indquote;
 
-	res = calloc(1, sizeof (char));
+	res = ft_calloc(1, sizeof (char));
 	i = 0;
 	indquote = false;
 	while (line[i])
@@ -167,7 +166,6 @@ char	*parsenv(char *line, t_env *env)
 		}
 		i++;
 	}
-	printf("----%s\n", res);
 	return (res);
 }
 
@@ -233,7 +231,7 @@ char	**commandsplit(char *line)
 	wordcount = counttoken(line);
 	if (wordcount == -1 || !wordcount)
 		return (NULL);
-	split = calloc(wordcount + 1, sizeof (char *));
+	split = ft_calloc(wordcount + 1, sizeof (char *));
 	j = 0;
 	i = 0;
 	while (i < wordcount && j < ft_strlen(line))
@@ -296,7 +294,7 @@ int	main(int ac, char **av, char **ev)
 				all.headcmd->path_bis = ft_getenv("PATH", all.headenv);
 				printlink(all.headcmd);
 				//give_good_path(&all);
-				//minishell(&all, all.headcmd);
+				 minishell(&all, all.headcmd);
 			}
 		}
 		else

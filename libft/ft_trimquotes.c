@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 16:43:14 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/16 11:01:29 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/18 20:07:00 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_trimquotes(char *str)
 	char	*tmp;
 	char	*trimmed;
 
-	trimmed = calloc(1, sizeof (char));
+	trimmed = ft_calloc(1, sizeof (char));
 	i = 0;
 	if (str)
 	{

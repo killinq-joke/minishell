@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 20:46:33 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/15 16:44:25 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/18 20:06:25 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_env	*envinit(char *name, char *value)
 {
 	t_env	*new;
 
-	new = calloc(1, sizeof (t_env));
+	new = ft_calloc(1, sizeof (t_env));
 	new->name = name;
 	new->value = value;
 	new->next = NULL;
