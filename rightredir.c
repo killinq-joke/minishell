@@ -96,22 +96,28 @@ void	leftleft(char **command, char *delim)
 	char	*text;
 	char	*line;
 	char	*tmp;
+	int		fd[2];	
 
 	(void)command;
-	line = readline("heredoc> ");
-	while (ft_strcmp(line, delim))
+	pipe(fd);
+	if (!fork())
 	{
-		tmp = line;
+		// dup2(`k);
 		line = readline("heredoc> ");
-		if (!ft_strcmp(line, delim))
-			break ;
-		text = ft_strjoin(tmp, line);
-		text = ft_joinchar(tmp, '\n');
-		free(tmp);
+		while (ft_strcmp(line, delim))
+		{
+			tmp = line;
+			line = readline("heredoc> ");
+			if (!ft_strcmp(line, delim))
+				break ;
+			text = ft_strjoin(tmp, line);
+			text = ft_joinchar(tmp, '\n');
+			free(tmp);
+		}
+		if (!text)
+			text = ft_strdup("");
+		printf("%s\n", text);
 	}
-	if (!text)
-		text = ft_strdup("");
-	printf("%s\n", text);
 	if (!fork())
 	{
 		if (execve(command[0], command, NULL) == -1)

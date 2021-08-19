@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/18 20:06:38 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/20 00:13:57 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,6 +287,9 @@ int	main(int ac, char **av, char **ev)
 			tmp = line;
 			line = parsenv(tmp, all.headenv);
 			free(tmp);
+			tmp = line;
+			line = ft_trimquotes(line);
+			free(tmp);
 			tokens = parstoken(line);
 			if (tokens && splitlen(tokens))
 			{
@@ -294,7 +297,7 @@ int	main(int ac, char **av, char **ev)
 				all.headcmd->path_bis = ft_getenv("PATH", all.headenv);
 				printlink(all.headcmd);
 				//give_good_path(&all);
-				 minishell(&all, all.headcmd);
+				minishell(&all, all.headcmd);
 			}
 		}
 		else
