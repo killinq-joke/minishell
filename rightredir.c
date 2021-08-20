@@ -52,20 +52,17 @@ void	rightright(char **command)
 	}
 }
 
-void	left(char **command)
+void	left(int filed, char **command)
 {
-	int	file;
-
-	file = open("z.txt", O_RDONLY);
-	if (file < 3)
+	if (filed < 3)
 	{
 		ft_puterr("error\n");
 		return ;
 	}
 	if (!fork())
 	{
-		dup2(file, STDIN_FILENO);
-		close(file);
+		dup2(filed, STDIN_FILENO);
+		close(filed);
 		if (execve(command[0], command, NULL) == -1)
 		{
 			ft_puterr("error\n");
@@ -93,38 +90,28 @@ char	**splitjoin(char **split, char *str)
 
 void	leftleft(char **command, char *delim)
 {
-	char	*text;
 	char	*line;
 	char	*tmp;
-	int		fd[2];	
+	int		file;
 
-	(void)command;
-	pipe(fd);
-	if (!fork())
+	file = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
+	line = readline("heredoc> ");
+	while (ft_strcmp(line, delim))
 	{
-		// dup2(`k);
+		write(file, line, ft_strlen(line));
+		write(file, "\n", 1);
+		tmp = line;
 		line = readline("heredoc> ");
-		while (ft_strcmp(line, delim))
-		{
-			tmp = line;
-			line = readline("heredoc> ");
-			if (!ft_strcmp(line, delim))
-				break ;
-			text = ft_strjoin(tmp, line);
-			text = ft_joinchar(tmp, '\n');
-			free(tmp);
-		}
-		if (!text)
-			text = ft_strdup("");
-		printf("%s\n", text);
+		free(tmp);
 	}
 	if (!fork())
 	{
+		file = open("/tmp/hd", O_RDONLY);
+		unlink("/tmp/hd");
+		dup2(file, STDIN_FILENO);
+		close(file);
 		if (execve(command[0], command, NULL) == -1)
-		{
-			printf("error %d\n", errno);
-			return ;
-		}
+			ft_puterr("error");
 	}
 }
 
@@ -133,7 +120,7 @@ int	main(int ac, char **av, char **ev)
 	(void)ac;
 	(void)av;
 	(void)ev;
-	leftleft((char *[]){"/bin/cat", "-e", "salut", NULL}, "EOF");
+	leftleft((char *[]){"/bin/cat", "-e", NULL}, "EOF");
 	// right((char *[]){"/bin/ls", NULL});
 	return (0);
 }

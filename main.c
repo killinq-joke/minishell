@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/20 00:13:57 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/20 12:41:33 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,6 +298,8 @@ int	main(int ac, char **av, char **ev)
 				printlink(all.headcmd);
 				//give_good_path(&all);
 				minishell(&all, all.headcmd);
+				while(wait(NULL) > 0)
+					;
 			}
 		}
 		else

@@ -82,5 +82,10 @@ size_t	linklen(t_link *head);
 size_t	envlen(t_env *head);
 void	minishell(t_all *all, t_link *cmd);
 char	*ft_getenv(const char *name, t_env *env);
-
+void	exportt(char **command, t_env *env);
+void	cd(t_link *cmd, t_env *env);
+void	export(char **command, t_env *env);
+void	unset(char **namelist, t_all *all);
+void	echo(t_link *cmd);
+void	pwd(void);
 #endif
