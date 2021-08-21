@@ -12,69 +12,6 @@
 
 #include "minishell.h"
 
-//void	minishell(t_link *cmd)
-//{
-//	int		fd[2];
-//	int		tmp;
-//	t_link	*actuel;
-
-//	actuel = cmd;
-//	while (actuel)
-//	{
-//		if (actuel->next)
-//		{
-//			pipe(fd);
-//			dup2(tmp, STDIN_FILENO);
-//			dup2(fd[1], STDOUT_FILENO);
-//			give_good_path(all);
-//		}
-//		else
-//		{
-//			dup2(tmp, STDIN_FILENO);
-//			give_good_path(all);
-//		}
-//		actuel = actuel->next;
-//	}
-//}
-/*
-void	minishell(t_all *all, t_link *cmd)
-{
-	t_link	*actuel;
-	int		fd[2];
-	int		tmp;
-
-	(void)all;
-	actuel = cmd;
-	while (actuel)
-	{
-		if (actuel->next)
-		{
-			pipe(fd);
-			if (fork() == 0)
-			{
-				dup2(tmp, STDIN_FILENO);
-				dup2(fd[1], STDOUT_FILENO);
-				give_good_path(all);
-			}
-			close(fd[1]);
-			tmp = fd[0];
-		}
-		else
-		{
-			if (fork() == 0)
-			{
-				dup2(tmp, STDIN_FILENO);
-				give_good_path(all);
-			}
-		}
-		wait(0);
-		actuel = actuel->next;
-	}
-}
-*/
-
-
-
 void	minishell(t_all *all, t_link *cmd)
 {
 	t_link	*actuel;
@@ -100,10 +37,8 @@ void	minishell(t_all *all, t_link *cmd)
 				pipe(fd);
 				if (fork() == 0)
 				{
-					dup2(
-					tmpp, STDIN_FILENO);
+					dup2(tmpp, STDIN_FILENO);
 					dup2(fd[1], STDOUT_FILENO);
-					
 					if (ft_strcmp(actuel->command[0], "pwd") == 0)
 						pwd();
 					if (ft_strcmp(actuel->command[0], "echo") == 0)
@@ -131,7 +66,7 @@ void	minishell(t_all *all, t_link *cmd)
 					dup2(tmpp, STDIN_FILENO);
 					dup2(fd[1], STDOUT_FILENO);
 					if (execve(actuel->command[0], actuel->command, NULL) == -1)
-						exit (0);
+						exit (printf("bonjour\n"));
 				}
 				close(fd[1]);
 				tmpp = fd[0];
@@ -143,23 +78,37 @@ void	minishell(t_all *all, t_link *cmd)
 				char	**path;
 				char	*tmp;
 				char	*command;
-				i = 0;
+				int co = 0;
+				int fdd;
+				i = -1;
 				path = ft_split(ft_getenv("PATH", all->headenv), ':');
-				while (path[i])
+				if (!path)
+						printf("bash: %s: No such file or directory\n", actuel->command[0]);
+				else 
 				{
-					if (fork() == 0)
+					while (path[++i])
 					{
-						dup2(tmpp, STDIN_FILENO);
-						dup2(fd[1], STDOUT_FILENO);
 						tmp = ft_joinchar(path[i], '/');
-						command = ft_strjoin(tmp, actuel->command[0]);
-						if (execve(command, actuel->command, NULL) == -1)
-							exit (0);
+						command = ft_strjoin(tmp, actuel->command[0]);	
+						fdd = open(command, O_RDONLY);
+						if (fdd != -1)
+						{
+							co = 1;
+							if (fork() == 0)
+							{
+								dup2(tmpp, STDIN_FILENO);
+								dup2(fd[1], STDOUT_FILENO);;
+								if (execve(command, actuel->command, NULL) == -1)
+								exit (0);
+							}
+							break;
+						}
 					}
-					i++;
+					close(fd[1]);
+					tmpp = fd[0];
+					if (co == 0)
+						printf("bash: %s: command not found\n", actuel->command[0]);
 				}
-				close(fd[1]);
-				tmpp = fd[0];
 			}
 		}	
 		else
@@ -206,20 +155,34 @@ void	minishell(t_all *all, t_link *cmd)
 				char	**path;
 				char	*tmp;
 				char	*command;
-				i = 0;
+				int fd;
+				int co = 0;
+				i = -1;
 				path = ft_split(ft_getenv("PATH", all->headenv), ':');
-				while (path[i])
-				{
-					if (fork() == 0)
+				if (!path)
+						printf("bash: %s: No such file or directory\n", actuel->command[0]);
+				else
+				{	
+					while (path[++i])
 					{
-						dup2(tmpp, STDIN_FILENO);
 						tmp = ft_joinchar(path[i], '/');
-						command = ft_strjoin(tmp, actuel->command[0]);
-						if (execve(command, actuel->command, NULL) == -1)
-							exit (0);
-					}
-					i++;
-				}	
+						command = ft_strjoin(tmp, actuel->command[0]);	
+						fd = open(command, O_RDONLY);
+						if (fd != -1)
+						{
+							co = 1;
+							if (fork() == 0)
+							{
+								dup2(tmpp, STDIN_FILENO);
+								if (execve(command, actuel->command, NULL) == -1)
+									exit (0);
+							}
+							break ;
+						}
+					}				
+					if (co == 0)
+						printf("bash: %s: command not found\n", actuel->command[0]);
+				}
 			}
 		}
 		actuel = actuel->next;

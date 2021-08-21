@@ -24,6 +24,7 @@
 # include <errno.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <termios.h>
 # include "libft.h"
 
 # define QUOTE '\''
@@ -88,4 +89,6 @@ void	export(char **command, t_env *env);
 void	unset(char **namelist, t_all *all);
 void	echo(t_link *cmd);
 void	pwd(void);
+int		rl_replace_line(const char *str, int num);
+
 #endif

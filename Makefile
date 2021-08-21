@@ -6,7 +6,7 @@
 #    By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/02 09:47:58 by ztouzri           #+#    #+#              #
-#    Updated: 2021/08/15 19:14:28 by ztouzri          ###   ########.fr        #
+#    Updated: 2021/08/21 14:26:01 by ztouzri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ all:	$(NAME)
 $(NAME):	$(OBJS)
 	make -C libft
 	mv libft/$(LIB) .
-	$(CC) $(CFLAGS) $(OBJS) $(LIB)  -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIB)  -lreadline  ./includes/libreadline.a -lcurses -o $(NAME)
 
 clean:
 	$(RM) $(OBJS) $(LIB)

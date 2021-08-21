@@ -104,6 +104,7 @@ void	leftleft(char **command, char *delim)
 		line = readline("heredoc> ");
 		free(tmp);
 	}
+	free(line);
 	if (!fork())
 	{
 		file = open("/tmp/hd", O_RDONLY);

@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/20 12:41:33 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/21 14:31:32 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,6 +265,29 @@ void	printlink(t_link *cmd)
 	}
 }
 
+void	echo_control_seq(t_bool c)
+{
+	struct termios	conf;
+
+	ioctl(ttyslot(), TIOCGETA, &conf);
+	if (c == true)
+		conf.c_lflag |= ECHOCTL;
+	else if (c == false)
+		conf.c_lflag &= ~(ECHOCTL);
+	ioctl(ttyslot(), TIOCSETA, &conf);
+}
+
+void	interrupt(int sig)
+{
+	if (sig == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+}
+
 int	main(int ac, char **av, char **ev)
 {
 	char	*line;
@@ -275,6 +298,8 @@ int	main(int ac, char **av, char **ev)
 	(void)ac;
 	(void)av;
 	all.headenv = envmaker(ev);
+	echo_control_seq(false);
+	signal(SIGINT, interrupt);
 	while (1)
 	{
 		line = readline("minishell> ");
