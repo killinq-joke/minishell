@@ -6,11 +6,13 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/21 17:15:42 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/21 17:23:17 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_bool	g_inchild = false;
 
 int	counttoken(char *line)
 {
@@ -290,10 +292,10 @@ void	interrupt(int sig)
 
 void	quit(int sig)
 {
-	if (sig == SIGQUIT)
+	if (sig == SIGQUIT && !g_inchild)
 	{
 		rl_on_new_line();
-		// rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }

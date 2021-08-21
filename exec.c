@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern t_bool	g_inchild;
+
 void	give_good_path(t_all *all)
 {
 	if ((ft_strcmp(all->headcmd->command[0], "echo") == 0)
@@ -50,10 +52,9 @@ int		execplusredir(t_link *cmd)
 
 void	quit1(int sig)
 {
-	if (sig == SIGQUIT)
+	if (sig == SIGQUIT && g_inchild)
 	{
 		kill(0, SIGQUIT);
-		// usleep(2000);
 		// printf("\n");
 		// rl_on_new_line();
 		// rl_replace_line("", 0);
@@ -67,6 +68,7 @@ void	execcmd(t_link *cmd)
 	char	**path;
 	char	*tmp;
 
+	g_inchild = true;
 	if (good_path_for_cmd(cmd) == false)
 	{
 		// if (fork() == 0)
@@ -95,4 +97,5 @@ void	execcmd(t_link *cmd)
 			// }
 		}
 	}
+	g_inchild = false;
 }
