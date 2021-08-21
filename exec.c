@@ -48,6 +48,19 @@ int		execplusredir(t_link *cmd)
 	return (0);
 }
 
+void	quit1(int sig)
+{
+	if (sig == SIGQUIT)
+	{
+		kill(0, SIGQUIT);
+		// usleep(2000);
+		// printf("\n");
+		// rl_on_new_line();
+		// rl_replace_line("", 0);
+		// rl_redisplay();
+	}
+}
+
 void	execcmd(t_link *cmd)
 {
 	int		i;
@@ -57,8 +70,9 @@ void	execcmd(t_link *cmd)
 	if (good_path_for_cmd(cmd) == false)
 	{
 		// if (fork() == 0)
-			if (execve(cmd->command[0], cmd->command, NULL) == -1)
-				exit(0);
+		signal(SIGQUIT, quit1);
+		if (execve(cmd->command[0], cmd->command, NULL) == -1)
+			exit(0);
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/21 15:23:08 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/21 15:24:57 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,6 @@ void	unset(char **namelist, t_all *all)
 		i = 1;
 		while (namelist[i])
 		{
-			printf("%s\n", namelist[i]);
 			if (!ft_strcmp(current->name, namelist[i]))
 			{
 				if (isfirst)
