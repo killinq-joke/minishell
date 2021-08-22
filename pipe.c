@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern t_signal g_signal;
+
 void	minishell(t_all *all, t_link *cmd)
 {
 	t_link	*actuel;
@@ -23,6 +25,7 @@ void	minishell(t_all *all, t_link *cmd)
 	actuel = cmd;
 	actual = cmd;
 	int taille = 0;
+	echo_control_seq(true);
 	while (actual)
 	{
 		taille++;
@@ -35,7 +38,8 @@ void	minishell(t_all *all, t_link *cmd)
 			if ((ft_strcmp(actuel->command[0], "echo") == 0) || (ft_strcmp(actuel->command[0], "cd") == 0) || (ft_strcmp(actuel->command[0], "pwd") == 0) || (ft_strcmp(actuel->command[0], "exit") == 0) || (ft_strcmp(actuel->command[0], "export") == 0) || (ft_strcmp(actuel->command[0], "unset") == 0) || (ft_strcmp(actuel->command[0], "env") == 0))
 			{
 				pipe(fd);
-				if (fork() == 0)
+				g_signal.childpid = fork();
+				if (!g_signal.childpid)
 				{
 					dup2(tmpp, STDIN_FILENO);
 					dup2(fd[1], STDOUT_FILENO);
@@ -61,15 +65,21 @@ void	minishell(t_all *all, t_link *cmd)
 			else if (ft_strncmp("/", actuel->command[0], 1) == 0 || ft_strncmp("./", actuel->command[0], 2) == 0 || ft_strncmp("../", actuel->command[0], 3) == 0)
 			{
 				pipe(fd);
-				if (fork() == 0)
+				g_signal.childpid = fork();
+				if (opendir(actuel->command[0]))
+					printf("bash :%s : is a Directory \n", actuel->command[0]);
+				else 
 				{
-					dup2(tmpp, STDIN_FILENO);
-					dup2(fd[1], STDOUT_FILENO);
-					if (execve(actuel->command[0], actuel->command, NULL) == -1)
-						exit (printf("bonjour\n"));
+					if (!g_signal.childpid)
+					{
+						dup2(tmpp, STDIN_FILENO);
+						dup2(fd[1], STDOUT_FILENO);
+						if (execve(actuel->command[0], actuel->command, NULL) == -1)
+							exit(printf("%s\n", strerror(errno)));
+					}
+					close(fd[1]);
+					tmpp = fd[0];
 				}
-				close(fd[1]);
-				tmpp = fd[0];
 			}
 			else
 			{
@@ -83,7 +93,7 @@ void	minishell(t_all *all, t_link *cmd)
 				i = -1;
 				path = ft_split(ft_getenv("PATH", all->headenv), ':');
 				if (!path)
-						printf("bash: %s: No such file or directory\n", actuel->command[0]);
+					printf("bash: %s: No such file or directory\n", actuel->command[0]);
 				else 
 				{
 					while (path[++i])
@@ -94,7 +104,9 @@ void	minishell(t_all *all, t_link *cmd)
 						if (fdd != -1)
 						{
 							co = 1;
-							if (fork() == 0)
+							g_signal.childpid = fork();
+							printf("d %d\n", g_signal.childpid);
+							if (!g_signal.childpid)
 							{
 								dup2(tmpp, STDIN_FILENO);
 								dup2(fd[1], STDOUT_FILENO);;
@@ -127,7 +139,9 @@ void	minishell(t_all *all, t_link *cmd)
 					pwd();
 				else
 				{
-					if (fork() == 0)
+					g_signal.childpid = fork();
+					printf("c %d\n", g_signal.childpid);
+					if (!g_signal.childpid)
 					{
 						dup2(tmpp, STDIN_FILENO);
 						if (ft_strcmp(actuel->command[0], "echo") == 0)
@@ -142,11 +156,17 @@ void	minishell(t_all *all, t_link *cmd)
 			}
 			else if (ft_strncmp("/", actuel->command[0], 1) == 0 || ft_strncmp("./", actuel->command[0], 2) == 0 || ft_strncmp("../", actuel->command[0], 3) == 0)
 			{
-				if (fork() == 0)
+				g_signal.childpid = fork();
+				if (opendir(actuel->command[0]))
+					printf("bash :%s : is a Directory \n", actuel->command[0]);
+				else 
 				{
-					dup2(tmpp, STDIN_FILENO);
-					if (execve(actuel->command[0], actuel->command, NULL) == -1)
-						exit (0);
+					if (!g_signal.childpid)
+					{
+						dup2(tmpp, STDIN_FILENO);
+						if (execve(actuel->command[0], actuel->command, NULL) == -1)
+							exit(printf("%s\n", strerror(errno)));
+					}
 				}
 			}
 			else
@@ -171,7 +191,9 @@ void	minishell(t_all *all, t_link *cmd)
 						if (fd != -1)
 						{
 							co = 1;
-							if (fork() == 0)
+							g_signal.childpid = fork();
+							printf("a %d\n", g_signal.childpid);
+							if (!g_signal.childpid)
 							{
 								dup2(tmpp, STDIN_FILENO);
 								if (execve(command, actuel->command, NULL) == -1)

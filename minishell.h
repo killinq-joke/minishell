@@ -24,7 +24,9 @@
 # include <errno.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <string.h>
 # include <termios.h>
+# include <dirent.h>
 # include "libft.h"
 
 # define QUOTE '\''
@@ -39,6 +41,10 @@ typedef enum e_bool {
 	false,
 	true,
 }				t_bool;
+
+typedef struct g_signal {
+	pid_t childpid;
+}				t_signal;
 
 typedef struct s_all
 {
@@ -90,5 +96,6 @@ void	unset(char **namelist, t_all *all);
 void	echo(t_link *cmd);
 void	pwd(void);
 int		rl_replace_line(const char *str, int num);
+void	echo_control_seq(t_bool c);
 
 #endif

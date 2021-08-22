@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-t_bool	g_inchild = false;
+t_signal	g_signal;
 
 int	counttoken(char *line)
 {
@@ -279,24 +279,23 @@ void	echo_control_seq(t_bool c)
 	ioctl(ttyslot(), TIOCSETA, &conf);
 }
 
-void	interrupt(int sig)
+void	signalhandler(int sig)
 {
-	if (sig == SIGINT)
+	if (sig == SIGINT && !g_signal.childpid)
 	{
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-}
-
-void	quit(int sig)
-{
-	if (sig == SIGQUIT && !g_inchild)
+	else if (sig == SIGQUIT && !g_signal.childpid)
 	{
 		rl_on_new_line();
-		rl_replace_line("", 0);
 		rl_redisplay();
+	}
+	else if (sig == SIGQUIT)
+	{
+		printf("Quit: 3\n");
 	}
 }
 
@@ -310,11 +309,12 @@ int	main(int ac, char **av, char **ev)
 	(void)ac;
 	(void)av;
 	all.headenv = envmaker(ev);
-	echo_control_seq(false);
-	signal(SIGINT, interrupt);
-	signal(SIGQUIT, quit);
+	signal(SIGINT, signalhandler);
+	signal(SIGQUIT, signalhandler);
 	while (1)
 	{
+		echo_control_seq(false);
+		g_signal.childpid = 0;
 		line = readline("minishell> ");
 		if (!line)
 		{
@@ -339,7 +339,6 @@ int	main(int ac, char **av, char **ev)
 				all.headcmd = parspipe(tokens);
 				all.headcmd->path_bis = ft_getenv("PATH", all.headenv);
 				printlink(all.headcmd);
-				//give_good_path(&all);
 				minishell(&all, all.headcmd);
 				while(wait(NULL) > 0)
 					;

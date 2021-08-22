@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern t_bool	g_inchild;
+extern t_signal g_signal;
 
 void	give_good_path(t_all *all)
 {
@@ -50,29 +50,14 @@ int		execplusredir(t_link *cmd)
 	return (0);
 }
 
-void	quit1(int sig)
-{
-	if (sig == SIGQUIT && g_inchild)
-	{
-		kill(0, SIGQUIT);
-		// printf("\n");
-		// rl_on_new_line();
-		// rl_replace_line("", 0);
-		// rl_redisplay();
-	}
-}
-
 void	execcmd(t_link *cmd)
 {
 	int		i;
 	char	**path;
 	char	*tmp;
 
-	g_inchild = true;
 	if (good_path_for_cmd(cmd) == false)
 	{
-		// if (fork() == 0)
-		signal(SIGQUIT, quit1);
 		if (execve(cmd->command[0], cmd->command, NULL) == -1)
 			exit(0);
 	}
@@ -82,20 +67,14 @@ void	execcmd(t_link *cmd)
 		path = ft_split(cmd->path_bis, ':');
 		while (path[++i])
 		{
-			// if (fork() == 0)
-			// {
-				tmp = path[i];
-				path[i] = ft_joinchar(path[i], '/');
-				free(tmp);
-				tmp = cmd->command[0];
-				cmd->command[0] = ft_strjoin(path[i], cmd->command[0]);
-				free(tmp);
-				if (execplusredir(cmd) == -1)
-					exit(0);
-				// if (execve(cmd->command[0], cmd->command, NULL) == -1)
-				// 	exit(0);
-			// }
+			tmp = path[i];
+			path[i] = ft_joinchar(path[i], '/');
+			free(tmp);
+			tmp = cmd->command[0];
+			cmd->command[0] = ft_strjoin(path[i], cmd->command[0]);
+			free(tmp);
+			if (execplusredir(cmd) == -1)
+				exit(0);
 		}
 	}
-	g_inchild = false;
 }
