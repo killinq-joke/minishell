@@ -281,12 +281,15 @@ void	echo_control_seq(t_bool c)
 
 void	signalhandler(int sig)
 {
-	if (sig == SIGINT && !g_signal.childpid)
+	if (sig == SIGINT)
 	{
 		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		if (!g_signal.childpid)
+		{
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+		}
 	}
 	else if (sig == SIGQUIT && !g_signal.childpid)
 	{
@@ -294,9 +297,7 @@ void	signalhandler(int sig)
 		rl_redisplay();
 	}
 	else if (sig == SIGQUIT)
-	{
 		printf("Quit: 3\n");
-	}
 }
 
 int	main(int ac, char **av, char **ev)

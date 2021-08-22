@@ -139,10 +139,10 @@ void	minishell(t_all *all, t_link *cmd)
 					pwd();
 				else
 				{
-					g_signal.childpid = fork();
 					printf("c %d\n", g_signal.childpid);
 					if (!g_signal.childpid)
 					{
+						g_signal.childpid = fork();
 						dup2(tmpp, STDIN_FILENO);
 						if (ft_strcmp(actuel->command[0], "echo") == 0)
 							echo(actuel);
@@ -156,11 +156,11 @@ void	minishell(t_all *all, t_link *cmd)
 			}
 			else if (ft_strncmp("/", actuel->command[0], 1) == 0 || ft_strncmp("./", actuel->command[0], 2) == 0 || ft_strncmp("../", actuel->command[0], 3) == 0)
 			{
-				g_signal.childpid = fork();
 				if (opendir(actuel->command[0]))
 					printf("bash :%s : is a Directory \n", actuel->command[0]);
 				else 
 				{
+					g_signal.childpid = fork();
 					if (!g_signal.childpid)
 					{
 						dup2(tmpp, STDIN_FILENO);
