@@ -105,7 +105,6 @@ void	minishell(t_all *all, t_link *cmd)
 						{
 							co = 1;
 							g_signal.childpid = fork();
-							printf("d %d\n", g_signal.childpid);
 							if (!g_signal.childpid)
 							{
 								dup2(tmpp, STDIN_FILENO);
@@ -139,10 +138,9 @@ void	minishell(t_all *all, t_link *cmd)
 					pwd();
 				else
 				{
-					printf("c %d\n", g_signal.childpid);
+					g_signal.childpid = fork();
 					if (!g_signal.childpid)
 					{
-						g_signal.childpid = fork();
 						dup2(tmpp, STDIN_FILENO);
 						if (ft_strcmp(actuel->command[0], "echo") == 0)
 							echo(actuel);
@@ -192,7 +190,6 @@ void	minishell(t_all *all, t_link *cmd)
 						{
 							co = 1;
 							g_signal.childpid = fork();
-							printf("a %d\n", g_signal.childpid);
 							if (!g_signal.childpid)
 							{
 								dup2(tmpp, STDIN_FILENO);

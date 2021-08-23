@@ -36,6 +36,7 @@
 typedef struct s_link	t_link;
 typedef struct s_env	t_env;
 typedef struct s_all	t_all;
+typedef struct s_redir	t_redir;
 
 typedef enum e_bool {
 	false,
@@ -51,6 +52,13 @@ typedef struct s_all
 	t_env	*headenv;
 	t_link	*headcmd;
 }				t_all;
+
+typedef struct s_redir
+{
+	char	redir;
+	char	*arg;
+	t_redir	*next;
+}				t_redir;
 
 typedef struct s_env
 {

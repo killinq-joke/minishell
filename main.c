@@ -334,6 +334,7 @@ int	main(int ac, char **av, char **ev)
 			tmp = line;
 			line = ft_trimquotes(line);
 			free(tmp);
+			printf("%s\n", line);
 			tokens = parstoken(line);
 			if (tokens && splitlen(tokens))
 			{
