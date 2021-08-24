@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/24 10:12:27 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/24 12:10:10 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,6 +248,18 @@ char	**commandsplit(char *line)
 	return (split);
 }
 
+void	printredir(t_redir *redir)
+{
+	t_redir	*current;
+
+	current = redir;
+	while (current)
+	{
+		printf("redir == %s | arg == %s | %p\n", current->redir, current->arg, current->next);
+		current = current->next;
+	}
+}
+
 void	printlink(t_link *cmd)
 {
 	int		i;
@@ -349,9 +361,35 @@ t_redir	*redirmaker(char **tokens)
 	return (head);
 }
 
+char	**redirremover(char **tokens)
+{
+	int	i;
+
+	i = 0;
+	while (tokens && tokens[i])
+	{
+
+	}
+	return (tokens);
+}
+
+void	trimtokens(char **tokens)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	while (tokens && tokens[i])
+	{
+		tmp = tokens[i];
+		tokens[i] = ft_trimquotes(tmp);
+		free(tmp);
+		i++;
+	}
+}
+
 int	main(int ac, char **av, char **ev)
 {
-	t_redir	*current;
 	char	*line;
 	char	*tmp;
 	char	**tokens;
@@ -382,21 +420,7 @@ int	main(int ac, char **av, char **ev)
 			line = parsenv(tmp, all.headenv);
 			free(tmp);
 			tokens = parstoken(line);
-			all.headredir = redirmaker(tokens);
-			current = all.headredir;
-			while (current)
-			{
-				printf("redir == %s | arg == %s | %p\n", current->redir, current->arg, current->next);
-				current = current->next;
-			}
-			// i = 0;
-			// while (tokens && tokens[i])
-			// {
-			// 	tmp = tokens[i];
-			// 	tokens[i] = ft_trimquotes(tmp);
-			// 	free(tmp);
-			// 	i++;
-			// }
+			trimtokens(tokens);
 			if (tokens && splitlen(tokens))
 			{
 				all.headcmd = parspipe(tokens);

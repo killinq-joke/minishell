@@ -51,7 +51,7 @@ typedef struct s_all
 {
 	t_env	*headenv;
 	t_link	*headcmd;
-	t_redir	*headredir;
+	int		exit_status;	
 }				t_all;
 
 typedef struct s_redir
@@ -75,7 +75,7 @@ typedef struct s_link
 	char	**path;
 	char	*path_bis;
 	t_env	*env;
-	int		fd_tmp;
+	t_redir	*redir;
 	t_link	*next;
 }				t_link;
 
@@ -106,5 +106,6 @@ void	echo(t_link *cmd);
 void	pwd(void);
 int		rl_replace_line(const char *str, int num);
 void	echo_control_seq(t_bool c);
+t_redir	*redirmaker(char **tokens);
 
 #endif

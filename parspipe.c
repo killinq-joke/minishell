@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parspipe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:28:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/18 20:06:45 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/24 11:32:20 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ t_link	*parspipe(char **tokens)
 	while (tokens[i])
 	{
 		current->command = parscmd(tokens, &i);
+		current->redir = redirmaker(current->command);
 		if (tokens[i] && !ft_strcmp(tokens[i], "|"))
 			i++;
 		if (!tokens[i])
