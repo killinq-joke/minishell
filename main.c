@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/24 12:10:10 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/24 14:11:37by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	counttoken(char *line)
 	return (count);
 }
 
-char	*parsenv(char *line, t_env *env)
+char	*parsenv(t_all *all, char *line, t_env *env)
 {
 	int		i;
 	int		j;
@@ -71,7 +71,6 @@ char	*parsenv(char *line, t_env *env)
 	char	*tmp;
 	char	*tmp1;
 	char	*name;
-	int		status;
 	t_bool	indquote;
 
 	res = ft_calloc(1, sizeof (char));
@@ -110,12 +109,9 @@ char	*parsenv(char *line, t_env *env)
 				name = ft_substr(&line[1], i, j);
 				if (!ft_strcmp(name, "?"))
 				{
-					//a modifier
-					WEXITSTATUS(status);
 					tmp = res;
-					tmp1 = ft_itoa(status);
+					tmp1 = ft_itoa(all->exit_status);
 					res = ft_strjoin(tmp, tmp1);
-					printf("%d\n", status);
 					free(tmp1);
 					free(tmp);
 				}
@@ -274,6 +270,7 @@ void	printlink(t_link *cmd)
 			printf("%s\n", current->command[i]);
 			i++;
 		}
+		printredir(current->redir);
 		printf("-------------------------------\n");
 		current = current->next;
 	}
@@ -361,16 +358,46 @@ t_redir	*redirmaker(char **tokens)
 	return (head);
 }
 
+char	**joinstr(char **split, char *str)
+{
+	int		i;
+	char	**join;
+
+	join = ft_calloc(splitlen(split) + 2, sizeof (char *));
+	i = 0;
+	while (split[i])
+	{
+		join[i] = ft_strdup(split[i]);
+		i++;
+	}
+	join[i] = ft_strdup(str);
+	return (join);
+}
+
 char	**redirremover(char **tokens)
 {
-	int	i;
+	int		i;
+	int		count;
+	char	**tmp;
+	char	**res;
 
+	res = ft_calloc(1, sizeof (char *));
+	count = 0;
 	i = 0;
 	while (tokens && tokens[i])
 	{
-
+		if (ft_strcmp(tokens[i], ">") && ft_strcmp(tokens[i], ">>")
+			&& ft_strcmp(tokens[i], "<") && ft_strcmp(tokens[i], "<<"))
+		{
+			tmp = res;
+			res = joinstr(tmp, tokens[i]);
+			free(tmp);
+		}
+		else
+			i++;
+		i++;
 	}
-	return (tokens);
+	return (res);
 }
 
 void	trimtokens(char **tokens)
@@ -417,9 +444,10 @@ int	main(int ac, char **av, char **ev)
 		if (checkerror(line) == true)
 		{
 			tmp = line;
-			line = parsenv(tmp, all.headenv);
+			line = parsenv(&all, tmp, all.headenv);
 			free(tmp);
 			tokens = parstoken(line);
+			tokens = redirremover(tokens);
 			trimtokens(tokens);
 			if (tokens && splitlen(tokens))
 			{

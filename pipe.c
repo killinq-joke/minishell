@@ -16,6 +16,7 @@ extern t_signal g_signal;
 
 void	minishell(t_all *all, t_link *cmd)
 {
+	all->exit_status = 0;
 	t_link	*actuel;
 	t_link	*actual;
 	t_all	*element;
@@ -57,7 +58,7 @@ void	minishell(t_all *all, t_link *cmd)
 						unset(actuel->command, element);
 					if (ft_strcmp(actuel->command[0], "exit") == 0)
 						;
-					exit(1);
+					exit(0);
 				}
 				close(fd[1]);
 				tmpp = fd[0];
@@ -75,10 +76,16 @@ void	minishell(t_all *all, t_link *cmd)
 						dup2(tmpp, STDIN_FILENO);
 						dup2(fd[1], STDOUT_FILENO);
 						if (execve(actuel->command[0], actuel->command, NULL) == -1)
-							exit(printf("%s\n", strerror(errno)));
+							exit(errno);
 					}
 					close(fd[1]);
 					tmpp = fd[0];
+					waitpid(g_signal.childpid, &all->exit_status, 0);
+					if (WIFEXITED(g_signal.childpid))
+					{
+						all->exit_status = 127;
+						printf("%s\n", strerror(errno));
+					}
 				}
 			}
 			else
@@ -110,15 +117,27 @@ void	minishell(t_all *all, t_link *cmd)
 								dup2(tmpp, STDIN_FILENO);
 								dup2(fd[1], STDOUT_FILENO);;
 								if (execve(command, actuel->command, NULL) == -1)
-								exit (0);
+									exit (errno);
 							}
+							waitpid(g_signal.childpid, &all->exit_status, 0);	
 							break;
 						}
 					}
 					close(fd[1]);
 					tmpp = fd[0];
 					if (co == 0)
+					{
+						all->exit_status = 127;
 						printf("bash: %s: command not found\n", actuel->command[0]);
+					}
+					if (co == 1) 
+					{
+						if (WIFEXITED(g_signal.childpid))
+						{
+							all->exit_status = 1;
+							printf("%s\n", strerror(errno));
+						}
+					}
 				}
 			}
 		}	
@@ -163,7 +182,13 @@ void	minishell(t_all *all, t_link *cmd)
 					{
 						dup2(tmpp, STDIN_FILENO);
 						if (execve(actuel->command[0], actuel->command, NULL) == -1)
-							exit(printf("%s\n", strerror(errno)));
+							exit(errno);
+					}
+					waitpid(g_signal.childpid, &all->exit_status, 0);
+					if (WIFEXITED(g_signal.childpid))
+					{
+						all->exit_status = 127;
+						printf("%s\n", strerror(errno));
 					}
 				}
 			}
@@ -194,13 +219,25 @@ void	minishell(t_all *all, t_link *cmd)
 							{
 								dup2(tmpp, STDIN_FILENO);
 								if (execve(command, actuel->command, NULL) == -1)
-									exit (0);
+									exit (errno);
 							}
+							waitpid(g_signal.childpid, &all->exit_status, 0);
 							break ;
 						}
 					}				
 					if (co == 0)
+					{
+						all->exit_status = 127;
 						printf("bash: %s: command not found\n", actuel->command[0]);
+					}
+					if (co == 1) 
+					{
+						if (WIFEXITED(g_signal.childpid))
+						{
+							all->exit_status = 1;
+							printf("%s\n", strerror(errno));
+						}
+					}
 				}
 			}
 		}
