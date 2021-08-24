@@ -75,6 +75,7 @@ void	cderror(char *path)
 {
 	int	error;
 
+	printf("salut\n");
 	error = errno;
 	ft_puterr("cd: ");
 	ft_puterr(path);
@@ -97,9 +98,10 @@ void	cderror(char *path)
 
 void	cd(t_link *cmd, t_env *env)
 {
+	t_env	*current;
 	char	*path;
 
-	if (linklen(cmd) == 1)
+	if (splitlen(cmd->command) == 1 || !ft_strcmp("~", cmd->command[1]))
 	{
 		path = ft_getenv("HOME", env);
 		if (!path)
@@ -112,6 +114,17 @@ void	cd(t_link *cmd, t_env *env)
 		path = cmd->command[1];
 	if (chdir(path) == -1)
 		cderror(path);
+	else
+	{
+		// printf("%s %d\n", path, chdir(path));
+		current = env;
+		while (current)
+		{
+			if (!ft_strcmp(current->name, "PWD"))
+				current->value = getcwd(NULL, 0);
+			current = current->next;
+		}
+	}
 }
 
 char	*getvalue(const char *name)

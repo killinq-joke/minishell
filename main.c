@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/21 17:23:17 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/24 10:12:27 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,8 +300,58 @@ void	signalhandler(int sig)
 		printf("Quit: 3\n");
 }
 
+t_redir	*redirinit(void)
+{
+	t_redir	*node;
+
+	node = ft_calloc(1, sizeof (t_redir));
+	node->redir = NULL;
+	node->arg = NULL;
+	node->next = NULL;
+	return (node);
+}
+
+t_redir	*redirmaker(char **tokens)
+{
+	int		i;
+	int		nbofredir;
+	t_redir	*head;
+	t_redir	*current;
+
+	nbofredir = 0;
+	i = 0;
+	while (tokens && tokens[i])
+	{
+		if (!ft_strcmp(tokens[i], ">") || !ft_strcmp(tokens[i], "<")
+			|| !ft_strcmp(tokens[i], ">>") || !ft_strcmp(tokens[i], "<<"))
+			nbofredir++;
+		i++;
+	}
+	if (!nbofredir)
+		return (NULL);
+	head = redirinit();
+	current = head;
+	i = 0;
+	while (nbofredir && tokens[i])
+	{
+		if (!ft_strcmp(tokens[i], ">") || !ft_strcmp(tokens[i], "<")
+			|| !ft_strcmp(tokens[i], ">>") || !ft_strcmp(tokens[i], "<<"))
+		{
+			current->redir = ft_strdup(tokens[i++]);
+			current->arg = ft_strdup(tokens[i]);
+			if (!--nbofredir)
+				break ;
+			current->next = redirinit();
+			current = current->next;
+		}
+		i++;
+	}
+	return (head);
+}
+
 int	main(int ac, char **av, char **ev)
 {
+	t_redir	*current;
 	char	*line;
 	char	*tmp;
 	char	**tokens;
@@ -331,11 +381,22 @@ int	main(int ac, char **av, char **ev)
 			tmp = line;
 			line = parsenv(tmp, all.headenv);
 			free(tmp);
-			tmp = line;
-			line = ft_trimquotes(line);
-			free(tmp);
-			printf("%s\n", line);
 			tokens = parstoken(line);
+			all.headredir = redirmaker(tokens);
+			current = all.headredir;
+			while (current)
+			{
+				printf("redir == %s | arg == %s | %p\n", current->redir, current->arg, current->next);
+				current = current->next;
+			}
+			// i = 0;
+			// while (tokens && tokens[i])
+			// {
+			// 	tmp = tokens[i];
+			// 	tokens[i] = ft_trimquotes(tmp);
+			// 	free(tmp);
+			// 	i++;
+			// }
 			if (tokens && splitlen(tokens))
 			{
 				all.headcmd = parspipe(tokens);

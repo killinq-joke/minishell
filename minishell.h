@@ -44,18 +44,19 @@ typedef enum e_bool {
 }				t_bool;
 
 typedef struct g_signal {
-	pid_t childpid;
+	pid_t	childpid;
 }				t_signal;
 
 typedef struct s_all
 {
 	t_env	*headenv;
 	t_link	*headcmd;
+	t_redir	*headredir;
 }				t_all;
 
 typedef struct s_redir
 {
-	char	redir;
+	char	*redir;
 	char	*arg;
 	t_redir	*next;
 }				t_redir;
