@@ -125,6 +125,24 @@ void	minishell(t_all *all, t_link *cmd)
 						}
 						current = current->next;
 					}
+					out = dup(STDOUT_FILENO);
+					current = actuel->redir;
+					while (current)
+					{
+						if (!ft_strcmp(current->redir, ">"))
+						{
+							file = open(current->arg, O_RDWR | O_CREAT | O_TRUNC, 0644);
+							dup2(file, STDOUT_FILENO);
+							close(file);
+						}
+						if (!ft_strcmp(current->redir, ">>"))
+						{
+							file = open(current->arg, O_RDWR | O_CREAT | O_APPEND, 0644);
+							dup2(file, STDOUT_FILENO);
+							close(file);
+						}
+						current = current->next;
+					}
 					while (path[++i])
 					{
 						tmp = ft_joinchar(path[i], '/');
@@ -137,10 +155,14 @@ void	minishell(t_all *all, t_link *cmd)
 							if (!g_signal.childpid)
 							{
 								dup2(tmpp, STDIN_FILENO);
-								dup2(fd[1], STDOUT_FILENO);
+								if (file < 3)
+									dup2(fd[1], STDOUT_FILENO);
 								if (execve(command, actuel->command, NULL) == -1)
 									exit (errno);
 							}
+							if (file > 2)
+								dup2(out, STDOUT_FILENO);
+							//a modifier
 							waitpid(g_signal.childpid, &all->exit_status, 0);
 							if (WEXITSTATUS(all->exit_status))
 								all->exit_status = 1;
@@ -191,11 +213,9 @@ void	minishell(t_all *all, t_link *cmd)
 				while (current)
 				{
 					if (!ft_strcmp(current->redir, ">"))
-					{
 						file = open(current->arg, O_RDWR | O_CREAT | O_TRUNC, 0644);
-						if (file < 3)
-							return ;
-					}
+					if (!ft_strcmp(current->redir, ">>"))
+						file = open(current->arg, O_RDWR | O_CREAT | O_APPEND, 0644);
 					current = current->next;
 				}
 				if ((ft_strcmp(actuel->command[0], "export") == 0) && (taille == 1))
@@ -343,6 +363,12 @@ void	minishell(t_all *all, t_link *cmd)
 					if (!ft_strcmp(current->redir, ">"))
 					{
 						file = open(current->arg, O_RDWR | O_CREAT | O_TRUNC, 0644);
+						dup2(file, STDOUT_FILENO);
+						close(file);
+					}
+					if (!ft_strcmp(current->redir, ">>"))
+					{
+						file = open(current->arg, O_RDWR | O_CREAT | O_APPEND, 0644);
 						dup2(file, STDOUT_FILENO);
 						close(file);
 					}
