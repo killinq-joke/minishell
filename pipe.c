@@ -90,12 +90,40 @@ void	minishell(t_all *all, t_link *cmd)
 				char	*command;
 				int co = 0;
 				int fdd;
+				t_redir	*current;
+
 				i = -1;
 				path = ft_split(ft_getenv("PATH", all->headenv), ':');
 				if (!path)
 					printf("bash: %s: No such file or directory\n", actuel->command[0]);
 				else 
 				{
+					current = actuel->redir;
+					while (current)
+					{
+						if (!ft_strcmp(current->redir, "<<"))
+						{
+							char	*line;
+							char	*tmp;
+
+							tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
+							line = readline("> ");
+							printf("f\n");
+							while (line && ft_strcmp(line, current->arg))
+							{
+								printf("a\n");
+								write(tmpp, line, ft_strlen(line));
+								write(tmpp, "\n", 1);
+								tmp = line;
+								line = readline("> ");
+								free(tmp);
+							}
+							free(line);
+							tmpp = open("/tmp/hd", O_RDONLY);
+							unlink("/tmp/hd");
+						}
+						current = current->next;
+					}
 					while (path[++i])
 					{
 						tmp = ft_joinchar(path[i], '/');
@@ -132,6 +160,33 @@ void	minishell(t_all *all, t_link *cmd)
 		{
 			if ((ft_strcmp(actuel->command[0], "echo") == 0) || (ft_strcmp(actuel->command[0], "cd") == 0) || (ft_strcmp(actuel->command[0], "pwd") == 0) || (ft_strcmp(actuel->command[0], "exit") == 0) || (ft_strcmp(actuel->command[0], "export") == 0) || (ft_strcmp(actuel->command[0], "unset") == 0) || (ft_strcmp(actuel->command[0], "env") == 0))
 			{
+				t_redir	*current;
+
+				current = actuel->redir;
+				while (current)
+				{
+					if (!ft_strcmp(current->redir, "<<"))
+					{
+						char	*line;
+						char	*tmp;
+
+						tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
+						line = readline("> ");
+						printf("b\n");
+						while (line && ft_strcmp(line, current->arg))
+						{
+							write(tmpp, line, ft_strlen(line));
+							write(tmpp, "\n", 1);
+							tmp = line;
+							line = readline("> ");
+							free(tmp);
+						}
+						free(line);
+						tmpp = open("/tmp/hd", O_RDONLY);
+						unlink("/tmp/hd");
+					}
+					current = current->next;
+				}
 				if ((ft_strcmp(actuel->command[0], "export") == 0) && (taille == 1))
 					export(actuel->command, all->headenv);
 				else if ((ft_strcmp(actuel->command[0], "unset") == 0) && (taille == 1))
@@ -160,6 +215,33 @@ void	minishell(t_all *all, t_link *cmd)
 			}
 			else if (ft_strncmp("/", actuel->command[0], 1) == 0 || ft_strncmp("./", actuel->command[0], 2) == 0 || ft_strncmp("../", actuel->command[0], 3) == 0)
 			{
+				t_redir	*current;
+
+				current = actuel->redir;
+				while (current)
+				{
+					if (!ft_strcmp(current->redir, "<<"))
+					{
+						char	*line;
+						char	*tmp;
+
+						tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
+						line = readline("> ");
+						printf("c\n");
+						while (line && ft_strcmp(line, current->arg))
+						{
+							write(tmpp, line, ft_strlen(line));
+							write(tmpp, "\n", 1);
+							tmp = line;
+							line = readline("> ");
+							free(tmp);
+						}
+						free(line);
+						tmpp = open("/tmp/hd", O_RDONLY);
+						unlink("/tmp/hd");
+					}
+					current = current->next;
+				}
 				if (opendir(actuel->command[0]))
 				{
 					all->exit_status = 126;
@@ -201,11 +283,11 @@ void	minishell(t_all *all, t_link *cmd)
 					{
 						char	*line;
 						char	*tmp;
-						char	*delim;
 
 						tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
 						line = readline("> ");
-						while (ft_strcmp(line, delim))
+						printf("e\n");
+						while (line && ft_strcmp(line, current->arg))
 						{
 							write(tmpp, line, ft_strlen(line));
 							write(tmpp, "\n", 1);
@@ -214,14 +296,8 @@ void	minishell(t_all *all, t_link *cmd)
 							free(tmp);
 						}
 						free(line);
-						if (!fork())
-						{
-							tmpp = open("/tmp/hd", O_RDONLY);
-							unlink("/tmp/hd");
-							dup2(tmpp, STDIN_FILENO);
-							close(tmpp);
-						}
-
+						tmpp = open("/tmp/hd", O_RDONLY);
+						unlink("/tmp/hd");
 					}
 					current = current->next;
 				}
