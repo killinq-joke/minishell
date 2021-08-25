@@ -20,7 +20,8 @@ void	minishell(t_all *all, t_link *cmd)
 	int		fd[2];
 	int		tmpp = STDIN_FILENO;
 	int		taille;
-	int	file;
+	int		file;
+	int		out;
 
 	taille = linklen(cmd);
 	actuel = cmd;
@@ -264,6 +265,18 @@ void	minishell(t_all *all, t_link *cmd)
 				}
 				else
 				{
+					out = dup(STDOUT_FILENO);
+					current = actuel->redir;
+					while (current)
+					{
+						if (!ft_strcmp(current->redir, ">"))
+						{
+							file = open(current->arg, O_RDWR | O_CREAT | O_TRUNC, 0644);
+							dup2(file, STDOUT_FILENO);
+							close(file);
+						}
+						current = current->next;
+					}
 					g_signal.childpid = fork();
 					if (!g_signal.childpid)
 					{
@@ -271,6 +284,8 @@ void	minishell(t_all *all, t_link *cmd)
 						if (execve(actuel->command[0], actuel->command, NULL) == -1)
 							exit(errno);
 					}
+					if (file > 2)
+						dup2(out, STDOUT_FILENO);
 					waitpid(g_signal.childpid, &all->exit_status, 0);
 					if (WEXITSTATUS(all->exit_status))
 						all->exit_status = 1;
@@ -315,7 +330,7 @@ void	minishell(t_all *all, t_link *cmd)
 					}
 					current = current->next;
 				}
-				int	out = dup(STDOUT_FILENO);
+				out = dup(STDOUT_FILENO);
 				current = actuel->redir;
 				while (current)
 				{
