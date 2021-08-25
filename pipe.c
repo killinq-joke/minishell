@@ -271,7 +271,13 @@ void	minishell(t_all *all, t_link *cmd)
 					{
 						if (!ft_strcmp(current->redir, ">"))
 						{
-							file = open(current->arg, O_RDWR | O_CREAT | O_TRUNC, 0644);
+							file = open(current->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+							dup2(file, STDOUT_FILENO);
+							close(file);
+						}
+						if (!ft_strcmp(current->redir, ">>"))
+						{
+							file = open(current->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
 							dup2(file, STDOUT_FILENO);
 							close(file);
 						}
