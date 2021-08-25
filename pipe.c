@@ -20,6 +20,7 @@ void	minishell(t_all *all, t_link *cmd)
 	int		fd[2];
 	int		tmpp = STDIN_FILENO;
 	int		taille;
+	int	file;
 
 	taille = linklen(cmd);
 	actuel = cmd;
@@ -96,7 +97,7 @@ void	minishell(t_all *all, t_link *cmd)
 				path = ft_split(ft_getenv("PATH", all->headenv), ':');
 				if (!path)
 					printf("bash: %s: No such file or directory\n", actuel->command[0]);
-				else 
+				else
 				{
 					current = actuel->redir;
 					while (current)
@@ -111,7 +112,6 @@ void	minishell(t_all *all, t_link *cmd)
 							printf("f\n");
 							while (line && ft_strcmp(line, current->arg))
 							{
-								printf("a\n");
 								write(tmpp, line, ft_strlen(line));
 								write(tmpp, "\n", 1);
 								tmp = line;
@@ -127,7 +127,7 @@ void	minishell(t_all *all, t_link *cmd)
 					while (path[++i])
 					{
 						tmp = ft_joinchar(path[i], '/');
-						command = ft_strjoin(tmp, actuel->command[0]);	
+						command = ft_strjoin(tmp, actuel->command[0]);
 						fdd = open(command, O_RDONLY);
 						if (fdd != -1)
 						{
@@ -136,14 +136,14 @@ void	minishell(t_all *all, t_link *cmd)
 							if (!g_signal.childpid)
 							{
 								dup2(tmpp, STDIN_FILENO);
-								dup2(fd[1], STDOUT_FILENO);;
+								dup2(fd[1], STDOUT_FILENO);
 								if (execve(command, actuel->command, NULL) == -1)
 									exit (errno);
 							}
 							waitpid(g_signal.childpid, &all->exit_status, 0);
 							if (WEXITSTATUS(all->exit_status))
 								all->exit_status = 1;
-							break;
+							break ;
 						}
 					}
 					close(fd[1]);
@@ -172,7 +172,6 @@ void	minishell(t_all *all, t_link *cmd)
 
 						tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
 						line = readline("> ");
-						printf("b\n");
 						while (line && ft_strcmp(line, current->arg))
 						{
 							write(tmpp, line, ft_strlen(line));
@@ -184,6 +183,17 @@ void	minishell(t_all *all, t_link *cmd)
 						free(line);
 						tmpp = open("/tmp/hd", O_RDONLY);
 						unlink("/tmp/hd");
+					}
+					current = current->next;
+				}
+				current = actuel->redir;
+				while (current)
+				{
+					if (!ft_strcmp(current->redir, ">"))
+					{
+						file = open(current->arg, O_RDWR | O_CREAT | O_TRUNC, 0644);
+						if (file < 3)
+							return ;
 					}
 					current = current->next;
 				}
@@ -202,6 +212,8 @@ void	minishell(t_all *all, t_link *cmd)
 					g_signal.childpid = fork();
 					if (!g_signal.childpid)
 					{
+						if (file > 2)
+							dup2(file, STDOUT_FILENO);
 						dup2(tmpp, STDIN_FILENO);
 						if (ft_strcmp(actuel->command[0], "echo") == 0)
 							echo(actuel);
@@ -209,9 +221,13 @@ void	minishell(t_all *all, t_link *cmd)
 							printenv(all->headenv);
 						if (ft_strcmp(actuel->command[0], "export") == 0)
 							exportt(actuel->command, all->headenv);
+						if (file > 2)
+							close(file);
 						exit(1);
 					}
 				}
+				if (file > 2)
+					close(file);
 			}
 			else if (ft_strncmp("/", actuel->command[0], 1) == 0 || ft_strncmp("./", actuel->command[0], 2) == 0 || ft_strncmp("../", actuel->command[0], 3) == 0)
 			{
@@ -227,7 +243,6 @@ void	minishell(t_all *all, t_link *cmd)
 
 						tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
 						line = readline("> ");
-						printf("c\n");
 						while (line && ft_strcmp(line, current->arg))
 						{
 							write(tmpp, line, ft_strlen(line));
@@ -247,7 +262,7 @@ void	minishell(t_all *all, t_link *cmd)
 					all->exit_status = 126;
 					printf("bash :%s : is a Directory \n", actuel->command[0]);
 				}
-				else 
+				else
 				{
 					g_signal.childpid = fork();
 					if (!g_signal.childpid)
@@ -286,7 +301,6 @@ void	minishell(t_all *all, t_link *cmd)
 
 						tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
 						line = readline("> ");
-						printf("e\n");
 						while (line && ft_strcmp(line, current->arg))
 						{
 							write(tmpp, line, ft_strlen(line));
@@ -301,16 +315,28 @@ void	minishell(t_all *all, t_link *cmd)
 					}
 					current = current->next;
 				}
+				int	out = dup(STDOUT_FILENO);
+				current = actuel->redir;
+				while (current)
+				{
+					if (!ft_strcmp(current->redir, ">"))
+					{
+						file = open(current->arg, O_RDWR | O_CREAT | O_TRUNC, 0644);
+						dup2(file, STDOUT_FILENO);
+						close(file);
+					}
+					current = current->next;
+				}
 				i = -1;
 				path = ft_split(ft_getenv("PATH", all->headenv), ':');
 				if (!path)
-						printf("bash: %s: No such file or directory\n", actuel->command[0]);
+					printf("bash: %s: No such file or directory\n", actuel->command[0]);
 				else
 				{	
 					while (path[++i])
 					{
 						tmp = ft_joinchar(path[i], '/');
-						command = ft_strjoin(tmp, actuel->command[0]);	
+						command = ft_strjoin(tmp, actuel->command[0]);
 						fd = open(command, O_RDONLY);
 						if (fd != -1)
 						{
@@ -322,6 +348,8 @@ void	minishell(t_all *all, t_link *cmd)
 								if (execve(command, actuel->command, NULL) == -1)
 									exit (errno);
 							}
+							if (file > 2)
+								dup2(out, STDOUT_FILENO);
 							waitpid(g_signal.childpid, &all->exit_status, 0);
 							if (WEXITSTATUS(all->exit_status))
 								all->exit_status = 1;
