@@ -276,6 +276,18 @@ void	printlink(t_link *cmd)
 	}
 }
 
+void	printsplit(char **split)
+{
+	int	i;
+
+	i = 0;
+	while (split && split[i])
+	{
+		printf("%s\n", split[i]);
+		i++;
+	}
+}
+
 void	echo_control_seq(t_bool c)
 {
 	struct termios	conf;
@@ -309,53 +321,53 @@ void	signalhandler(int sig)
 		printf("Quit: 3\n");
 }
 
-t_redir	*redirinit(void)
+t_redir	*redirinit(char *redir, char *arg)
 {
 	t_redir	*node;
 
 	node = ft_calloc(1, sizeof (t_redir));
-	node->redir = NULL;
-	node->arg = NULL;
+	node->redir = ft_strdup(redir);
+	node->arg = ft_strdup(arg);
 	node->next = NULL;
 	return (node);
 }
 
-t_redir	*redirmaker(char **tokens)
+void	rediradd(t_redir **head, t_redir *new)
 {
-	int		i;
-	int		nbofredir;
-	t_redir	*head;
 	t_redir	*current;
 
-	nbofredir = 0;
-	i = 0;
-	while (tokens && tokens[i])
+	if (!head || !(*head))
+		*head = new;
+	else
 	{
-		if (!ft_strcmp(tokens[i], ">") || !ft_strcmp(tokens[i], "<")
-			|| !ft_strcmp(tokens[i], ">>") || !ft_strcmp(tokens[i], "<<"))
-			nbofredir++;
-		i++;
-	}
-	if (!nbofredir)
-		return (NULL);
-	head = redirinit();
-	current = head;
-	i = 0;
-	while (nbofredir && tokens[i])
-	{
-		if (!ft_strcmp(tokens[i], ">") || !ft_strcmp(tokens[i], "<")
-			|| !ft_strcmp(tokens[i], ">>") || !ft_strcmp(tokens[i], "<<"))
-		{
-			current->redir = ft_strdup(tokens[i++]);
-			current->arg = ft_strdup(tokens[i]);
-			if (!--nbofredir)
-				break ;
-			current->next = redirinit();
+		current = *head;
+		while (current->next)
 			current = current->next;
-		}
-		i++;
+		current->next = new;
 	}
-	return (head);
+}
+
+void	redirmaker(t_link *cmd)
+{
+	int		i;
+	t_link	*current;
+
+	current = cmd;
+	while (current)
+	{
+		current->redir = NULL;
+		i = -1;
+		while (current->command[++i])
+		{
+			if (!ft_strcmp(current->command[i], ">") || !ft_strcmp(current->command[i], ">>")
+				|| !ft_strcmp(current->command[i], "<") || !ft_strcmp(current->command[i], "<<"))
+			{
+				rediradd(&current->redir, redirinit(current->command[i], current->command[i + 1]));
+				i++;
+			}
+		}
+		current = current->next;
+	}
 }
 
 char	**joinstr(char **split, char *str)
@@ -415,6 +427,19 @@ void	trimtokens(char **tokens)
 	}
 }
 
+void	cleancommand(t_link *cmd)
+{
+	t_link	*current;	
+
+	current = cmd;
+	while (current)
+	{
+		current->command = redirremover(current->command);
+		trimtokens(current->command);
+		current = current->next;
+	}
+}
+
 int	main(int ac, char **av, char **ev)
 {
 	char	*line;
@@ -431,6 +456,7 @@ int	main(int ac, char **av, char **ev)
 	{
 		echo_control_seq(false);
 		g_signal.childpid = 0;
+		g_signal.all = &all;
 		line = readline("minishell> ");
 		if (!line)
 		{
@@ -447,13 +473,18 @@ int	main(int ac, char **av, char **ev)
 			line = parsenv(&all, tmp, all.headenv);
 			free(tmp);
 			tokens = parstoken(line);
-			tokens = redirremover(tokens);
-			trimtokens(tokens);
 			if (tokens && splitlen(tokens))
 			{
 				all.headcmd = parspipe(tokens);
+				redirmaker(all.headcmd);
 				all.headcmd->path_bis = ft_getenv("PATH", all.headenv);
-				printlink(all.headcmd);
+				t_link	*current = all.headcmd;
+				while (current)
+				{
+					printredir(current->redir);
+					current = current->next;
+				}
+				cleancommand(all.headcmd);
 				minishell(&all, all.headcmd);
 				while(wait(NULL) > 0)
 					;

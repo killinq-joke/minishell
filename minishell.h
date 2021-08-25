@@ -45,6 +45,7 @@ typedef enum e_bool {
 
 typedef struct g_signal {
 	pid_t	childpid;
+	t_all	*all;
 }				t_signal;
 
 typedef struct s_all
@@ -106,6 +107,8 @@ void	echo(t_link *cmd);
 void	pwd(void);
 int		rl_replace_line(const char *str, int num);
 void	echo_control_seq(t_bool c);
-t_redir	*redirmaker(char **tokens);
+void	redirmaker(t_link *cmd);
+void	printredir(t_redir *redir);
+void	printsplit(char **split);
 
 #endif

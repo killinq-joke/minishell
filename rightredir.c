@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-void	right(char **command)
+void	right(t_link *cmd)
 {
 	int	file;
 
-	file = open("z.txt", O_RDWR | O_CREAT | O_TRUNC, 0644);
+	file = open(cmd->redir->arg, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (file < 3)
 		return ;
 	if (!fork())
@@ -31,6 +31,26 @@ void	right(char **command)
 		close(file);
 	}
 }
+
+// void	right(char **command)
+// {
+// 	int	file;
+
+// 	file = open("z.txt", O_RDWR | O_CREAT | O_TRUNC, 0644);
+// 	if (file < 3)
+// 		return ;
+// 	if (!fork())
+// 	{
+// 		dup2(file, STDOUT_FILENO);
+// 		if (execve(command[0], command, NULL) == -1)
+// 		{
+// 			printf("error %d\n", errno);
+// 			close(file);
+// 			return ;
+// 		}
+// 		close(file);
+// 	}
+// }
 
 void	rightright(char **command)
 {

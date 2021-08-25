@@ -16,22 +16,15 @@ extern t_signal g_signal;
 
 void	minishell(t_all *all, t_link *cmd)
 {
-	all->exit_status = 0;
 	t_link	*actuel;
-	t_link	*actual;
-	t_all	*element;
 	int		fd[2];
 	int		tmpp = STDIN_FILENO;
-	element = all;
+	int		taille;
+
+	taille = linklen(cmd);
 	actuel = cmd;
-	actual = cmd;
-	int taille = 0;
+	all->exit_status = 0;
 	echo_control_seq(true);
-	while (actual)
-	{
-		taille++;
-		actual = actual->next;
-	}
 	while (actuel)
 	{
 		if (actuel->next)
@@ -49,13 +42,13 @@ void	minishell(t_all *all, t_link *cmd)
 					if (ft_strcmp(actuel->command[0], "echo") == 0)
 						echo(actuel);
 					if (ft_strcmp(actuel->command[0], "env") == 0)
-						printenv(element->headenv);
+						printenv(all->headenv);
 					if (ft_strcmp(actuel->command[0], "cd") == 0)
-						cd(actuel, element->headenv);
+						cd(actuel, all->headenv);
 					if (ft_strcmp(actuel->command[0], "export") == 0)
-						export(actuel->command, element->headenv);
+						export(actuel->command, all->headenv);
 					if (ft_strcmp(actuel->command[0], "unset") == 0)
-						unset(actuel->command, element);
+						unset(actuel->command, all);
 					if (ft_strcmp(actuel->command[0], "exit") == 0)
 						;
 					exit(0);
@@ -68,8 +61,11 @@ void	minishell(t_all *all, t_link *cmd)
 				pipe(fd);
 				g_signal.childpid = fork();
 				if (opendir(actuel->command[0]))
+				{
+					all->exit_status = 126;
 					printf("bash :%s : is a Directory \n", actuel->command[0]);
-				else 
+				}
+				else
 				{
 					if (!g_signal.childpid)
 					{
@@ -82,10 +78,7 @@ void	minishell(t_all *all, t_link *cmd)
 					tmpp = fd[0];
 					waitpid(g_signal.childpid, &all->exit_status, 0);
 					if (WIFEXITED(g_signal.childpid))
-					{
 						all->exit_status = 127;
-						printf("%s\n", strerror(errno));
-					}
 				}
 			}
 			else
@@ -119,7 +112,9 @@ void	minishell(t_all *all, t_link *cmd)
 								if (execve(command, actuel->command, NULL) == -1)
 									exit (errno);
 							}
-							waitpid(g_signal.childpid, &all->exit_status, 0);	
+							waitpid(g_signal.childpid, &all->exit_status, 0);
+							if (WEXITSTATUS(all->exit_status))
+								all->exit_status = 1;
 							break;
 						}
 					}
@@ -130,14 +125,6 @@ void	minishell(t_all *all, t_link *cmd)
 						all->exit_status = 127;
 						printf("bash: %s: command not found\n", actuel->command[0]);
 					}
-					if (co == 1) 
-					{
-						if (WIFEXITED(g_signal.childpid))
-						{
-							all->exit_status = 1;
-							printf("%s\n", strerror(errno));
-						}
-					}
 				}
 			}
 		}	
@@ -146,13 +133,13 @@ void	minishell(t_all *all, t_link *cmd)
 			if ((ft_strcmp(actuel->command[0], "echo") == 0) || (ft_strcmp(actuel->command[0], "cd") == 0) || (ft_strcmp(actuel->command[0], "pwd") == 0) || (ft_strcmp(actuel->command[0], "exit") == 0) || (ft_strcmp(actuel->command[0], "export") == 0) || (ft_strcmp(actuel->command[0], "unset") == 0) || (ft_strcmp(actuel->command[0], "env") == 0))
 			{
 				if ((ft_strcmp(actuel->command[0], "export") == 0) && (taille == 1))
-					export(actuel->command, element->headenv);
+					export(actuel->command, all->headenv);
 				else if ((ft_strcmp(actuel->command[0], "unset") == 0) && (taille == 1))
-					unset(actuel->command, element);
+					unset(actuel->command, all);
 				else if(ft_strcmp(actuel->command[0], "exit") == 0 && (taille == 1))
 					exit(0);
 				else if (ft_strcmp(actuel->command[0], "cd") == 0)
-					cd(actuel, element->headenv);
+					cd(actuel, all->headenv);
 				else if (ft_strcmp(actuel->command[0], "pwd") == 0)
 					pwd();
 				else
@@ -164,9 +151,9 @@ void	minishell(t_all *all, t_link *cmd)
 						if (ft_strcmp(actuel->command[0], "echo") == 0)
 							echo(actuel);
 						if (ft_strcmp(actuel->command[0], "env") == 0)
-							printenv(element->headenv);
+							printenv(all->headenv);
 						if (ft_strcmp(actuel->command[0], "export") == 0)
-							exportt(actuel->command, element->headenv);
+							exportt(actuel->command, all->headenv);
 						exit(1);
 					}
 				}
@@ -174,7 +161,10 @@ void	minishell(t_all *all, t_link *cmd)
 			else if (ft_strncmp("/", actuel->command[0], 1) == 0 || ft_strncmp("./", actuel->command[0], 2) == 0 || ft_strncmp("../", actuel->command[0], 3) == 0)
 			{
 				if (opendir(actuel->command[0]))
+				{
+					all->exit_status = 126;
 					printf("bash :%s : is a Directory \n", actuel->command[0]);
+				}
 				else 
 				{
 					g_signal.childpid = fork();
@@ -185,7 +175,9 @@ void	minishell(t_all *all, t_link *cmd)
 							exit(errno);
 					}
 					waitpid(g_signal.childpid, &all->exit_status, 0);
-					if (WIFEXITED(g_signal.childpid))
+					if (WEXITSTATUS(all->exit_status))
+						all->exit_status = 1;
+					else if (WIFEXITED(g_signal.childpid))
 					{
 						all->exit_status = 127;
 						printf("%s\n", strerror(errno));
@@ -198,8 +190,41 @@ void	minishell(t_all *all, t_link *cmd)
 				char	**path;
 				char	*tmp;
 				char	*command;
-				int fd;
-				int co = 0;
+				int		fd;
+				int		co = 0;
+				t_redir	*current;
+
+				current = actuel->redir;
+				while (current)
+				{
+					if (!ft_strcmp(current->redir, "<<"))
+					{
+						char	*line;
+						char	*tmp;
+						char	*delim;
+
+						tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
+						line = readline("> ");
+						while (ft_strcmp(line, delim))
+						{
+							write(tmpp, line, ft_strlen(line));
+							write(tmpp, "\n", 1);
+							tmp = line;
+							line = readline("> ");
+							free(tmp);
+						}
+						free(line);
+						if (!fork())
+						{
+							tmpp = open("/tmp/hd", O_RDONLY);
+							unlink("/tmp/hd");
+							dup2(tmpp, STDIN_FILENO);
+							close(tmpp);
+						}
+
+					}
+					current = current->next;
+				}
 				i = -1;
 				path = ft_split(ft_getenv("PATH", all->headenv), ':');
 				if (!path)
@@ -222,6 +247,10 @@ void	minishell(t_all *all, t_link *cmd)
 									exit (errno);
 							}
 							waitpid(g_signal.childpid, &all->exit_status, 0);
+							if (WEXITSTATUS(all->exit_status))
+								all->exit_status = 1;
+							else if (WTERMSIG(all->exit_status))
+								all->exit_status = 128 + WTERMSIG(all->exit_status);
 							break ;
 						}
 					}				
@@ -229,14 +258,6 @@ void	minishell(t_all *all, t_link *cmd)
 					{
 						all->exit_status = 127;
 						printf("bash: %s: command not found\n", actuel->command[0]);
-					}
-					if (co == 1) 
-					{
-						if (WIFEXITED(g_signal.childpid))
-						{
-							all->exit_status = 1;
-							printf("%s\n", strerror(errno));
-						}
 					}
 				}
 			}
