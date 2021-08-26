@@ -23,6 +23,7 @@ void	minishell(t_all *all, t_link *cmd)
 	int		taille;
 	int		file = 0;
 	int		out;
+	t_bool	leftredir = false;
 
 	taille = linklen(cmd);
 	actuel = cmd;
@@ -149,7 +150,7 @@ void	minishell(t_all *all, t_link *cmd)
 				if (opendir(actuel->command[0]))
 				{
 					all->exit_status = 126;
-					ft_puterr("bash:");
+					ft_puterr("minishell:");
 					ft_puterr(actuel->command[0]);
 					ft_puterr(" : is a Directory \n");
 				}
@@ -186,7 +187,7 @@ void	minishell(t_all *all, t_link *cmd)
 				path = ft_split(ft_getenv("PATH", all->headenv), ':');
 				if (!path)
 				{
-					ft_puterr("bash:");
+					ft_puterr("minishell:");
 					ft_puterr(actuel->command[0]);
 					ft_puterr(" : No such file or directory\n");
 				}
@@ -264,7 +265,7 @@ void	minishell(t_all *all, t_link *cmd)
 					if (co == 0)
 					{
 						all->exit_status = 127;
-						ft_puterr("bash: ");
+						ft_puterr("minishell: ");
 						ft_puterr(actuel->command[0]);
 						ft_puterr(": command not found\n");
 					}
@@ -374,7 +375,7 @@ void	minishell(t_all *all, t_link *cmd)
 				if (opendir(actuel->command[0]))
 				{
 					all->exit_status = 126;
-					ft_puterr("bash:");
+					ft_puterr("minishell:");
 					ft_puterr(actuel->command[0]);
 					ft_puterr(" : is a Directory \n");
 				}
@@ -466,18 +467,33 @@ void	minishell(t_all *all, t_link *cmd)
 						dup2(file, STDOUT_FILENO);
 						close(file);
 					}
+					if (!ft_strcmp(current->redir, "<"))
+					{
+						tmpp = dup(STDIN_FILENO);
+						leftredir = true;
+						file = open(current->arg, O_RDONLY);
+						if (file < 3)
+						{
+							ft_puterr("minishell: ");
+							ft_puterr(current->arg);
+							ft_puterr(": No such file or directory\n");
+							break ;
+						}
+						tmpp = dup(file);
+						close(file);
+					}
 					current = current->next;
 				}
 				path = ft_split(ft_getenv("PATH", all->headenv), ':');
 				if (!path)
 				{
-					ft_puterr("bash:");
+					ft_puterr("minishell:");
 					ft_puterr(actuel->command[0]);
 					ft_puterr(" : No such file or directory\n");
 				}
 				else
 				{	
-				i = -1;
+					i = -1;
 					while (path[++i])
 					{
 						tmp = ft_joinchar(path[i], '/');
@@ -502,13 +518,15 @@ void	minishell(t_all *all, t_link *cmd)
 								all->exit_status = 128 + WTERMSIG(all->exit_status);
 							break ;
 						}
-					}				
-					if (file > 2)
+					}
+					//if (leftredir)
+					//	dup2(in, STDIN_FILENO);			
+					if (file > 2 && !leftredir)
 						dup2(out, STDOUT_FILENO);
 					if (co == 0)
 					{
 						all->exit_status = 127;
-						ft_puterr("bash: ");
+						ft_puterr("minishell: ");
 						ft_puterr(actuel->command[0]);
 						ft_puterr(": command not found\n");
 					}

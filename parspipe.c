@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:28:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/25 14:38:32 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/26 18:57:21 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ t_link	*parspipe(char **tokens)
 	i = 0;
 	head = linkinit(NULL);
 	current = head;
-	printsplit(tokens);
 	while (tokens[i])
 	{
 		current->command = parscmd(tokens, &i);
