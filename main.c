@@ -478,12 +478,6 @@ int	main(int ac, char **av, char **ev)
 				all.headcmd = parspipe(tokens);
 				redirmaker(all.headcmd);
 				all.headcmd->path_bis = ft_getenv("PATH", all.headenv);
-				t_link	*current = all.headcmd;
-				while (current)
-				{
-					printredir(current->redir);
-					current = current->next;
-				}
 				cleancommand(all.headcmd);
 				minishell(&all, all.headcmd);
 				while(wait(NULL) > 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execbuiltins.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/21 15:24:57 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/26 15:57:42 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ void	pwd(void)
 	{
 		if (errno == EACCES)
 			printf("Read or search permission was denied for a component of the pathname\n");
-		else if (errno == EINVAL)
-			printf("The size argument is zero.\n");
 		else if (errno == ERANGE)
 			printf("The size argument is greater than zero but smaller than the length of the pathname plus 1.\n");
 	}
@@ -75,7 +73,6 @@ void	cderror(char *path)
 {
 	int	error;
 
-	printf("salut\n");
 	error = errno;
 	ft_puterr("cd: ");
 	ft_puterr(path);
@@ -116,7 +113,6 @@ void	cd(t_link *cmd, t_env *env)
 		cderror(path);
 	else
 	{
-		// printf("%s %d\n", path, chdir(path));
 		current = env;
 		while (current)
 		{

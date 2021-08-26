@@ -17,10 +17,11 @@ extern t_signal g_signal;
 void	minishell(t_all *all, t_link *cmd)
 {
 	t_link	*actuel;
+	t_redir	*current;
 	int		fd[2];
 	int		tmpp = STDIN_FILENO;
 	int		taille;
-	int		file;
+	int		file = 0;
 	int		out;
 
 	taille = linklen(cmd);
@@ -34,11 +35,48 @@ void	minishell(t_all *all, t_link *cmd)
 			if ((ft_strcmp(actuel->command[0], "echo") == 0) || (ft_strcmp(actuel->command[0], "cd") == 0) || (ft_strcmp(actuel->command[0], "pwd") == 0) || (ft_strcmp(actuel->command[0], "exit") == 0) || (ft_strcmp(actuel->command[0], "export") == 0) || (ft_strcmp(actuel->command[0], "unset") == 0) || (ft_strcmp(actuel->command[0], "env") == 0))
 			{
 				pipe(fd);
+				current = actuel->redir;
+				while (current)
+				{
+					if (!ft_strcmp(current->redir, "<<"))
+					{
+						char	*line;
+						char	*tmp;
+
+						tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
+						line = readline("> ");
+						while (line && ft_strcmp(line, current->arg))
+						{
+							write(tmpp, line, ft_strlen(line));
+							write(tmpp, "\n", 1);
+							tmp = line;
+							line = readline("> ");
+							free(tmp);
+						}
+						free(line);
+						tmpp = open("/tmp/hd", O_RDONLY);
+						unlink("/tmp/hd");
+					}
+					current = current->next;
+				}
+				out = dup(STDOUT_FILENO);
+				current = actuel->redir;
+				while (current)
+				{
+					if (!ft_strcmp(current->redir, ">"))
+						file = open(current->arg, O_RDWR | O_CREAT | O_TRUNC, 0644);
+					if (!ft_strcmp(current->redir, ">>"))
+						file = open(current->arg, O_RDWR | O_CREAT | O_APPEND, 0644);
+					current = current->next;
+				}
 				g_signal.childpid = fork();
 				if (!g_signal.childpid)
 				{
 					dup2(tmpp, STDIN_FILENO);
-					dup2(fd[1], STDOUT_FILENO);
+					if (file < 3)
+						dup2(fd[1], STDOUT_FILENO);
+					else
+						dup2(file, STDOUT_FILENO);
 					if (ft_strcmp(actuel->command[0], "pwd") == 0)
 						pwd();
 					if (ft_strcmp(actuel->command[0], "echo") == 0)
@@ -55,27 +93,78 @@ void	minishell(t_all *all, t_link *cmd)
 						;
 					exit(0);
 				}
+				if (file > 2)
+					close(file);
+				//a modifier
+				dup2(out, STDOUT_FILENO);
 				close(fd[1]);
 				tmpp = fd[0];
 			}
 			else if (ft_strncmp("/", actuel->command[0], 1) == 0 || ft_strncmp("./", actuel->command[0], 2) == 0 || ft_strncmp("../", actuel->command[0], 3) == 0)
 			{
 				pipe(fd);
+				current = actuel->redir;
+				while (current)
+				{
+					if (!ft_strcmp(current->redir, "<<"))
+					{
+						char	*line;
+						char	*tmp;
+
+						tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
+						line = readline("> ");
+						while (line && ft_strcmp(line, current->arg))
+						{
+							write(tmpp, line, ft_strlen(line));
+							write(tmpp, "\n", 1);
+							tmp = line;
+							line = readline("> ");
+							free(tmp);
+						}
+						free(line);
+						tmpp = open("/tmp/hd", O_RDONLY);
+						unlink("/tmp/hd");
+					}
+					current = current->next;
+				}
+				out = dup(STDOUT_FILENO);
+				current = actuel->redir;
+				while (current)
+				{
+					if (!ft_strcmp(current->redir, ">"))
+					{
+						file = open(current->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+						dup2(file, STDOUT_FILENO);
+						close(file);
+					}
+					if (!ft_strcmp(current->redir, ">>"))
+					{
+						file = open(current->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
+						dup2(file, STDOUT_FILENO);
+						close(file);
+					}
+					current = current->next;
+				}
 				g_signal.childpid = fork();
 				if (opendir(actuel->command[0]))
 				{
 					all->exit_status = 126;
-					printf("bash :%s : is a Directory \n", actuel->command[0]);
+					ft_puterr("bash:");
+					ft_puterr(actuel->command[0]);
+					ft_puterr(" : is a Directory \n");
 				}
 				else
 				{
 					if (!g_signal.childpid)
 					{
 						dup2(tmpp, STDIN_FILENO);
-						dup2(fd[1], STDOUT_FILENO);
+						if (file < 3)
+							dup2(fd[1], STDOUT_FILENO);
 						if (execve(actuel->command[0], actuel->command, NULL) == -1)
 							exit(errno);
 					}
+					if (file > 2)
+						dup2(out, STDOUT_FILENO);
 					close(fd[1]);
 					tmpp = fd[0];
 					waitpid(g_signal.childpid, &all->exit_status, 0);
@@ -92,12 +181,15 @@ void	minishell(t_all *all, t_link *cmd)
 				char	*command;
 				int co = 0;
 				int fdd;
-				t_redir	*current;
 
 				i = -1;
 				path = ft_split(ft_getenv("PATH", all->headenv), ':');
 				if (!path)
-					printf("bash: %s: No such file or directory\n", actuel->command[0]);
+				{
+					ft_puterr("bash:");
+					ft_puterr(actuel->command[0]);
+					ft_puterr(" : No such file or directory\n");
+				}
 				else
 				{
 					current = actuel->redir;
@@ -110,7 +202,6 @@ void	minishell(t_all *all, t_link *cmd)
 
 							tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
 							line = readline("> ");
-							printf("f\n");
 							while (line && ft_strcmp(line, current->arg))
 							{
 								write(tmpp, line, ft_strlen(line));
@@ -162,7 +253,6 @@ void	minishell(t_all *all, t_link *cmd)
 							}
 							if (file > 2)
 								dup2(out, STDOUT_FILENO);
-							//a modifier
 							waitpid(g_signal.childpid, &all->exit_status, 0);
 							if (WEXITSTATUS(all->exit_status))
 								all->exit_status = 1;
@@ -174,7 +264,9 @@ void	minishell(t_all *all, t_link *cmd)
 					if (co == 0)
 					{
 						all->exit_status = 127;
-						printf("bash: %s: command not found\n", actuel->command[0]);
+						ft_puterr("bash: ");
+						ft_puterr(actuel->command[0]);
+						ft_puterr(": command not found\n");
 					}
 				}
 			}
@@ -183,8 +275,6 @@ void	minishell(t_all *all, t_link *cmd)
 		{
 			if ((ft_strcmp(actuel->command[0], "echo") == 0) || (ft_strcmp(actuel->command[0], "cd") == 0) || (ft_strcmp(actuel->command[0], "pwd") == 0) || (ft_strcmp(actuel->command[0], "exit") == 0) || (ft_strcmp(actuel->command[0], "export") == 0) || (ft_strcmp(actuel->command[0], "unset") == 0) || (ft_strcmp(actuel->command[0], "env") == 0))
 			{
-				t_redir	*current;
-
 				current = actuel->redir;
 				while (current)
 				{
@@ -218,23 +308,22 @@ void	minishell(t_all *all, t_link *cmd)
 						file = open(current->arg, O_RDWR | O_CREAT | O_APPEND, 0644);
 					current = current->next;
 				}
-				if ((ft_strcmp(actuel->command[0], "export") == 0) && (taille == 1))
-					export(actuel->command, all->headenv);
-				else if ((ft_strcmp(actuel->command[0], "unset") == 0) && (taille == 1))
+				if ((ft_strcmp(actuel->command[0], "unset") == 0) && (taille == 1))
 					unset(actuel->command, all);
 				else if(ft_strcmp(actuel->command[0], "exit") == 0 && (taille == 1))
 					exit(0);
 				else if (ft_strcmp(actuel->command[0], "cd") == 0)
 					cd(actuel, all->headenv);
-				else if (ft_strcmp(actuel->command[0], "pwd") == 0)
-					pwd();
 				else
 				{
 					g_signal.childpid = fork();
 					if (!g_signal.childpid)
 					{
 						if (file > 2)
+						{
 							dup2(file, STDOUT_FILENO);
+							close(file);
+						}
 						dup2(tmpp, STDIN_FILENO);
 						if (ft_strcmp(actuel->command[0], "echo") == 0)
 							echo(actuel);
@@ -242,13 +331,17 @@ void	minishell(t_all *all, t_link *cmd)
 							printenv(all->headenv);
 						if (ft_strcmp(actuel->command[0], "export") == 0)
 							exportt(actuel->command, all->headenv);
+						if ((ft_strcmp(actuel->command[0], "export") == 0) && (taille == 1))
+							export(actuel->command, all->headenv);
+						if (ft_strcmp(actuel->command[0], "pwd") == 0)
+							pwd();
 						if (file > 2)
 							close(file);
 						exit(1);
 					}
+					if (file > 2)
+						close(file);
 				}
-				if (file > 2)
-					close(file);
 			}
 			else if (ft_strncmp("/", actuel->command[0], 1) == 0 || ft_strncmp("./", actuel->command[0], 2) == 0 || ft_strncmp("../", actuel->command[0], 3) == 0)
 			{
@@ -281,7 +374,9 @@ void	minishell(t_all *all, t_link *cmd)
 				if (opendir(actuel->command[0]))
 				{
 					all->exit_status = 126;
-					printf("bash :%s : is a Directory \n", actuel->command[0]);
+					ft_puterr("bash:");
+					ft_puterr(actuel->command[0]);
+					ft_puterr(" : is a Directory \n");
 				}
 				else
 				{
@@ -318,7 +413,7 @@ void	minishell(t_all *all, t_link *cmd)
 					else if (WIFEXITED(g_signal.childpid))
 					{
 						all->exit_status = 127;
-						printf("%s\n", strerror(errno));
+						ft_puterr(strerror(errno));
 					}
 				}
 			}
@@ -330,7 +425,6 @@ void	minishell(t_all *all, t_link *cmd)
 				char	*command;
 				int		fd;
 				int		co = 0;
-				t_redir	*current;
 
 				current = actuel->redir;
 				while (current)
@@ -374,12 +468,16 @@ void	minishell(t_all *all, t_link *cmd)
 					}
 					current = current->next;
 				}
-				i = -1;
 				path = ft_split(ft_getenv("PATH", all->headenv), ':');
 				if (!path)
-					printf("bash: %s: No such file or directory\n", actuel->command[0]);
+				{
+					ft_puterr("bash:");
+					ft_puterr(actuel->command[0]);
+					ft_puterr(" : No such file or directory\n");
+				}
 				else
 				{	
+				i = -1;
 					while (path[++i])
 					{
 						tmp = ft_joinchar(path[i], '/');
@@ -392,11 +490,11 @@ void	minishell(t_all *all, t_link *cmd)
 							if (!g_signal.childpid)
 							{
 								dup2(tmpp, STDIN_FILENO);
+								if (file > 2)
+									close(file);
 								if (execve(command, actuel->command, NULL) == -1)
 									exit (errno);
 							}
-							if (file > 2)
-								dup2(out, STDOUT_FILENO);
 							waitpid(g_signal.childpid, &all->exit_status, 0);
 							if (WEXITSTATUS(all->exit_status))
 								all->exit_status = 1;
@@ -405,10 +503,14 @@ void	minishell(t_all *all, t_link *cmd)
 							break ;
 						}
 					}				
+					if (file > 2)
+						dup2(out, STDOUT_FILENO);
 					if (co == 0)
 					{
 						all->exit_status = 127;
-						printf("bash: %s: command not found\n", actuel->command[0]);
+						ft_puterr("bash: ");
+						ft_puterr(actuel->command[0]);
+						ft_puterr(": command not found\n");
 					}
 				}
 			}
