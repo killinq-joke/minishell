@@ -467,7 +467,7 @@ int	main(int ac, char **av, char **ev)
 		tmp = line;
 		line = ft_strtrim(line, " ");
 		free(tmp);
-		if (checkerror(line) == true)
+		if (checkerror(line))
 		{
 			tmp = line;
 			line = parsenv(&all, tmp, all.headenv);

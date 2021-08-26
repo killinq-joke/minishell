@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkerror.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/10 11:56:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/17 02:29:45 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/26 21:10:19 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_bool	checkerror(char *line)
 	int	i;
 
 	i = 0;
-	if (!line || !check_space(line))
+	if (!line)
 		return (false);
 	while (line[i])
 	{
@@ -63,7 +63,10 @@ t_bool	checkerror(char *line)
 		}
 		i++;
 	}
-	if (ft_isin("|><", line[ft_strlen(line) - 1]))
-		return (false);
+	if (ft_strlen(line))
+	{
+		if (ft_isin("|><", line[ft_strlen(line) - 1]))
+			return (false);
+	}
 	return (true);
 }
