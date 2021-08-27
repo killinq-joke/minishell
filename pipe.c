@@ -21,7 +21,7 @@ void	minishell(t_all *all, t_link *cmd)
 	int		fd[2];
 	int		tmpp = STDIN_FILENO;
 	int		taille;
-	int		file = 0;
+	int		file = 3;
 	int		out;
 	t_bool	leftredir = false;
 
@@ -363,8 +363,7 @@ void	minishell(t_all *all, t_link *cmd)
 							close(file);
 						exit(1);
 					}
-					if (file != -1)
-						close(file);
+					close(file);
 				}
 			}
 			else if (ft_strncmp("/", actuel->command[0], 1) == 0 || ft_strncmp("./", actuel->command[0], 2) == 0 || ft_strncmp("../", actuel->command[0], 3) == 0)
