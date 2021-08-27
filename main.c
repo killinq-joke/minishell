@@ -461,6 +461,7 @@ int	main(int ac, char **av, char **ev)
 		if (!line)
 		{
 			ft_putstrnl("exit");
+			close(STDIN_FILENO);
 			exit(0);
 		}
 		add_history(line);
