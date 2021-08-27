@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/15 18:31:49 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/14 13:53:25 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/27 12:55:56 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,12 @@ int	ft_strcmp(const char *s1, const char *s2)
 	int	i;
 
 	i = 0;
+	if (!s1 && !s2)
+		return (0);
+	if (!s1)
+		return (-1);
+	if (!s2)
+		return (1);
 	while (s1[i] && s1[i] == s2[i])
 		i++;
 	return (s1[i] - s2[i]);

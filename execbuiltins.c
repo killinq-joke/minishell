@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/26 15:57:42 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/26 21:46:49 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,11 @@ void	cd(t_link *cmd, t_env *env)
 		while (current)
 		{
 			if (!ft_strcmp(current->name, "PWD"))
+			{
 				current->value = getcwd(NULL, 0);
+				if (!current->value)
+					ft_puterr("cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
+			}
 			current = current->next;
 		}
 	}

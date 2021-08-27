@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 14:57:49 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/05/26 16:15:22 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/27 12:56:36 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	unsigned char	*s1tmp;
 	unsigned char	*s2tmp;
 
+	if (!s1 && !s2)
+		return (0);
+	if (!s1)
+		return (-1);
+	if (!s2)
+		return (1);
 	s1tmp = (unsigned char *)s1;
 	s2tmp = (unsigned char *)s2;
 	i = 0;
