@@ -4,7 +4,6 @@
 a.out
 *.dSYM
 minishell
-*.a
 .vscode
 -n
 zak
