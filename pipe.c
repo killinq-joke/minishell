@@ -24,7 +24,7 @@ void	minishell(t_all *all, t_link *cmd)
 	int		file = -2;
 	// int		filer = -2;
 	int		out;
-	t_bool	errorleft = true;
+	t_bool	errorleft = false;
 	t_bool	redir = false;
 
 	taille = linklen(cmd);
@@ -67,9 +67,15 @@ void	minishell(t_all *all, t_link *cmd)
 				while (current)
 				{
 					if (!ft_strcmp(current->redir, ">"))
+					{
+						redir = true;
 						file = open(current->arg, O_RDWR | O_CREAT | O_TRUNC, 0644);
+					}
 					if (!ft_strcmp(current->redir, ">>"))
+					{
+						redir = true;
 						file = open(current->arg, O_RDWR | O_CREAT | O_APPEND, 0644);
+					}
 					if (!ft_strcmp(current->redir, "<"))
 					{
 						file = open(current->arg, O_RDONLY);
@@ -80,6 +86,9 @@ void	minishell(t_all *all, t_link *cmd)
 				}
 				if (file == -1)
 				{
+					errorleft = true;
+					file = open("/dev/null", O_RDONLY);
+					dup2(file, STDOUT_FILENO);
 					ft_puterr("minishell: ");
 					ft_puterr(current->arg);
 					ft_puterr(": No such file or directory\n");
@@ -88,9 +97,9 @@ void	minishell(t_all *all, t_link *cmd)
 				if (!g_signal.childpid)
 				{
 					dup2(tmpp, STDIN_FILENO);
-					if (file == -1)
+					if (!errorleft && !redir)
 						dup2(fd[1], STDOUT_FILENO);
-					else
+					else if (redir)
 						dup2(file, STDOUT_FILENO);
 					if (ft_strcmp(actuel->command[0], "pwd") == 0)
 						pwd();
@@ -147,12 +156,14 @@ void	minishell(t_all *all, t_link *cmd)
 				{
 					if (!ft_strcmp(current->redir, ">"))
 					{
+						redir = true;
 						file = open(current->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 						dup2(file, STDOUT_FILENO);
 						close(file);
 					}
 					if (!ft_strcmp(current->redir, ">>"))
 					{
+						redir = true;
 						file = open(current->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
 						dup2(file, STDOUT_FILENO);
 						close(file);
@@ -162,12 +173,13 @@ void	minishell(t_all *all, t_link *cmd)
 						file = open(current->arg, O_RDONLY);
 						if (file == -1)
 						{
-							redir = true;
+							errorleft = true;
 							ft_puterr("minishell: ");
 							ft_puterr(current->arg);
 							ft_puterr(": No such file or directory\n");
 							close(file);
 							file = open("/dev/null", O_RDONLY);
+							tmpp = dup(file);
 							close(file);
 							break ;
 						}
@@ -184,21 +196,23 @@ void	minishell(t_all *all, t_link *cmd)
 					if (!g_signal.childpid)
 					{
 						dup2(tmpp, STDIN_FILENO);
-						if (!redir)
+						if (!errorleft && !redir)
 							dup2(fd[1], STDOUT_FILENO);
-						else
-							dup2(file, STDOUT_FILENO);
-						if (execve(actuel->command[0], actuel->command, NULL) == -1)
-							exit (errno);
+						if (!errorleft)
+						{
+							if (execve(actuel->command[0], actuel->command, NULL) == -1)
+								exit (errno);
+						}
+						exit(0);
 					}
-					if (file != -2)
-						dup2(out, STDOUT_FILENO);
+					dup2(out, STDOUT_FILENO);
 					waitpid(g_signal.childpid, &all->exit_status, 0);
 					if (WEXITSTATUS(all->exit_status))
 						all->exit_status = 1;
 				}
 				close(fd[1]);
-				tmpp = fd[0];
+				if (!errorleft)
+					tmpp = fd[0];
 				waitpid(g_signal.childpid, &all->exit_status, 0);
 				if (WIFEXITED(g_signal.childpid))
 					all->exit_status = 127;
@@ -275,9 +289,9 @@ void	minishell(t_all *all, t_link *cmd)
 								ft_puterr(current->arg);
 								ft_puterr(": No such file or directory\n");
 								close(file);
-								// file = open("/dev/null", O_RDONLY);
-								// tmpp = dup(file);
-								// close(file);
+								file = open("/dev/null", O_RDONLY);
+								tmpp = dup(file);
+								close(file);
 								break ;
 							}
 							tmpp = dup(file);
@@ -297,15 +311,16 @@ void	minishell(t_all *all, t_link *cmd)
 							if (!g_signal.childpid)
 							{
 								dup2(tmpp, STDIN_FILENO);
-								// if (!errorleft && !redir)
+								if (!errorleft && !redir)
 									dup2(fd[1], STDOUT_FILENO);
-								// if (errorleft)
-								// 	dup2(open("/dev/null", O_RDONLY), STDOUT_FILENO);
-								if (execve(command, actuel->command, NULL) == -1)
-									exit (errno);
+								if (!errorleft)
+								{
+									if (execve(command, actuel->command, NULL) == -1)
+										exit (errno);
+								}
+								exit(0);
 							}
-							// if (file != -2)
-								dup2(out, STDOUT_FILENO);
+							dup2(out, STDOUT_FILENO);
 							waitpid(g_signal.childpid, &all->exit_status, 0);
 							if (WEXITSTATUS(all->exit_status))
 								all->exit_status = 1;
@@ -313,7 +328,8 @@ void	minishell(t_all *all, t_link *cmd)
 						}
 					}
 					close(fd[1]);
-					tmpp = fd[0];
+					if (!errorleft)
+						tmpp = fd[0];
 					if (co == 0)
 					{
 						all->exit_status = 127;
@@ -356,11 +372,18 @@ void	minishell(t_all *all, t_link *cmd)
 				while (current)
 				{
 					if (!ft_strcmp(current->redir, ">"))
+					{
+						redir = true;
 						file = open(current->arg, O_RDWR | O_CREAT | O_TRUNC, 0644);
+					}
 					if (!ft_strcmp(current->redir, ">>"))
+					{
+						redir = true;
 						file = open(current->arg, O_RDWR | O_CREAT | O_APPEND, 0644);
+					}
 					if (!ft_strcmp(current->redir, "<"))
 					{
+						errorleft = true;
 						file = open(current->arg, O_RDONLY);
 						if (file == -1)
 							break ;
@@ -385,10 +408,7 @@ void	minishell(t_all *all, t_link *cmd)
 					if (!g_signal.childpid)
 					{
 						if (file != -1)
-						{
-							dup2(file, STDOUT_FILENO);
 							close(file);
-						}
 						dup2(tmpp, STDIN_FILENO);
 						if (ft_strcmp(actuel->command[0], "echo") == 0)
 							echo(actuel);

@@ -6,11 +6,28 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/26 21:46:49 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/29 20:52:09 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_bool	isdashn(char *str)
+{
+	int	i;
+
+	i = 2;
+	if (!ft_strncmp(str, "-n", 2))
+	{
+		while (str[i] == 'n')
+			i++;
+		if (str[i])
+			return (false);
+	}
+	else
+		return (false);
+	return (true);
+}
 
 void	echo(t_link *cmd)
 {
@@ -19,7 +36,7 @@ void	echo(t_link *cmd)
 
 	nl = true;
 	i = 1;
-	while (cmd->command[i] && !ft_strcmp(cmd->command[i], "-n"))
+	while (cmd->command[i] && isdashn(cmd->command[i]))
 	{
 		nl = false;
 		i++;
