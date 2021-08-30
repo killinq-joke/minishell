@@ -100,14 +100,21 @@ char	*parsenv(t_all *all, char *line, t_env *env)
 		}
 		else if (line[i] && line[i] == '$')
 		{
-			if (line[i] && line[i + 1] != SPACE)
+			if (line[i])
 			{
 				j = 0;
 				while (line[i + j + 1] && line[i + j + 1] != SPACE
 					&& line[i + j + 1] != QUOTE && line[i + j + 1] != DQUOTE)
 					j++;
 				name = ft_substr(&line[1], i, j);
-				if (!ft_strcmp(name, "?"))
+				// printf("salut %s\n", name);
+				if (!ft_strlen(name))
+				{
+					tmp = res;
+					res = ft_strjoin(tmp, "$");
+					free(tmp);
+				}
+				else if (!ft_strcmp(name, "?"))
 				{
 					tmp = res;
 					tmp1 = ft_itoa(all->exit_status);
@@ -189,6 +196,7 @@ unsigned int	wordlen(char *line)
 			i++;
 	}
 	else
+	{
 		while (line[i] != SPACE && line[i])
 		{
 			if (line[i] == QUOTE)
@@ -205,6 +213,7 @@ unsigned int	wordlen(char *line)
 			}
 			i++;
 		}
+	}
 	return (i);
 }
 
@@ -232,6 +241,7 @@ char	**commandsplit(char *line)
 	split = ft_calloc(wordcount + 1, sizeof (char *));
 	j = 0;
 	i = 0;
+	line = ft_trimquotes(line);
 	while (i < wordcount && j < ft_strlen(line))
 	{
 		j += spacecount(&line[j]);
