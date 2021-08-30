@@ -110,5 +110,7 @@ void	echo_control_seq(t_bool c);
 void	redirmaker(t_link *cmd);
 void	printredir(t_redir *redir);
 void	printsplit(char **split);
+char	*parsenv(t_all *all, char *line, t_env *env);
+int		counttoken(char *line);
 
 #endif
