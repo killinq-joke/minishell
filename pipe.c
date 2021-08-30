@@ -108,7 +108,7 @@ void	minishell(t_all *all, t_link *cmd)
 					if (ft_strcmp(actuel->command[0], "env") == 0)
 						printenv(all->headenv);
 					if (ft_strcmp(actuel->command[0], "cd") == 0)
-						cd(actuel, all->headenv);
+						cd(actuel, all->headenv, all);
 					if (ft_strcmp(actuel->command[0], "export") == 0)
 						export(actuel->command, all->headenv);
 					if (ft_strcmp(actuel->command[0], "unset") == 0)
@@ -399,9 +399,23 @@ void	minishell(t_all *all, t_link *cmd)
 				else if ((ft_strcmp(actuel->command[0], "unset") == 0) && (taille == 1))
 					unset(actuel->command, all);
 				else if(ft_strcmp(actuel->command[0], "exit") == 0 && (taille == 1))
+				{
+					ft_putstr("exit\n");
+					if (actuel->command[1])
+					{
+						if (ft_strisnum(actuel->command[1]) == 1)
+							exit(ft_atoi(actuel->command[1]));
+						else
+						{
+							ft_puterr("minishell: ");
+							ft_puterr(actuel->command[1]);
+							ft_puterr(": numeric argument required\n");		
+						}
+					}
 					exit(0);
+				}
 				else if (ft_strcmp(actuel->command[0], "cd") == 0)
-					cd(actuel, all->headenv);
+					cd(actuel, all->headenv, all);
 				else
 				{
 					g_signal.childpid = fork();

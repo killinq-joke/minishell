@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/29 20:52:09 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/30 12:00:11 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	cderror(char *path)
 		ft_puterr("Not a directory\n");
 }
 
-void	cd(t_link *cmd, t_env *env)
+void	cd(t_link *cmd, t_env *env, t_all *all)
 {
 	t_env	*current;
 	char	*path;
@@ -127,7 +127,10 @@ void	cd(t_link *cmd, t_env *env)
 	else
 		path = cmd->command[1];
 	if (chdir(path) == -1)
+	{
+		all->exit_status = 1;
 		cderror(path);
+	}
 	else
 	{
 		current = env;
@@ -259,7 +262,7 @@ void	execbuiltins(t_all *all)
 	if (ft_strcmp(all->headcmd->command[0], "env") == 0)
 		printenv(all->headenv);
 	if (ft_strcmp(all->headcmd->command[0], "cd") == 0)
-		cd(all->headcmd, all->headenv);
+		cd(all->headcmd, all->headenv, all);
 	if (ft_strcmp(all->headcmd->command[0], "export") == 0)
 		export(all->headcmd->command, all->headenv);
 	if (ft_strcmp(all->headcmd->command[0], "unset") == 0)
