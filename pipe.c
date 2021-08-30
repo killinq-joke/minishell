@@ -304,7 +304,7 @@ void	minishell(t_all *all, t_link *cmd)
 						tmp = ft_joinchar(path[i], '/');
 						command = ft_strjoin(tmp, actuel->command[0]);
 						fdd = open(command, O_RDONLY);
-						if (fdd != -1)
+						if (fdd != -1 && ft_strlen(actuel->command[0]))
 						{
 							co = 1;
 							g_signal.childpid = fork();
@@ -416,6 +416,8 @@ void	minishell(t_all *all, t_link *cmd)
 				}
 				else if (ft_strcmp(actuel->command[0], "cd") == 0)
 					cd(actuel, all->headenv, all);
+				else if (ft_strcmp(actuel->command[0], "export") == 0)
+					export(actuel->command, all->headenv);
 				else
 				{
 					g_signal.childpid = fork();
@@ -428,10 +430,6 @@ void	minishell(t_all *all, t_link *cmd)
 							echo(actuel);
 						if (ft_strcmp(actuel->command[0], "env") == 0)
 							printenv(all->headenv);
-						if (ft_strcmp(actuel->command[0], "export") == 0)
-							exportt(actuel->command, all->headenv);
-						if ((ft_strcmp(actuel->command[0], "export") == 0) && (taille == 1))
-							export(actuel->command, all->headenv);
 						if (ft_strcmp(actuel->command[0], "pwd") == 0)
 							pwd();
 						if (file != -1)
@@ -625,7 +623,7 @@ void	minishell(t_all *all, t_link *cmd)
 						tmp = ft_joinchar(path[i], '/');
 						command = ft_strjoin(tmp, actuel->command[0]);
 						fd = open(command, O_RDONLY);
-						if (fd != -1)
+						if (fd != -1 && ft_strlen(actuel->command[0]))
 						{
 							co = 1;
 							g_signal.childpid = fork();
