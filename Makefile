@@ -6,7 +6,7 @@
 #    By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/02 09:47:58 by ztouzri           #+#    #+#              #
-#    Updated: 2021/08/27 12:39:07 by ztouzri          ###   ########.fr        #
+#    Updated: 2021/08/30 15:15:40 by ztouzri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ $(NAME):	$(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIB)  -lreadline  ./includes/libreadline.a -lcurses -o $(NAME)
 
 clean:
-	$(RM) $(OBJS) $(LIB)
+	$(RM) $(OBJS) $(LIB) file*
 
 fclean: clean
 	$(RM) $(NAME)
