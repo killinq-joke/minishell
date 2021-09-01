@@ -292,6 +292,7 @@ void minishell(t_all *all, t_link *cmd)
 					{
 						tmp = ft_joinchar(path[i], '/');
 						command = ft_strjoin(tmp, actuel->command[0]);
+						free(tmp);
 						fdd = open(command, O_RDONLY);
 						if (fdd != -1 && ft_strlen(actuel->command[0]))
 						{

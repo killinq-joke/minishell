@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:28:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/01 18:43:21 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/01 20:36:19 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,6 @@ void	freelink(t_link *cmd)
 		tmp = current;
 		current = current->next;
 		freelinknode(tmp);
+		free(tmp);
 	}
-	free(cmd);
 }
