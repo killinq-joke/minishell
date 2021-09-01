@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/03 15:02:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/03 15:06:39 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/01 18:23:19 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_puterr(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i])
+	while (str && str[i])
 	{
 		write(2, &str[i], 1);
 		i++;

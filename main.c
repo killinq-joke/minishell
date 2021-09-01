@@ -130,7 +130,6 @@ int	main(int ac, char **av, char **ev)
 				all.headcmd->path_bis = ft_getenv("PATH", all.headenv);
 				cleancommand(all.headcmd);
 				minishell(&all, all.headcmd);
-				// while (1);
 				while (wait(NULL) > 0)
 					;
 				freelink(all.headcmd);

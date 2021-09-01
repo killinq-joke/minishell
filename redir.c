@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 18:31:32 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/31 12:16:21 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/01 14:02:16 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	**redirremover(char **tokens)
 		{
 			tmp = res;
 			res = joinstr(tmp, tokens[i]);
-			free(tmp);
+			freetokens(tmp);
 		}
 		else
 			i++;

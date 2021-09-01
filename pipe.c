@@ -12,17 +12,19 @@
 
 #include "minishell.h"
 
-extern t_signal	g_signal;
+extern t_signal g_signal;
 
-int	heredoc_non_pipe_command(t_redir *current, int tmpp)
-{	
+int heredoc_non_pipe_command(t_link *actuel, int tmpp)
+{
+	t_redir *current;
 
+	current = actuel->redir;
 	while (current)
 	{
 		if (!ft_strcmp(current->redir, "<<"))
 		{
-			char	*line;
-			char	*tmp;
+			char *line;
+			char *tmp;
 
 			tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
 			line = readline("> ");
@@ -40,28 +42,35 @@ int	heredoc_non_pipe_command(t_redir *current, int tmpp)
 		}
 		current = current->next;
 	}
+	return (tmpp);
 }
 
-void	minishell(t_all *all, t_link *cmd)
+void minishell(t_all *all, t_link *cmd)
 {
 	t_link	*actuel;
-	t_redir	*current;
-	char	**env;	
+	t_redir *current;
+	char	**path;
+	char	**env;
 	int		fd[2];
+	int		i;
+	int		co = 0;
+	char	*command;
+	char	*tmp;
 	int		tmpp = STDIN_FILENO;
+	int		out = dup(STDOUT_FILENO);
 	int		taille;
 	int		file = -2;
-	int		out;
 	t_bool	errorleft = false;
 	t_bool	redir = false;
+
 
 	taille = linklen(cmd);
 	actuel = cmd;
 	all->exit_status = 0;
 	echo_control_seq(true);
+	env = envtab(all->headenv);
 	while (actuel)
 	{
-		env = envtab(all->headenv);
 		if (actuel->next)
 		{
 			if ((ft_strcmp(actuel->command[0], "echo") == 0) || (ft_strcmp(actuel->command[0], "cd") == 0) || (ft_strcmp(actuel->command[0], "pwd") == 0) || (ft_strcmp(actuel->command[0], "exit") == 0) || (ft_strcmp(actuel->command[0], "export") == 0) || (ft_strcmp(actuel->command[0], "unset") == 0) || (ft_strcmp(actuel->command[0], "env") == 0))
@@ -72,8 +81,8 @@ void	minishell(t_all *all, t_link *cmd)
 				{
 					if (!ft_strcmp(current->redir, "<<"))
 					{
-						char	*line;
-						char	*tmp;
+						char *line;
+						char *tmp;
 
 						tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
 						line = readline("> ");
@@ -109,7 +118,7 @@ void	minishell(t_all *all, t_link *cmd)
 					{
 						file = open(current->arg, O_RDONLY);
 						if (file == -1)
-							break ;
+							break;
 					}
 					current = current->next;
 				}
@@ -155,30 +164,7 @@ void	minishell(t_all *all, t_link *cmd)
 			else if (ft_strncmp("/", actuel->command[0], 1) == 0 || ft_strncmp("./", actuel->command[0], 2) == 0 || ft_strncmp("../", actuel->command[0], 3) == 0)
 			{
 				pipe(fd);
-				current = actuel->redir;
-				while (current)
-				{
-					if (!ft_strcmp(current->redir, "<<"))
-					{
-						char	*line;
-						char	*tmp;
-
-						tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
-						line = readline("> ");
-						while (line && ft_strcmp(line, current->arg))
-						{
-							write(tmpp, line, ft_strlen(line));
-							write(tmpp, "\n", 1);
-							tmp = line;
-							line = readline("> ");
-							free(tmp);
-						}
-						free(line);
-						tmpp = open("/tmp/hd", O_RDONLY);
-						unlink("/tmp/hd");
-					}
-					current = current->next;
-				}
+				tmpp = heredoc_non_pipe_command(actuel, tmpp);
 				out = dup(STDOUT_FILENO);
 				current = actuel->redir;
 				while (current)
@@ -230,7 +216,7 @@ void	minishell(t_all *all, t_link *cmd)
 						if (!errorleft)
 						{
 							if (execve(actuel->command[0], actuel->command, env) == -1)
-								exit (errno);
+								exit(errno);
 						}
 						exit(0);
 					}
@@ -248,16 +234,13 @@ void	minishell(t_all *all, t_link *cmd)
 			}
 			else
 			{
-				pipe(fd);
-				int		i;
-				char	**path;
-				char	*tmp;
-				char	*command;
-				int		co = 0;
-				int		fdd;
+				int fdd;
 
+				pipe(fd);
 				i = -1;
-				path = ft_split(ft_getenv("PATH", all->headenv), ':');
+				tmp = ft_getenv("PATH", all->headenv);
+				path = ft_split(tmp, ':');
+				free(tmp);
 				if (!path)
 				{
 					ft_puterr("minishell:");
@@ -266,30 +249,7 @@ void	minishell(t_all *all, t_link *cmd)
 				}
 				else
 				{
-					current = actuel->redir;
-					while (current)
-					{
-						if (!ft_strcmp(current->redir, "<<"))
-						{
-							char	*line;
-							char	*tmp;
-
-							tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
-							line = readline("> ");
-							while (line && ft_strcmp(line, current->arg))
-							{
-								write(tmpp, line, ft_strlen(line));
-								write(tmpp, "\n", 1);
-								tmp = line;
-								line = readline("> ");
-								free(tmp);
-							}
-							free(line);
-							tmpp = open("/tmp/hd", O_RDONLY);
-							unlink("/tmp/hd");
-						}
-						current = current->next;
-					}
+					tmpp = heredoc_non_pipe_command(actuel, tmpp);
 					out = dup(STDOUT_FILENO);
 					current = actuel->redir;
 					while (current)
@@ -345,16 +305,22 @@ void	minishell(t_all *all, t_link *cmd)
 								if (!errorleft)
 								{
 									if (execve(command, actuel->command, env) == -1)
-										exit (errno);
+									{
+										free(command);
+										exit(errno);
+									}
 								}
+								free(command);
 								exit(0);
 							}
 							dup2(out, STDOUT_FILENO);
 							waitpid(g_signal.childpid, &all->exit_status, 0);
 							if (WEXITSTATUS(all->exit_status))
 								all->exit_status = 1;
+							free(command);
 							break ;
 						}
+						free(command);
 					}
 					close(fd[1]);
 					if (!errorleft)
@@ -368,35 +334,12 @@ void	minishell(t_all *all, t_link *cmd)
 					}
 				}
 			}
-		}	
+		}
 		else
 		{
 			if ((ft_strcmp(actuel->command[0], "echo") == 0) || (ft_strcmp(actuel->command[0], "cd") == 0) || (ft_strcmp(actuel->command[0], "pwd") == 0) || (ft_strcmp(actuel->command[0], "exit") == 0) || (ft_strcmp(actuel->command[0], "export") == 0) || (ft_strcmp(actuel->command[0], "unset") == 0) || (ft_strcmp(actuel->command[0], "env") == 0))
 			{
-				current = actuel->redir;
-				while (current)
-				{
-					if (!ft_strcmp(current->redir, "<<"))
-					{
-						char	*line;
-						char	*tmp;
-
-						tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
-						line = readline("> ");
-						while (line && ft_strcmp(line, current->arg))
-						{
-							write(tmpp, line, ft_strlen(line));
-							write(tmpp, "\n", 1);
-							tmp = line;
-							line = readline("> ");
-							free(tmp);
-						}
-						free(line);
-						tmpp = open("/tmp/hd", O_RDONLY);
-						unlink("/tmp/hd");
-					}
-					current = current->next;
-				}
+				tmpp = heredoc_non_pipe_command(actuel, tmpp);
 				current = actuel->redir;
 				while (current)
 				{
@@ -404,11 +347,13 @@ void	minishell(t_all *all, t_link *cmd)
 					{
 						redir = true;
 						file = open(current->arg, O_RDWR | O_CREAT | O_TRUNC, 0644);
+						dup2(file, STDOUT_FILENO);
 					}
 					if (!ft_strcmp(current->redir, ">>"))
 					{
 						redir = true;
 						file = open(current->arg, O_RDWR | O_CREAT | O_APPEND, 0644);
+						dup2(file, STDOUT_FILENO);
 					}
 					if (!ft_strcmp(current->redir, "<"))
 					{
@@ -427,7 +372,7 @@ void	minishell(t_all *all, t_link *cmd)
 				}
 				else if ((ft_strcmp(actuel->command[0], "unset") == 0) && (taille == 1))
 					unset(actuel->command, all);
-				else if(ft_strcmp(actuel->command[0], "exit") == 0 && (taille == 1))
+				else if (ft_strcmp(actuel->command[0], "exit") == 0 && (taille == 1))
 				{
 					ft_putstr("exit\n");
 					if (actuel->command[1])
@@ -438,7 +383,7 @@ void	minishell(t_all *all, t_link *cmd)
 						{
 							ft_puterr("minishell: ");
 							ft_puterr(actuel->command[1]);
-							ft_puterr(": numeric argument required\n");		
+							ft_puterr(": numeric argument required\n");
 						}
 					}
 					exit(0);
@@ -468,33 +413,11 @@ void	minishell(t_all *all, t_link *cmd)
 					if (file != -1)
 						close(file);
 				}
+				dup2(out, STDOUT_FILENO);
 			}
 			else if (ft_strncmp("/", actuel->command[0], 1) == 0 || ft_strncmp("./", actuel->command[0], 2) == 0 || ft_strncmp("../", actuel->command[0], 3) == 0)
 			{
-				current = actuel->redir;
-				while (current)
-				{
-					if (!ft_strcmp(current->redir, "<<"))
-					{
-						char	*line;
-						char	*tmp;
-
-						tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
-						line = readline("> ");
-						while (line && ft_strcmp(line, current->arg))
-						{
-							write(tmpp, line, ft_strlen(line));
-							write(tmpp, "\n", 1);
-							tmp = line;
-							line = readline("> ");
-							free(tmp);
-						}
-						free(line);
-						tmpp = open("/tmp/hd", O_RDONLY);
-						unlink("/tmp/hd");
-					}
-					current = current->next;
-				}
+				tmpp = heredoc_non_pipe_command(actuel, tmpp);
 				if (opendir(actuel->command[0]))
 				{
 					all->exit_status = 126;
@@ -568,20 +491,13 @@ void	minishell(t_all *all, t_link *cmd)
 			}
 			else
 			{
-				int		i;
-				char	**path;
-				char	*tmp;
-				char	*command;
-				int		fd;
-				int		co = 0;
-
 				current = actuel->redir;
 				while (current)
 				{
 					if (!ft_strcmp(current->redir, "<<"))
 					{
-						char	*line;
-						char	*tmp;
+						char *line;
+						char *tmp;
 
 						tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
 						line = readline("> ");
@@ -652,7 +568,8 @@ void	minishell(t_all *all, t_link *cmd)
 					ft_puterr(" : No such file or directory\n");
 				}
 				else
-				{	
+				{
+					int fd;
 					i = -1;
 					while (path[++i])
 					{
@@ -666,12 +583,12 @@ void	minishell(t_all *all, t_link *cmd)
 							g_signal.childpid = fork();
 							if (!g_signal.childpid)
 							{
-								free(command);
 								dup2(tmpp, STDIN_FILENO);
 								if (file != -1)
 									close(file);
 								if (execve(command, actuel->command, env) == -1)
-									exit (errno);
+									exit(errno);
+								free(command);
 							}
 							waitpid(g_signal.childpid, &all->exit_status, 0);
 							if (WEXITSTATUS(all->exit_status))
@@ -692,11 +609,11 @@ void	minishell(t_all *all, t_link *cmd)
 						ft_puterr(actuel->command[0]);
 						ft_puterr(": command not found\n");
 					}
-					freetokens(path);
 				}
 			}
 		}
-		freetokens(env);
+		freetokens(path);
 		actuel = actuel->next;
 	}
+	freetokens(env);
 }

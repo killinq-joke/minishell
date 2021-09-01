@@ -6,11 +6,12 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 16:43:14 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/31 15:51:45 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/01 11:40:29 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
 char	*ft_trimquotes(char *str)
 {

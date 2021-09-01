@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parspipe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:28:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/31 15:55:23 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/01 18:43:21 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ void	freelinknode(t_link *node)
 	{
 		tmp = current;
 		current = current->next;
+		free(tmp->arg);
+		free(tmp->redir);
 		free(tmp);
 	}
 }
@@ -120,4 +122,5 @@ void	freelink(t_link *cmd)
 		current = current->next;
 		freelinknode(tmp);
 	}
+	free(cmd);
 }
