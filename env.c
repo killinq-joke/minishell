@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 20:46:33 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/18 20:06:25 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/31 14:27:31 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,15 @@ t_env	*envmaker(char **env)
 		current = current->next;
 	}
 	return (head);
+}
+
+void	freeenv(t_env *node)
+{
+	if (node->value)
+		free(node->value);
+	if (node->name)
+		free(node->name);
+	free(node);
 }
 
 void	printenv(t_env *env)

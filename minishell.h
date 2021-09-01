@@ -72,10 +72,8 @@ typedef struct s_env
 typedef struct s_link
 {
 	char	**command;
-	char	operator;
 	char	**path;
 	char	*path_bis;
-	t_env	*env;
 	t_redir	*redir;
 	t_link	*next;
 }				t_link;
@@ -112,5 +110,12 @@ void	printredir(t_redir *redir);
 void	printsplit(char **split);
 char	*parsenv(t_all *all, char *line, t_env *env);
 int		counttoken(char *line);
+void	cleancommand(t_link *cmd);
+char	**joinstr(char **split, char *str);
+char	**redirremover(char **tokens);
+char	**envtab(t_env	*env);
+void	freeenv(t_env *node);
+void	freelink(t_link *cmd);
+void	freetokens(char **tokens);
 
 #endif

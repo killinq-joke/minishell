@@ -63,6 +63,28 @@ char	**joinstr(char **split, char *str)
 	return (join);
 }
 
+char	**envtab(t_env	*env)
+{
+	int		i;
+	char	**tab;
+	char	*tmp;
+	t_env	*current;
+
+	tab = ft_calloc(envlen(env) + 1, sizeof (char *));
+	i = 0;
+	current = env;
+	while (current)
+	{
+		tab[i] = ft_strjoin(current->name, "=");
+		tmp = tab[i];
+		tab[i] = ft_strjoin(tmp, current->value);
+		free(tmp);
+		current = current->next;
+		i++;
+	}
+	return (tab);
+}
+
 int	main(int ac, char **av, char **ev)
 {
 	char	*line;
@@ -96,7 +118,10 @@ int	main(int ac, char **av, char **ev)
 			tmp = line;
 			line = parsenv(&all, tmp, all.headenv);
 			free(tmp);
-			tokens = parstoken(line);
+			tmp = line;
+			line = ft_trimquotes(line);
+			free(tmp);
+			tokens = commandsplit(line);
 			free(line);
 			if (tokens && splitlen(tokens))
 			{
@@ -105,12 +130,15 @@ int	main(int ac, char **av, char **ev)
 				all.headcmd->path_bis = ft_getenv("PATH", all.headenv);
 				cleancommand(all.headcmd);
 				minishell(&all, all.headcmd);
-				while(wait(NULL) > 0)
+				// while (1);
+				while (wait(NULL) > 0)
 					;
+				freelink(all.headcmd);
 			}
 		}
 		else
 			ft_puterr("parse error\n");
 	}
+	freeenv(all.headenv);
 	return (0);
 }

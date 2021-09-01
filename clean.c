@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 18:32:43 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/30 18:32:48 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/31 18:35:17 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,15 @@ void	trimtokens(char **tokens)
 
 void	cleancommand(t_link *cmd)
 {
+	char	**tmp;	
 	t_link	*current;	
 
 	current = cmd;
 	while (current)
 	{
-		current->command = redirremover(current->command);
+		tmp = current->command;
+		current->command = redirremover(tmp);
+		freetokens(tmp);
 		trimtokens(current->command);
 		current = current->next;
 	}

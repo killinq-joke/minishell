@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/30 12:00:11 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/31 14:27:00 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,16 +196,6 @@ void	export(char **command, t_env *env)
 			i++;
 		}
 	}
-}
-
-void	freeenv(t_env *node)
-{
-	//if (node->value)
-	//	free(node->value);
-	if (node->name)
-		free(node->name);
-	free(node);
-	(void)node;
 }
 
 void	unset(char **namelist, t_all *all)

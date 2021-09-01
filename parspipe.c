@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:28:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/26 18:57:21 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/31 15:55:23 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,19 @@ char	**parstoken(char *line)
 	while (tokens && tokens[i])
 		i++;
 	return (tokens);
+}
+
+void	freetokens(char **tokens)
+{
+	int	i;
+
+	i = 0;
+	while (tokens && tokens[i])
+	{
+		free(tokens[i]);
+		i++;
+	}
+	free(tokens);
 }
 
 char	**parscmd(char **tokens, size_t *i)
@@ -74,6 +87,37 @@ t_link	*parspipe(char **tokens)
 		current->next = linkinit(NULL);
 		current = current->next;
 	}
-	free(tokens);
+	freetokens(tokens);
 	return (head);
+}
+
+void	freelinknode(t_link *node)
+{
+	t_redir	*tmp;
+	t_redir	*current;
+
+	freetokens(node->command);
+	freetokens(node->path);
+	free(node->path_bis);
+	current = node->redir;
+	while (current)
+	{
+		tmp = current;
+		current = current->next;
+		free(tmp);
+	}
+}
+
+void	freelink(t_link *cmd)
+{
+	t_link	*tmp;
+	t_link	*current;
+
+	current = cmd;
+	while (current)
+	{
+		tmp = current;
+		current = current->next;
+		freelinknode(tmp);
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_trimquotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 16:43:14 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/18 20:07:00 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/31 15:51:45 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ char	*ft_trimquotes(char *str)
 			}
 			i++;
 		}
+		return (trimmed);
 	}
-	else
-		return (str);
-	return (trimmed);
+	free(trimmed);
+	return (NULL);
 }

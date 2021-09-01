@@ -6,7 +6,7 @@
 #    By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/02 09:47:58 by ztouzri           #+#    #+#              #
-#    Updated: 2021/08/30 18:22:03 by ztouzri          ###   ########.fr        #
+#    Updated: 2021/09/01 11:21:08 by ztouzri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror
 LIB		= libft.a
 
-SRCS	= main.c parspipe.c checkerror.c utils.c env.c exec.c execbuiltins.c pipe.c parsline.c
+SRCS	= main.c parspipe.c checkerror.c utils.c env.c exec.c execbuiltins.c pipe.c parsline.c redir.c clean.c commandsplit.c
 OBJS	= $(SRCS:c=o)
 
 .c.o:
@@ -27,7 +27,7 @@ all:	$(NAME)
 $(NAME):	$(OBJS)
 	make -C libft
 	mv libft/$(LIB) .
-	$(CC) $(CFLAGS) $(OBJS) $(LIB)  -lreadline  ./includes/libreadline.a -lcurses -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIB)  -lreadline ./includes/libreadline.a -lcurses -o $(NAME)
 
 clean:
 	$(RM) $(OBJS) $(LIB) file*

@@ -6,11 +6,35 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 18:33:09 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/30 18:36:40 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/31 19:52:39 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+unsigned int	wordlen1(char *line)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (line[i] != SPACE && line[i])
+	{
+		if (line[i] == QUOTE)
+		{
+			i++;
+			while (line[i] != QUOTE && line[i])
+				i++;
+		}
+		else if (line[i] == DQUOTE)
+		{
+			i++;
+			while (line[i] != DQUOTE && line[i])
+				i++;
+		}
+		i++;
+	}
+	return (i);
+}
 
 unsigned int	wordlen(char *line)
 {
@@ -34,24 +58,7 @@ unsigned int	wordlen(char *line)
 			i++;
 	}
 	else
-	{
-		while (line[i] != SPACE && line[i])
-		{
-			if (line[i] == QUOTE)
-			{
-				i++;
-				while (line[i] != QUOTE && line[i])
-					i++;
-			}
-			else if (line[i] == DQUOTE)
-			{
-				i++;
-				while (line[i] != DQUOTE && line[i])
-					i++;
-			}
-			i++;
-		}
-	}
+		i = wordlen1(line);
 	return (i);
 }
 
@@ -69,7 +76,6 @@ char	**commandsplit(char *line)
 	split = ft_calloc(wordcount + 1, sizeof (char *));
 	j = 0;
 	i = 0;
-	line = ft_trimquotes(line);
 	while (i < wordcount && j < ft_strlen(line))
 	{
 		j += ft_spacecount(&line[j]);

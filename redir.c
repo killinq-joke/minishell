@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 18:31:32 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/30 18:32:26 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/08/31 12:16:21 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,13 @@ void	redirmaker(t_link *cmd)
 		i = -1;
 		while (current->command[++i])
 		{
-			if (!ft_strcmp(current->command[i], ">") || !ft_strcmp(current->command[i], ">>")
-				|| !ft_strcmp(current->command[i], "<") || !ft_strcmp(current->command[i], "<<"))
+			if (!ft_strcmp(current->command[i], ">")
+				|| !ft_strcmp(current->command[i], ">>")
+				|| !ft_strcmp(current->command[i], "<")
+				|| !ft_strcmp(current->command[i], "<<"))
 			{
-				rediradd(&current->redir, redirinit(current->command[i], current->command[i + 1]));
+				rediradd(&current->redir,
+					redirinit(current->command[i], current->command[i + 1]));
 				i++;
 			}
 		}
