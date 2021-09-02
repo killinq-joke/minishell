@@ -334,11 +334,12 @@ void minishell(t_all *all, t_link *cmd)
 						ft_puterr(": command not found\n");
 					}
 				}
+				freetokens(path);
 			}
 		}
 		else
 		{
-			if ((ft_strcmp(actuel->command[0], "echo") == 0) || (ft_strcmp(actuel->command[0], "cd") == 0) || (ft_strcmp(actuel->command[0], "pwd") == 0) || (ft_strcmp(actuel->command[0], "exit") == 0) || (ft_strcmp(actuel->command[0], "export") == 0) || (ft_strcmp(actuel->command[0], "unset") == 0) || (ft_strcmp(actuel->command[0], "env") == 0))
+			if (!ft_strcmp(actuel->command[0], "echo") || !ft_strcmp(actuel->command[0], "cd") || !ft_strcmp(actuel->command[0], "pwd") || !ft_strcmp(actuel->command[0], "exit") || !ft_strcmp(actuel->command[0], "export") || !ft_strcmp(actuel->command[0], "unset") || !ft_strcmp(actuel->command[0], "env"))
 			{
 				tmpp = heredoc_non_pipe_command(actuel, tmpp);
 				current = actuel->redir;
@@ -611,9 +612,9 @@ void minishell(t_all *all, t_link *cmd)
 						ft_puterr(": command not found\n");
 					}
 				}
+				freetokens(path);
 			}
 		}
-		freetokens(path);
 		actuel = actuel->next;
 	}
 	freetokens(env);
