@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkerror.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/10 11:56:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/31 12:05:29 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/02 17:42:53y ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,18 @@ int	check_double_or_simple_quotes(char *str, int i, char c)
 	return (0);
 }
 
+int	check_redir_pipe(char *str, int i)
+{
+	i++;
+	while (str[i] && ft_isin(" |", str[i]))
+	{
+		if (str[i] == '|')
+			return (0);
+		i++;
+	}
+	return (i);
+}
+
 t_bool	checkerror1(char *line)
 {
 	int	i;
@@ -58,6 +70,12 @@ t_bool	checkerror1(char *line)
 			if (check_double_or_simple_quotes(line, i, 39) == false)
 				return (false);
 			i = check_double_or_simple_quotes(line, i, 39);
+		}
+		if (ft_isin("><", line[i]))
+		{
+			if (!check_redir_pipe(line, i))
+				return (false);
+			i = check_redir_pipe(line, i);
 		}
 	}
 	return (true);
