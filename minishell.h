@@ -63,7 +63,6 @@ typedef struct g_signal {
 	t_bool	redir;
 	t_all	*all;
 }				t_signal;
-
 typedef struct s_all
 {
 	t_env	*headenv;
