@@ -33,7 +33,8 @@ void	exec_slash_command_non_pipe(t_all *all)
 		if (!g_signal.childpid)
 		{
 			dup2(g_signal.tmpp, STDIN_FILENO);
-			if (execve(g_signal.actuel->command[0], g_signal.actuel->command, g_signal.env) == -1)
+			if (execve(g_signal.actuel->command[0],
+					g_signal.actuel->command, g_signal.env) == -1)
 				exit(errno);
 		}
 		if (g_signal.file != -1)
@@ -51,13 +52,15 @@ void	redirection_slash_command_non_pipe(void)
 	{
 		if (!ft_strcmp(g_signal.current->redir, ">"))
 		{
-			g_signal.file = open(g_signal.current->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			g_signal.file = open(g_signal.current->arg,
+					O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			dup2(g_signal.file, STDOUT_FILENO);
 			close(g_signal.file);
 		}
 		if (!ft_strcmp(g_signal.current->redir, ">>"))
 		{
-			g_signal.file = open(g_signal.current->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			g_signal.file = open(g_signal.current->arg,
+					O_WRONLY | O_CREAT | O_APPEND, 0644);
 			dup2(g_signal.file, STDOUT_FILENO);
 			close(g_signal.file);
 		}
