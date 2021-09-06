@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 20:46:33 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/31 14:27:31 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/06 15:50:55 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_env	*envmaker(char **env)
 	while (env[i])
 	{
 		current->name = getname(env[i]);
-		current->value = getenv(current->name);
+		current->value = ft_strdup(getenv(current->name));
 		i++;
 		if (!env[i])
 			break ;
@@ -61,7 +61,7 @@ t_env	*envmaker(char **env)
 
 void	freeenv(t_env *node)
 {
-	if (node->value)
+	if (node->value && ft_strlen(node->value))
 		free(node->value);
 	if (node->name)
 		free(node->name);

@@ -81,7 +81,6 @@ int	counttoken(char *line)
 		if (!line[i])
 			break ;
 		i++;
-		printf("nbquote === %d\n", nbquote);
 		nbquote = 0;
 	}
 	return (count);

@@ -57,6 +57,8 @@ void	all_non_pipe_execution(t_all *all)
 		|| ft_strncmp("../", g_signal.actuel->command[0], 3) == 0)
 		all_slash_command_non_pipe(all);
 	else
+	{
 		all_exec_command_non_pipe(all);
-	freetokens(g_signal.path);
+		freetokens(g_signal.path);
+	}
 }

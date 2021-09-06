@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 18:33:09 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/06 10:40:33 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/06 16:49:37 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,18 @@ unsigned int	wordlen1(char *line)
 unsigned int	wordlen(char *line)
 {
 	unsigned int	i;
-
+	int				nbquotes;
+//nb de quote pair et space == break ;
+	nbquotes = 0;
 	i = 0;
 	if (line[0] == QUOTE)
 	{
 		i++;
 		while (line[i])
 		{
-			if (line[i] == QUOTE && (line[i + 1] == SPACE || !line[i + 1]))
+			if (line[i] == QUOTE)
+				nbquotes++;
+			if (nbquotes % 2 && (line[i + 1] == SPACE || !line[i + 1]))
 				break ;
 			i++;
 		}
@@ -58,7 +62,9 @@ unsigned int	wordlen(char *line)
 		i++;
 		while (line[i])
 		{
-			if (line[i] == DQUOTE && (line[i + 1] == SPACE || !line[i + 1]))
+			if (line[i] == DQUOTE)
+				nbquotes++;
+			if (nbquotes % 2 && (line[i + 1] == SPACE || !line[i + 1]))
 				break ;
 			i++;
 		}
@@ -67,7 +73,6 @@ unsigned int	wordlen(char *line)
 	}
 	else
 		i = wordlen1(line);
-	printf("len == %d\n", i);
 	return (i);
 }
 
@@ -80,7 +85,6 @@ char	**commandsplit(char *line)
 	int		len;
 
 	wordcount = counttoken(line);
-	printf("%d\n", wordcount);
 	if (wordcount == -1 || !wordcount)
 		return (NULL);
 	split = ft_calloc(wordcount + 1, sizeof (char *));
@@ -90,6 +94,7 @@ char	**commandsplit(char *line)
 	{
 		j += ft_spacecount(&line[j]);
 		len = wordlen(&line[j]);
+		printf("%d\n", len);
 		split[i] = ft_substr(line, j, len);
 		j += len;
 		i++;

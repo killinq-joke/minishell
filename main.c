@@ -150,7 +150,6 @@ int	main(int ac, char **av, char **ev)
 			line = parsenv(&all, tmp, all.headenv);
 			free(tmp);
 			tokens = commandsplit(line);
-			printsplit(tokens);
 			free(line);
 			if (tokens && splitlen(tokens))
 			{
@@ -158,7 +157,6 @@ int	main(int ac, char **av, char **ev)
 				redirmaker(all.headcmd);
 				all.headcmd->path_bis = ft_getenv("PATH", all.headenv);
 				cleancommand(all.headcmd);
-				printcmd(all.headcmd);
 				minishell(&all, all.headcmd);
 				while (wait(NULL) > 0)
 					;
