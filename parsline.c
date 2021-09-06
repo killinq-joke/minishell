@@ -21,7 +21,7 @@ int	counttoken(char *line)
 	nbquote = 0;	
 	count = 0;
 	i = 0;
-	if (line[i] && line[i] != SPACE && line[i] != DQUOTE && line[i] != QUOTE)
+	if (line[i] && line[i] != SPACE)
 		count++;
 	while (line[i])
 	{
@@ -36,7 +36,10 @@ int	counttoken(char *line)
 		{
 			i++;
 			if (line[i] == DQUOTE)
-				nbquote++;
+			{
+				i++;
+				continue ;
+			}
 			while (line[i])
 			{
 				if (line[i] == DQUOTE)
@@ -55,6 +58,11 @@ int	counttoken(char *line)
 		if (line[i] == QUOTE)
 		{
 			i++;
+			if (line[i] == QUOTE)
+			{
+				i++;
+				continue ;
+			}
 			while (line[i])
 			{
 				if (line[i] == QUOTE)
