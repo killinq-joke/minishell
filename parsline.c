@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 18:20:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/30 18:21:48 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/03 18:14:06by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 
 int	counttoken(char *line)
 {
-	int		i;
-	int		count;
+	int	i;
+	int	count;
+	int	nbquote;
 
+	nbquote = 0;	
 	count = 0;
 	i = 0;
 	if (line[i] && line[i] != SPACE && line[i] != DQUOTE && line[i] != QUOTE)
@@ -33,9 +35,17 @@ int	counttoken(char *line)
 		if (line[i] == DQUOTE)
 		{
 			i++;
-			while (line[i] && line[i] != DQUOTE)
+			if (line[i] == DQUOTE)
+				nbquote++;
+			while (line[i])
+			{
+				if (line[i] == DQUOTE)
+					nbquote++;
+				if ((line[i] == DQUOTE && (line[i + 1] == SPACE || !line[i + 1])))
+					break ;
 				i++;
-			if (line[i] != DQUOTE)
+			}
+			if (!(nbquote % 2))
 			{
 				ft_puterr("error: unclosed dquotes not supported\n");
 				return (-1);
@@ -45,9 +55,15 @@ int	counttoken(char *line)
 		if (line[i] == QUOTE)
 		{
 			i++;
-			while (line[i] && line[i] != QUOTE)
+			while (line[i])
+			{
+				if (line[i] == QUOTE)
+					nbquote++;
+				if ((line[i] == QUOTE && (line[i + 1] == SPACE || !line[i + 1])))
+					break ;
 				i++;
-			if (line[i] != QUOTE)
+			}
+			if (!(nbquote % 2))
 			{
 				ft_puterr("error: unclosed quotes not supported\n");
 				return (-1);
@@ -57,6 +73,8 @@ int	counttoken(char *line)
 		if (!line[i])
 			break ;
 		i++;
+		printf("nbquote === %d\n", nbquote);
+		nbquote = 0;
 	}
 	return (count);
 }

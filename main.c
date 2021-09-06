@@ -85,6 +85,37 @@ char	**envtab(t_env	*env)
 	return (tab);
 }
 
+void	printsplit(char **split)
+{
+	int	i;
+
+	i = 0;
+	if (!split)
+	{
+		printf("what1\n");
+		return ;
+	}
+	while (split[i])
+	{
+		printf("%s\n", split[i]);
+		i++;
+	}
+}
+
+void	printcmd(t_link *cmd)
+{
+	t_link	*current;
+
+	current = cmd;
+	if (!cmd)
+		printf("what\n");
+	while (current)
+	{
+		printsplit(cmd->command);
+		current = current->next;
+	}
+}
+
 int	main(int ac, char **av, char **ev)
 {
 	char	*line;
@@ -118,10 +149,8 @@ int	main(int ac, char **av, char **ev)
 			tmp = line;
 			line = parsenv(&all, tmp, all.headenv);
 			free(tmp);
-			tmp = line;
-			line = ft_trimquotes(line);
-			free(tmp);
 			tokens = commandsplit(line);
+			printsplit(tokens);
 			free(line);
 			if (tokens && splitlen(tokens))
 			{
@@ -129,6 +158,7 @@ int	main(int ac, char **av, char **ev)
 				redirmaker(all.headcmd);
 				all.headcmd->path_bis = ft_getenv("PATH", all.headenv);
 				cleancommand(all.headcmd);
+				printcmd(all.headcmd);
 				minishell(&all, all.headcmd);
 				while (wait(NULL) > 0)
 					;

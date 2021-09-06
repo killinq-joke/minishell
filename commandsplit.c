@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commandsplit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 18:33:09 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/08/31 19:52:39 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/06 10:40:33 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,30 @@ unsigned int	wordlen(char *line)
 	if (line[0] == QUOTE)
 	{
 		i++;
-		while (line[i] != QUOTE && line[i])
+		while (line[i])
+		{
+			if (line[i] == QUOTE && (line[i + 1] == SPACE || !line[i + 1]))
+				break ;
 			i++;
+		}
 		if (line[i])
 			i++;
 	}
 	else if (line[0] == DQUOTE)
 	{
 		i++;
-		while (line[i] != DQUOTE && line[i])
+		while (line[i])
+		{
+			if (line[i] == DQUOTE && (line[i + 1] == SPACE || !line[i + 1]))
+				break ;
 			i++;
+		}
 		if (line[i])
 			i++;
 	}
 	else
 		i = wordlen1(line);
+	printf("len == %d\n", i);
 	return (i);
 }
 
@@ -71,6 +80,7 @@ char	**commandsplit(char *line)
 	int		len;
 
 	wordcount = counttoken(line);
+	printf("%d\n", wordcount);
 	if (wordcount == -1 || !wordcount)
 		return (NULL);
 	split = ft_calloc(wordcount + 1, sizeof (char *));

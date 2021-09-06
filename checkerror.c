@@ -59,18 +59,18 @@ t_bool	checkerror1(char *line)
 			|| !ft_strncmp("><", &line[i], 2) || !ft_strncmp(">>>", &line[i], 3)
 			|| !ft_strncmp("<<<", &line[i], 3))
 			return (false);
-		if (line[i] == '"')
-		{
-			if (check_double_or_simple_quotes(line, i, '"') == false)
-				return (false);
-			i = check_double_or_simple_quotes(line, i, '"');
-		}
-		if (line[i] == 39)
-		{
-			if (check_double_or_simple_quotes(line, i, 39) == false)
-				return (false);
-			i = check_double_or_simple_quotes(line, i, 39);
-		}
+		// if (line[i] == '"')
+		// {
+		// 	if (check_double_or_simple_quotes(line, i, '"') == false)
+		// 		return (false);
+		// 	i = check_double_or_simple_quotes(line, i, '"');
+		// }
+		// if (line[i] == 39)
+		// {
+		// 	if (check_double_or_simple_quotes(line, i, 39) == false)
+		// 		return (false);
+		// 	i = check_double_or_simple_quotes(line, i, 39);
+		// }
 		if (ft_isin("><", line[i]))
 		{
 			if (!check_redir_pipe(line, i))

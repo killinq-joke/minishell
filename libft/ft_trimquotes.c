@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_trimquotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztouzri <ztouzri@student.42nice.fr>        +#+  +:+       +#+        */
+/*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 16:43:14 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/01 11:40:29 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/06 12:13:38 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,29 @@ char	*ft_trimquotes(char *str)
 	{
 		while (str[i])
 		{
-			if (str[i] != '\'' && str[i] != '"')
+			if (str[i] == '\'')
+			{
+				i++;
+				while (str[i] && str[i] != '\'')
+				{
+					tmp = trimmed;
+					trimmed = ft_joinchar(tmp, str[i]);
+					free(tmp);
+					i++;
+				}
+			}
+			else if (str[i] == '"')
+			{
+				i++;
+				while (str[i] && str[i] != '"')
+				{
+					tmp = trimmed;
+					trimmed = ft_joinchar(tmp, str[i]);
+					free(tmp);
+					i++;
+				}
+			}
+			else
 			{
 				tmp = trimmed;
 				trimmed = ft_joinchar(tmp, str[i]);
@@ -33,6 +55,7 @@ char	*ft_trimquotes(char *str)
 			}
 			i++;
 		}
+		printf("trimmed == %s\n", trimmed);
 		return (trimmed);
 	}
 	free(trimmed);

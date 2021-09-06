@@ -6,13 +6,13 @@
 #    By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/02 09:47:58 by ztouzri           #+#    #+#              #
-#    Updated: 2021/09/02 17:56:59 by ztouzri          ###   ########.fr        #
+#    Updated: 2021/09/06 10:49:14 by ztouzri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= minishell
 CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS	= -Wall -Wextra -Werror
 LIB		= libft.a
 
 SRCS	= main.c parspipe.c checkerror.c utils.c env.c exec.c execbuiltins.c pipe.c parsline.c redir.c clean.c commandsplit.c
