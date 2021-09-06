@@ -15,7 +15,7 @@ CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror -g -fsanitize=address
 LIB		= libft.a
 
-SRCS	= main.c parspipe.c checkerror.c utils.c env.c exec.c execbuiltins.c pipe.c parsline.c redir.c clean.c commandsplit.c
+SRCS	= main.c parspipe.c checkerror.c utils.c env.c exec.c execbuiltins.c exec_command_non_pipe.c all_execution_non_pipe.c all_execution_pipe.c builtins_pipe.c slash_command_non_pipe.c builtins_non_pipe.c exec_command_pipe.c slash_command_pipe.c pipe.c parsline.c redir.c clean.c commandsplit.c
 OBJS	= $(SRCS:c=o)
 
 .c.o:

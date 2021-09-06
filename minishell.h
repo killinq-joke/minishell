@@ -45,6 +45,22 @@ typedef enum e_bool {
 
 typedef struct g_signal {
 	pid_t	childpid;
+	char	**path;
+	char	**env;
+	int		fd[2];
+	int		i;
+	int		co;
+	char	*command;
+	char	*tmp;
+	char	tmpp;
+	int		out;
+	int		fdd;
+	int		taille;
+	int		file;
+	t_link	*actuel;
+	t_redir	*current;
+	t_bool	errorleft;
+	t_bool	redir;
 	t_all	*all;
 }				t_signal;
 
@@ -98,7 +114,7 @@ size_t	envlen(t_env *head);
 void	minishell(t_all *all, t_link *cmd);
 char	*ft_getenv(const char *name, t_env *env);
 void	exportt(char **command, t_env *env);
-void    cd(t_link *cmd, t_env *env, t_all *all);
+void	cd(t_link *cmd, t_env *env, t_all *all);
 void	export(char **command, t_env *env);
 void	unset(char **namelist, t_all *all);
 void	echo(t_link *cmd);
@@ -117,5 +133,31 @@ char	**envtab(t_env	*env);
 void	freeenv(t_env *node);
 void	freelink(t_link *cmd);
 void	freetokens(char **tokens);
+void	redirection_builtins_pipe(void);
+void	file_error_and_close_builtins_pipe(int nb);
+void	exec_builtins_pipe(t_all *all);
+void	exec_slash_command(t_all *all);
+void	file_error_and_close_slash_command_pipe(t_all *all);
+void	redirection_slash_command_pipe(void);
+void	exec_command_pipe(t_all *all);
+void	error_path_exec_command_pipe(t_all *all);
+int		heredoc_non_pipe_command(t_link *actuel, int tmpp);
+void	redirection_builtins_non_pipe(void);
+void	exec_builtins_non_pipe(t_all *all);
+void	exec_builtins_non_pipe_2(t_all *all);
+void	redirection_slash_command_non_pipe(void);
+void	exec_slash_command_non_pipe(t_all *all);
+void	error_path_slash_command(t_all *all);
+void	error_path_exec_command(t_all *all);
+void	redirection_exec_command_non_pipe(void);
+void	exec_command_non_pipe(t_all *all);
+void	all_pipe_execution(t_all *all);
+void	all_exec_command_pipe(t_all *all);
+void	all_slash_command_pipe(t_all *all);
+void	all_builtin_execution_pipe(t_all *all);
+void	all_non_pipe_execution(t_all *all);
+void	all_exec_command_non_pipe(t_all *all);
+void	all_slash_command_non_pipe(t_all *all);
+void	all_builtin_execution_non_pipe(t_all *all);
 
 #endif
