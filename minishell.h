@@ -94,6 +94,17 @@ typedef struct s_link
 	t_link	*next;
 }				t_link;
 
+typedef struct s_pars
+{
+	int		i;
+	int		j;
+	char	*res;
+	char	*tmp;
+	char	*tmp1;
+	char	*name;
+	t_bool	indquote;
+}				t_pars;
+
 t_bool	checkerror(char *line);
 char	**commandsplit(char *line);
 char	**parstoken(char *line);
@@ -159,5 +170,10 @@ void	all_non_pipe_execution(t_all *all);
 void	all_exec_command_non_pipe(t_all *all);
 void	all_slash_command_non_pipe(t_all *all);
 void	all_builtin_execution_non_pipe(t_all *all);
+void	exec_builtins_non_pipe_3(t_all *all);
+void	exec_command_pipe3(void);
+void	redirection_exec_command_pipe3(void);
+void	redirection_exec_command_pipe2(void);
+void	exec_command_non_pipe2(t_all *all);
 
 #endif

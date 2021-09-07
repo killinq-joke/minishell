@@ -36,27 +36,35 @@ unsigned int	wordlen1(char *line)
 	return (i);
 }
 
+unsigned int	wordlen_quotes(char *line)
+{
+	int	i;
+	int	nbquotes;
+
+	i = 1;
+	nbquotes = 0;
+	while (line[i])
+	{
+		if (line[i] == QUOTE)
+			nbquotes++;
+		if (nbquotes % 2 && (line[i + 1] == SPACE || !line[i + 1]))
+			break ;
+		i++;
+	}
+	if (line[i])
+		i++;
+	return (i);
+}
+
 unsigned int	wordlen(char *line)
 {
 	unsigned int	i;
 	int				nbquotes;
-//nb de quote pair et space == break ;
+
 	nbquotes = 0;
 	i = 0;
 	if (line[0] == QUOTE)
-	{
-		i++;
-		while (line[i])
-		{
-			if (line[i] == QUOTE)
-				nbquotes++;
-			if (nbquotes % 2 && (line[i + 1] == SPACE || !line[i + 1]))
-				break ;
-			i++;
-		}
-		if (line[i])
-			i++;
-	}
+		i = wordlen_quotes(line);
 	else if (line[0] == DQUOTE)
 	{
 		i++;

@@ -1,6 +1,7 @@
-int 	redir_builtins_pipe(t_link *actuel, int file, t_bool redir)
+/*
+int	redir_builtins_pipe(t_link *actuel, int file, t_bool redir)
 {
-	t_redir *current;
+	t_redir	*current;
 
 	current = actuel->redir;
 	while (current)
@@ -19,7 +20,7 @@ int 	redir_builtins_pipe(t_link *actuel, int file, t_bool redir)
 		{
 			file = open(current->arg, O_RDONLY);
 			if (file == -1)
-				break;
+				break ;
 		}
 		current = current->next;
 	}
@@ -28,16 +29,15 @@ int 	redir_builtins_pipe(t_link *actuel, int file, t_bool redir)
 
 int heredoc_non_pipe_command(t_link *actuel, int tmpp)
 {
-	t_redir *current;
+	t_redir	*current;
+	char	*line;
+	char	*tmp;
 
 	current = actuel->redir;
 	while (current)
 	{
 		if (!ft_strcmp(current->redir, "<<"))
 		{
-			char *line;
-			char *tmp;
-
 			tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
 			line = readline("> ");
 			while (line && ft_strcmp(line, current->arg))
@@ -56,3 +56,4 @@ int heredoc_non_pipe_command(t_link *actuel, int tmpp)
 	}
 	return (tmpp);
 }
+*/

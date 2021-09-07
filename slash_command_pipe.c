@@ -55,38 +55,52 @@ void	file_error_and_close_slash_command_pipe(t_all *all)
 	}
 }
 
+void	redirection_slash_command_pipe_2(void)
+{
+	if (!ft_strcmp(g_signal.current->redir, ">"))
+	{
+		g_signal.redir = true;
+		g_signal.file = open(g_signal.current->arg,
+				O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		dup2(g_signal.file, STDOUT_FILENO);
+		close(g_signal.file);
+	}
+	if (!ft_strcmp(g_signal.current->redir, ">>"))
+	{
+		g_signal.redir = true;
+		g_signal.file = open(g_signal.current->arg,
+				O_WRONLY | O_CREAT | O_APPEND, 0644);
+		dup2(g_signal.file, STDOUT_FILENO);
+		close(g_signal.file);
+	}	
+}
+
+void	redirection_slash_command_pipe_3(void)
+{
+	g_signal.errorleft = true;
+	ft_puterr("minishell: ");
+	ft_puterr(g_signal.current->arg);
+	ft_puterr(": No such file or directory\n");
+	close(g_signal.file);
+	g_signal.file = open("/dev/null", O_RDONLY);
+	g_signal.tmpp = dup(g_signal.file);
+	close(g_signal.file);
+}
+
 void	redirection_slash_command_pipe(void)
 {
 	g_signal.current = g_signal.actuel->redir;
 	while (g_signal.current)
 	{
-		if (!ft_strcmp(g_signal.current->redir, ">"))
-		{
-			g_signal.redir = true;
-			g_signal.file = open(g_signal.current->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			dup2(g_signal.file, STDOUT_FILENO);
-			close(g_signal.file);
-		}
-		if (!ft_strcmp(g_signal.current->redir, ">>"))
-		{
-			g_signal.redir = true;
-			g_signal.file = open(g_signal.current->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			dup2(g_signal.file, STDOUT_FILENO);
-			close(g_signal.file);
-		}
+		if ((!ft_strcmp(g_signal.current->redir, ">"))
+			|| (!ft_strcmp(g_signal.current->redir, ">>")))
+			redirection_slash_command_pipe_2();
 		if (!ft_strcmp(g_signal.current->redir, "<"))
 		{
 			g_signal.file = open(g_signal.current->arg, O_RDONLY);
 			if (g_signal.file == -1)
 			{
-				g_signal.errorleft = true;
-				ft_puterr("minishell: ");
-				ft_puterr(g_signal.current->arg);
-				ft_puterr(": No such file or directory\n");
-				close(g_signal.file);
-				g_signal.file = open("/dev/null", O_RDONLY);
-				g_signal.tmpp = dup(g_signal.file);
-				close(g_signal.file);
+				redirection_slash_command_pipe_3();
 				break ;
 			}
 			g_signal.tmpp = dup(g_signal.file);

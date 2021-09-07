@@ -18,7 +18,7 @@ int	counttoken(char *line)
 	int	count;
 	int	nbquote;
 
-	nbquote = 0;	
+	nbquote = 0;
 	count = 0;
 	i = 0;
 	if (line[i] && line[i] != SPACE)
@@ -44,7 +44,8 @@ int	counttoken(char *line)
 			{
 				if (line[i] == DQUOTE)
 					nbquote++;
-				if ((line[i] == DQUOTE && (line[i + 1] == SPACE || !line[i + 1])))
+				if ((line[i] == DQUOTE
+						&& (line[i + 1] == SPACE || !line[i + 1])))
 					break ;
 				i++;
 			}
@@ -67,7 +68,8 @@ int	counttoken(char *line)
 			{
 				if (line[i] == QUOTE)
 					nbquote++;
-				if ((line[i] == QUOTE && (line[i + 1] == SPACE || !line[i + 1])))
+				if ((line[i] == QUOTE
+						&& (line[i + 1] == SPACE || !line[i + 1])))
 					break ;
 				i++;
 			}
@@ -86,112 +88,118 @@ int	counttoken(char *line)
 	return (count);
 }
 
+char	*joinandfree(char *line, char c)
+{
+	char	*tmp;
+
+	tmp = line;
+	line = ft_joinchar(tmp, c);
+	free(tmp);
+	return (line);
+}
+
+void	parsenv11(t_all *all, t_pars *p)
+{
+	p->tmp = p->res;
+	p->tmp1 = ft_itoa(all->exit_status);
+	p->res = ft_strjoin(p->tmp, p->tmp1);
+	free(p->tmp1);
+	free(p->tmp);
+}
+
+void	parsenv12(t_env *env, t_pars *p)
+{
+	p->tmp = p->res;
+	p->tmp1 = ft_getenv(p->name, env);
+	p->res = ft_strjoin(p->tmp, p->tmp1);
+	free(p->tmp1);
+	free(p->tmp);
+}
+
+void	parsenv1(t_all *all, char *line, t_env *env, t_pars *p)
+{
+	if (line[p->i])
+	{
+		p->j = 0;
+		while (line[p->i + p->j + 1] && line[p->i + p->j + 1] != SPACE
+			&& line[p->i + p->j + 1]
+			!= QUOTE && line[p->i + p->j + 1] != DQUOTE)
+			p->j++;
+		p->name = ft_substr(&line[1], p->i, p->j);
+		if (!ft_strlen(p->name))
+		{
+			p->tmp = p->res;
+			p->res = ft_strjoin(p->tmp, "$");
+			free(p->tmp);
+		}
+		else if (!ft_strcmp(p->name, "?"))
+			parsenv11(all, p);
+		else
+			parsenv12(env, p);
+		free(p->name);
+		p->i += p->j;
+	}
+}
+
+void	parsenv2(char *line, t_pars *p)
+{
+	if (line[p->i] == DQUOTE)
+		p->indquote = !p->indquote;
+	if ((!ft_strncmp(">>", &line[p->i], 2)
+			|| !ft_strncmp("<<", &line[p->i], 2)) && !p->indquote)
+	{
+		p->res = joinandfree(p->res, ' ');
+		p->res = joinandfree(p->res, line[p->i++]);
+		p->res = joinandfree(p->res, line[p->i]);
+		p->res = joinandfree(p->res, ' ');
+	}
+	else if (ft_isin("><|", line[p->i]) && !p->indquote)
+	{
+		p->res = joinandfree(p->res, ' ');
+		p->res = joinandfree(p->res, line[p->i]);
+		p->res = joinandfree(p->res, ' ');
+	}
+	else
+		p->res = joinandfree(p->res, line[p->i]);
+}
+
+void	parsenv0(char *line, t_pars *p)
+{
+	p->tmp = p->res;
+	p->res = ft_joinchar(p->tmp, line[p->i]);
+	free(p->tmp);
+	p->i++;
+	while (line[p->i] && line[p->i] != QUOTE)
+	{
+		p->tmp = p->res;
+		p->res = ft_joinchar(p->tmp, line[p->i]);
+		free(p->tmp);
+		p->i++;
+	}
+	if (line[p->i] && line[p->i] == QUOTE)
+	{
+		p->tmp = p->res;
+		p->res = ft_joinchar(p->tmp, line[p->i]);
+		free(p->tmp);
+	}
+}
+
 char	*parsenv(t_all *all, char *line, t_env *env)
 {
-	int		i;
-	int		j;
-	char	*res;
-	char	*tmp;
-	char	*tmp1;
-	char	*name;
-	t_bool	indquote;
+	t_pars	p;
 
-	res = ft_calloc(1, sizeof (char));
-	i = 0;
-	indquote = false;
-	while (line[i])
+	p.res = ft_calloc(1, sizeof (char));
+	p.i = 0;
+	p.indquote = false;
+	while (line[p.i])
 	{
-		if (line[i] && line[i] == QUOTE)
-		{
-			tmp = res;
-			res = ft_joinchar(tmp, line[i]);
-			free(tmp);
-			i++;
-			while (line[i] && line[i] != QUOTE)
-			{
-				tmp = res;
-				res = ft_joinchar(tmp, line[i]);
-				free(tmp);
-				i++;
-			}
-			if (line[i] && line[i] == QUOTE)
-			{
-				tmp = res;
-				res = ft_joinchar(tmp, line[i]);
-				free(tmp);
-			}
-		}
-		else if (line[i] && line[i] == '$')
-		{
-			if (line[i])
-			{
-				j = 0;
-				while (line[i + j + 1] && line[i + j + 1] != SPACE
-					&& line[i + j + 1] != QUOTE && line[i + j + 1] != DQUOTE)
-					j++;
-				name = ft_substr(&line[1], i, j);
-				if (!ft_strlen(name))
-				{
-					tmp = res;
-					res = ft_strjoin(tmp, "$");
-					free(tmp);
-				}
-				else if (!ft_strcmp(name, "?"))
-				{
-					tmp = res;
-					tmp1 = ft_itoa(all->exit_status);
-					res = ft_strjoin(tmp, tmp1);
-					free(tmp1);
-					free(tmp);
-				}
-				else
-				{
-					tmp = res;
-					res = ft_strjoin(tmp, ft_getenv(name, env));
-					free(tmp);
-				}
-				i += j;
-			}
-		}
+		if (line[p.i] && line[p.i] == QUOTE)
+			parsenv0(line, &p);
+		else if (line[p.i] && line[p.i] == '$')
+			parsenv1(all, line, env, &p);
 		else
-		{
-			if (line[i] == DQUOTE)
-				indquote = !indquote;
-			if ((!ft_strncmp(">>", &line[i], 2) || !ft_strncmp("<<", &line[i], 2)) && !indquote)
-			{
-				tmp = res;
-				res = ft_joinchar(tmp, ' ');
-				free(tmp);
-				tmp = res;
-				res = ft_joinchar(tmp, line[i++]);
-				free(tmp);
-				tmp = res;
-				res = ft_joinchar(tmp, line[i]);
-				free(tmp);
-				tmp = res;
-				res = ft_joinchar(tmp, ' ');
-				free(tmp);
-			}
-			else if (ft_isin("><|", line[i]) && !indquote)
-			{
-				tmp = res;
-				res = ft_joinchar(tmp, ' ');
-				free(tmp);
-				tmp = res;
-				res = ft_joinchar(tmp, line[i]);
-				free(tmp);
-				tmp = res;
-				res = ft_joinchar(tmp, ' ');
-				free(tmp);
-			}
-			else
-			{
-				tmp = res;
-				res = ft_joinchar(tmp, line[i]);
-				free(tmp);
-			}
-		}
-		i++;
+			parsenv2(line, &p);
+		p.i++;
 	}
-	return (res);
+	return (p.res);
 }

@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern t_signal g_signal;
+extern t_signal	g_signal;
 
 void	give_good_path(t_all *all)
 {
@@ -38,7 +38,7 @@ t_bool	good_path_for_cmd(t_link *cmd)
 		return (false);
 }
 
-int		execplusredir(t_link *cmd)
+int	execplusredir(t_link *cmd)
 {
 	if (execve(cmd->command[0], cmd->command, NULL) == -1)
 		return (-1);

@@ -14,6 +14,23 @@
 
 extern t_signal	g_signal;
 
+void	exec_slash_command_non_pipe2(t_all *all)
+{
+	g_signal.childpid = fork();
+	if (!g_signal.childpid)
+	{
+		dup2(g_signal.tmpp, STDIN_FILENO);
+		if (execve(g_signal.actuel->command[0],
+				g_signal.actuel->command, g_signal.env) == -1)
+			exit(errno);
+	}
+	if (g_signal.file != -1)
+		dup2(g_signal.out, STDOUT_FILENO);
+	waitpid(g_signal.childpid, &all->exit_status, 0);
+	if (WEXITSTATUS(all->exit_status))
+		all->exit_status = 1;
+}
+
 void	exec_slash_command_non_pipe(t_all *all)
 {
 	g_signal.fdd = open(g_signal.actuel->command[0], O_RDONLY);
@@ -29,18 +46,25 @@ void	exec_slash_command_non_pipe(t_all *all)
 	}
 	else
 	{
-		g_signal.childpid = fork();
-		if (!g_signal.childpid)
-		{
-			dup2(g_signal.tmpp, STDIN_FILENO);
-			if (execve(g_signal.actuel->command[0], g_signal.actuel->command, g_signal.env) == -1)
-				exit(errno);
-		}
-		if (g_signal.file != -1)
-			dup2(g_signal.out, STDOUT_FILENO);
-		waitpid(g_signal.childpid, &all->exit_status, 0);
-		if (WEXITSTATUS(all->exit_status))
-			all->exit_status = 1;
+		exec_slash_command_non_pipe2(all);
+	}
+}
+
+void	redirection_slash_command_non_pipe2(void)
+{
+	if (!ft_strcmp(g_signal.current->redir, ">"))
+	{
+		g_signal.file = open(g_signal.current->arg,
+				O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		dup2(g_signal.file, STDOUT_FILENO);
+		close(g_signal.file);
+	}
+	if (!ft_strcmp(g_signal.current->redir, ">>"))
+	{
+		g_signal.file = open(g_signal.current->arg,
+				O_WRONLY | O_CREAT | O_APPEND, 0644);
+		dup2(g_signal.file, STDOUT_FILENO);
+		close(g_signal.file);
 	}
 }
 
@@ -49,18 +73,9 @@ void	redirection_slash_command_non_pipe(void)
 	g_signal.current = g_signal.actuel->redir;
 	while (g_signal.current)
 	{
-		if (!ft_strcmp(g_signal.current->redir, ">"))
-		{
-			g_signal.file = open(g_signal.current->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			dup2(g_signal.file, STDOUT_FILENO);
-			close(g_signal.file);
-		}
-		if (!ft_strcmp(g_signal.current->redir, ">>"))
-		{
-			g_signal.file = open(g_signal.current->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			dup2(g_signal.file, STDOUT_FILENO);
-			close(g_signal.file);
-		}
+		if ((!ft_strcmp(g_signal.current->redir, ">"))
+			|| (!ft_strcmp(g_signal.current->redir, ">>")))
+			redirection_slash_command_non_pipe2();
 		if (!ft_strcmp(g_signal.current->redir, "<"))
 		{
 			g_signal.tmpp = dup(STDIN_FILENO);

@@ -12,20 +12,27 @@
 
 #include "minishell.h"
 
-extern t_signal g_signal;
+extern t_signal	g_signal;
 
-int heredoc_non_pipe_command(t_link *actuel, int tmpp)
+int	heredoc_non_pipe_command2(int tmpp, char *line)
 {
-	t_redir *current;
+	free(line);
+	tmpp = open("/tmp/hd", O_RDONLY);
+	unlink("/tmp/hd");
+	return (tmpp);
+}
+
+int	heredoc_non_pipe_command(t_link *actuel, int tmpp)
+{
+	t_redir	*current;
+	char	*line;
+	char	*tmp;
 
 	current = actuel->redir;
 	while (current)
 	{
 		if (!ft_strcmp(current->redir, "<<"))
 		{
-			char *line;
-			char *tmp;
-
 			tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
 			line = readline("> ");
 			while (line && ft_strcmp(line, current->arg))
@@ -36,9 +43,7 @@ int heredoc_non_pipe_command(t_link *actuel, int tmpp)
 				line = readline("> ");
 				free(tmp);
 			}
-			free(line);
-			tmpp = open("/tmp/hd", O_RDONLY);
-			unlink("/tmp/hd");
+			tmpp = heredoc_non_pipe_command2(tmpp, line);
 		}
 		current = current->next;
 	}

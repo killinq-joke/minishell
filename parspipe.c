@@ -90,37 +90,3 @@ t_link	*parspipe(char **tokens)
 	freetokens(tokens);
 	return (head);
 }
-
-void	freelinknode(t_link *node)
-{
-	t_redir	*tmp;
-	t_redir	*current;
-
-	freetokens(node->command);
-	freetokens(node->path);
-	free(node->path_bis);
-	current = node->redir;
-	while (current)
-	{
-		tmp = current;
-		current = current->next;
-		free(tmp->arg);
-		free(tmp->redir);
-		free(tmp);
-	}
-}
-
-void	freelink(t_link *cmd)
-{
-	t_link	*tmp;
-	t_link	*current;
-
-	current = cmd;
-	while (current)
-	{
-		tmp = current;
-		current = current->next;
-		freelinknode(tmp);
-		free(tmp);
-	}
-}

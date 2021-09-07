@@ -62,9 +62,15 @@ void	pwd(void)
 	if (errno)
 	{
 		if (errno == EACCES)
-			printf("Read or search permission was denied for a component of the pathname\n");
+		{	
+			printf("Read or search permission was denied");
+			printf(" for a component of the pathname\n");
+		}
 		else if (errno == ERANGE)
-			printf("The size argument is greater than zero but smaller than the length of the pathname plus 1.\n");
+		{	
+			printf("The size argument is greater than zero ");
+			printf("but smaller than the length of the pathname plus 1.\n");
+		}
 	}
 }
 
@@ -83,163 +89,6 @@ void	exportt(char **command, t_env *env)
 				printf("declare -x %s\n", current->name);
 			current = current->next;
 		}
-	}
-}
-
-void	cderror(char *path)
-{
-	int	error;
-
-	error = errno;
-	ft_puterr("cd: ");
-	ft_puterr(path);
-	ft_puterr(": ");
-	if (error == EACCES)
-		ft_puterr("Permission denied.\n");
-	else if (error == EFAULT)
-		ft_puterr("Outside of the process's allocated address space.\n");
-	else if (error == EIO)
-		ft_puterr("I/O error.\n");
-	else if (error == ELOOP)
-		ft_puterr("Too many symbolic links were encountered.\n");
-	else if (error == ENAMETOOLONG)
-		ft_puterr("File name too long\n");
-	else if (error == ENOENT)
-		ft_puterr("No such file of directory\n");
-	else if (error == ENOTDIR)
-		ft_puterr("Not a directory\n");
-}
-
-void	cd(t_link *cmd, t_env *env, t_all *all)
-{
-	t_env	*current;
-	char	*path;
-
-	if (splitlen(cmd->command) == 1 || !ft_strcmp("~", cmd->command[1]))
-	{
-		path = ft_getenv("HOME", env);
-		if (!path)
-		{
-			ft_puterr("cd: HOME not set\n");
-			return ;
-		}
-	}
-	else
-		path = cmd->command[1];
-	if (chdir(path) == -1)
-	{
-		all->exit_status = 1;
-		cderror(path);
-	}
-	else
-	{
-		current = env;
-		while (current)
-		{
-			if (!ft_strcmp(current->name, "PWD"))
-			{
-				current->value = getcwd(NULL, 0);
-				if (!current->value)
-					ft_puterr("cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
-			}
-			current = current->next;
-		}
-	}
-}
-
-char	*getvalue(const char *name)
-{
-	int	i;
-	int	len;
-
-	if (!name)
-		return (ft_strdup(""));
-	i = 0;
-	while (name[i] && name[i] != '=')
-		i++;
-	if (name[i] == '=')
-		i++;
-	else
-		return (NULL);
-	len = i;
-	while (name[len])
-		len++;
-	return (ft_substr(name, i, len));
-}
-
-void	export(char **command, t_env *env)
-{
-	int		i;
-	t_env	*current;
-
-	current = env;
-	if (splitlen(command) == 1)
-	{
-		while (current)
-		{
-			if (current->value)
-				printf("declare -x %s=\"%s\"\n", current->name, current->value);
-			else
-				printf("declare -x %s\n", current->name);
-			current = current->next;
-		}
-	}
-	else
-	{
-		while (current->next)
-			current = current->next;
-		i = 1;
-		while (command[i])
-		{
-			current->next = envinit(getname(command[i]), getvalue(command[i]));
-			current = current->next;
-			i++;
-		}
-	}
-}
-
-void	unset(char **namelist, t_all *all)
-{
-	int		i;
-	int		isfirst;
-	t_env	*current;
-	t_env	*tmp;
-
-	isfirst = true;
-	current = all->headenv;
-	if (!namelist || !all->headenv)
-		return ;
-	if (envlen(all->headenv) == 1)
-		freeenv(all->headenv);
-	while (current)
-	{
-		i = 1;
-		while (namelist[i])
-		{
-			if (!ft_strcmp(current->name, namelist[i]))
-			{
-				if (isfirst)
-				{
-					all->headenv = current->next;
-					freeenv(current);
-					current = all->headenv;
-					isfirst = true;
-					break ;
-				}
-				else
-				{
-					tmp->next = current->next;
-					freeenv(current);
-					current = all->headenv;
-					isfirst = true;
-					break ;
-				}
-			}
-			i++;
-		}
-		tmp = current;
-		current = current->next;
-		isfirst = false;
 	}
 }
 
