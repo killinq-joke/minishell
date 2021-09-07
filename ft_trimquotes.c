@@ -10,42 +10,56 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 #include <stdio.h>
 
-int	ft_trimquotes2(char *str, int i, char *tmp, char *trimmed)
+extern t_signal	g_signal;
+
+char	*ft_trimquotes2(char *str, char *tmp, char *trimmed)
 {
-	i++;
-	while (str[i] && str[i] != '\'')
+	g_signal.u++;
+	while (str[g_signal.u] && str[g_signal.u] != '\'')
 	{
 		tmp = trimmed;
-		trimmed = ft_joinchar(tmp, str[i]);
+		trimmed = ft_joinchar(tmp, str[g_signal.u]);
 		free(tmp);
-		i++;
+		g_signal.u++;
 	}
-	return (i);
+	return (trimmed);
+}
+
+char	*ft_trimquotes3(char *str, char *tmp, char *trimmed)
+{
+	g_signal.u++;
+	while (str[g_signal.u] && str[g_signal.u] != '"')
+	{
+		tmp = trimmed;
+		trimmed = ft_joinchar(tmp, str[g_signal.u]);
+		free(tmp);
+		g_signal.u++;
+	}
+	return (trimmed);
 }
 
 char	*ft_trimquotes(char *str)
 {
-	int		i;
 	char	*tmp;
 	char	*trimmed;
 
 	trimmed = ft_calloc(1, sizeof (char));
-	i = -1;
+	g_signal.u = -1;
 	if (str)
 	{
-		while (str[++i])
+		while (str[++g_signal.u])
 		{
-			if (str[i] == '\'')
-				i = ft_trimquotes2(str, i, tmp, trimmed);
-			else if (str[i] == '"')
-				i = ft_trimquotes2(str, i, tmp, trimmed);
+			if (str[g_signal.u] == '\'')
+				trimmed = ft_trimquotes2(str, tmp, trimmed);
+			else if (str[g_signal.u] == '"')
+				trimmed = ft_trimquotes3(str, tmp, trimmed);
 			else
 			{
 				tmp = trimmed;
-				trimmed = ft_joinchar(tmp, str[i]);
+				trimmed = ft_joinchar(tmp, str[g_signal.u]);
 				free(tmp);
 			}
 		}

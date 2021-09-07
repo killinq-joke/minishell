@@ -9,7 +9,7 @@ SRCS	= ft_strlen.c ft_atoi.c ft_bzero.c ft_calloc.c\
 		ft_strmapi.c ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c\
 		ft_putnbr_fd.c ft_split.c ft_putstr.c ft_putnbr.c ft_isin.c ft_atol.c\
 		ft_sort_int_tab.c ft_intisin.c ft_superiorintisin.c ft_tabncpy.c ft_swap.c\
-		ft_strcmp.c ft_atof.c ft_puterr.c ft_joinchar.c ft_trimquotes.c ft_putstrnl.c\
+		ft_strcmp.c ft_atof.c ft_puterr.c ft_joinchar.c ft_putstrnl.c\
 		ft_strisnum.c ft_spacecount.c\
 
 OBJS		= ${SRCS:.c=.o}
