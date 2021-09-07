@@ -84,6 +84,7 @@ void	exec_command_non_pipe3(void)
 void	exec_command_non_pipe2(t_all *all)
 {
 	g_signal.i = -1;
+	g_signal.co = 0;
 	while (g_signal.path[++g_signal.i])
 	{
 		g_signal.tmp = ft_joinchar(g_signal.path[g_signal.i], '/');

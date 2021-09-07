@@ -47,54 +47,38 @@ void	signalhandler(int sig)
 		printf("Quit: 3\n");
 }
 
-void	printsplit(char **split)
+void	minishell2(char *tmp, char *line, t_all *all)
 {
-	int	i;
+	char	**tokens;
 
-	i = 0;
-	if (!split)
+	tmp = line;
+	line = parsenv(all, tmp, all->headenv);
+	free(tmp);
+	tokens = commandsplit(line);
+	free(line);
+	if (tokens && splitlen(tokens))
 	{
-		printf("what1\n");
-		return ;
-	}
-	while (split[i])
-	{
-		printf("%s\n", split[i]);
-		i++;
+		all->headcmd = parspipe(tokens);
+		redirmaker(all->headcmd);
+		all->headcmd->path_bis = ft_getenv("PATH", all->headenv);
+		cleancommand(all->headcmd);
+		minishell(all, all->headcmd);
+		while (wait(NULL) > 0)
+			;
+		freelink(all->headcmd);
 	}
 }
 
-void	printcmd(t_link *cmd)
-{
-	t_link	*current;
-
-	current = cmd;
-	if (!cmd)
-		printf("what\n");
-	while (current)
-	{
-		printsplit(cmd->command);
-		current = current->next;
-	}
-}
-
-int	main(int ac, char **av, char **ev)
+void	complete_minishell(t_all *all)
 {
 	char	*line;
-	char	*tmp;
-	char	**tokens;
-	t_all	all;
+	char	*tmp;	
 
-	(void)ac;
-	(void)av;
-	all.headenv = envmaker(ev);
-	signal(SIGINT, signalhandler);
-	signal(SIGQUIT, signalhandler);
 	while (1)
 	{
 		echo_control_seq(false);
 		g_signal.childpid = 0;
-		g_signal.all = &all;
+		g_signal.all = all;
 		line = readline("minishell> ");
 		if (!line)
 		{
@@ -107,27 +91,22 @@ int	main(int ac, char **av, char **ev)
 		line = ft_strtrim(line, " ");
 		free(tmp);
 		if (checkerror(line))
-		{
-			tmp = line;
-			line = parsenv(&all, tmp, all.headenv);
-			free(tmp);
-			tokens = commandsplit(line);
-			free(line);
-			if (tokens && splitlen(tokens))
-			{
-				all.headcmd = parspipe(tokens);
-				redirmaker(all.headcmd);
-				all.headcmd->path_bis = ft_getenv("PATH", all.headenv);
-				cleancommand(all.headcmd);
-				minishell(&all, all.headcmd);
-				while (wait(NULL) > 0)
-					;
-				freelink(all.headcmd);
-			}
-		}
+			minishell2(tmp, line, all);
 		else
 			ft_puterr("parse error\n");
 	}
+}
+
+int	main(int ac, char **av, char **ev)
+{
+	t_all	all;
+
+	(void)ac;
+	(void)av;
+	all.headenv = envmaker(ev);
+	signal(SIGINT, signalhandler);
+	signal(SIGQUIT, signalhandler);
+	complete_minishell(&all);
 	freeenv(all.headenv);
 	return (0);
 }

@@ -98,6 +98,9 @@ typedef struct s_pars
 {
 	int		i;
 	int		j;
+	int		k;
+	int		count;
+	int		nbquote;
 	char	*res;
 	char	*tmp;
 	char	*tmp1;
@@ -175,5 +178,11 @@ void	exec_command_pipe3(void);
 void	redirection_exec_command_pipe3(void);
 void	redirection_exec_command_pipe2(void);
 void	exec_command_non_pipe2(t_all *all);
+char	*joinandfree(char *line, char c);
+void	parsenv1(t_all *all, char *line, t_env *env, t_pars *p);
+void	parsenv12(t_env *env, t_pars *p);
+void	parsenv11(t_all *all, t_pars *p);
+void	minishell2(char *tmp, char *line, t_all *all);
+void	complete_minishell(t_all *all);
 
 #endif

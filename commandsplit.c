@@ -102,7 +102,6 @@ char	**commandsplit(char *line)
 	{
 		j += ft_spacecount(&line[j]);
 		len = wordlen(&line[j]);
-		printf("%d\n", len);
 		split[i] = ft_substr(line, j, len);
 		j += len;
 		i++;

@@ -18,7 +18,7 @@ SRCS	= 	main.c parspipe.c parspipe2.c checkerror.c utils.c env.c \
 			exec.c execbuiltins.c execbuiltins2.c execbuiltins3.c execbuiltins4.c exec_command_non_pipe.c all_execution_non_pipe.c \
 			all_execution_pipe.c builtins_pipe.c slash_command_non_pipe.c builtins_non_pipe.c builtins_non_pipe2.c\
 			exec_command_pipe.c slash_command_pipe.c pipe.c parsline.c redir.c clean.c commandsplit.c \
-			exec_command_pipe2.c exec_command_non_pipe2.c signal.c
+			exec_command_pipe2.c exec_command_non_pipe2.c signal.c parsline2.c parsline3.c 
 OBJS	= $(SRCS:c=o)
 
 .c.o:

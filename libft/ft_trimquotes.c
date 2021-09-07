@@ -13,6 +13,19 @@
 #include "libft.h"
 #include <stdio.h>
 
+int	ft_trimquotes2(char *str, int i, char *tmp, char *trimmed)
+{
+	i++;
+	while (str[i] && str[i] != '\'')
+	{
+		tmp = trimmed;
+		trimmed = ft_joinchar(tmp, str[i]);
+		free(tmp);
+		i++;
+	}
+	return (i);
+}
+
 char	*ft_trimquotes(char *str)
 {
 	int		i;
@@ -20,40 +33,21 @@ char	*ft_trimquotes(char *str)
 	char	*trimmed;
 
 	trimmed = ft_calloc(1, sizeof (char));
-	i = 0;
+	i = -1;
 	if (str)
 	{
-		while (str[i])
+		while (str[++i])
 		{
 			if (str[i] == '\'')
-			{
-				i++;
-				while (str[i] && str[i] != '\'')
-				{
-					tmp = trimmed;
-					trimmed = ft_joinchar(tmp, str[i]);
-					free(tmp);
-					i++;
-				}
-			}
+				i = ft_trimquotes2(str, i, tmp, trimmed);
 			else if (str[i] == '"')
-			{
-				i++;
-				while (str[i] && str[i] != '"')
-				{
-					tmp = trimmed;
-					trimmed = ft_joinchar(tmp, str[i]);
-					free(tmp);
-					i++;
-				}
-			}
+				i = ft_trimquotes2(str, i, tmp, trimmed);
 			else
 			{
 				tmp = trimmed;
 				trimmed = ft_joinchar(tmp, str[i]);
 				free(tmp);
 			}
-			i++;
 		}
 		return (trimmed);
 	}
