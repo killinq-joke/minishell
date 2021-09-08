@@ -18,7 +18,7 @@ char	*getvalue(const char *name)
 	int	len;
 
 	if (!name)
-		return (ft_strdup(""));
+		return (NULL);
 	i = 0;
 	while (name[i] && name[i] != '=')
 		i++;
@@ -32,22 +32,56 @@ char	*getvalue(const char *name)
 	return (ft_substr(name, i, len));
 }
 
+t_bool	envisin(const char *name, t_env *env)
+{
+	t_env	*current;
+
+	current = env;
+	while (current)
+	{
+		if (!ft_strcmp(current->name, name))
+			return (true);
+		current = current->next;
+	}
+	return (false);
+}
+/*
+void	export3(char *command, char *name)
+{
+	ft_puterr("minishell: export: `");
+	ft_puterr(command);
+	ft_puterr("': not a valid identifier\n");
+	free(name);
+}
+*/
+
 void	export2(char **command, t_env *env)
 {
 	int		i;
 	t_env	*current;
 	char	*name;
+	char	*value;
 
 	current = env;
-	while (current->next)
-		current = current->next;
 	i = 1;
 	while (command[i])
 	{
 		name = getname(command[i]);
+		while (current->next && ft_strcmp(current->name, name))
+			current = current->next;
 		if (ft_strlen(name))
 		{
-			current->next = envinit(name, getvalue(command[i]));
+			value = getvalue(command[i]);
+			if (envisin(name, env))
+			{
+				if (current->value && value)
+					free(current->value);
+				if (value)
+					current->value = value;
+				free(name);
+			}
+			else
+				current->next = envinit(name, getvalue(command[i]));
 			current = current->next;
 		}
 		else

@@ -12,7 +12,7 @@
 
 NAME	= minishell
 CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror -g -fsanitize=address
 LIB		= libft.a
 SRCS	= 	main.c parspipe.c parspipe2.c checkerror.c utils.c env.c \
 			exec.c execbuiltins.c execbuiltins2.c execbuiltins3.c execbuiltins4.c exec_command_non_pipe.c all_execution_non_pipe.c \

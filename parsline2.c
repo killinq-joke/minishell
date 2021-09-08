@@ -37,7 +37,17 @@ void	parsenv1(t_all *all, char *line, t_env *env, t_pars *p)
 	}
 }
 
-void	parsenv2(char *line, t_pars *p)
+char	*joinhome(char *line, t_env *env, t_pars *p)
+{
+	p->tmp = line;
+	p->tmp1 = ft_getenv("HOME", env);
+	line = ft_strjoin(p->tmp, p->tmp1);
+	free(p->tmp1);
+	free(p->tmp);
+	return (line);
+}
+
+void	parsenv2(char *line, t_env *env, t_pars *p)
 {
 	if (line[p->i] == DQUOTE)
 		p->indquote = !p->indquote;
@@ -55,6 +65,10 @@ void	parsenv2(char *line, t_pars *p)
 		p->res = joinandfree(p->res, line[p->i]);
 		p->res = joinandfree(p->res, ' ');
 	}
+	else if ((!p->i || line[p->i - 1] == ' ')
+		&& line[p->i] == '~' && (line[p->i + 1] == ' '
+			|| line[p->i + 1] == '/' || !line[p->i + 1]))
+		p->res = joinhome(p->res, env, p);
 	else
 		p->res = joinandfree(p->res, line[p->i]);
 }
@@ -94,7 +108,7 @@ char	*parsenv(t_all *all, char *line, t_env *env)
 		else if (line[p.i] && line[p.i] == '$')
 			parsenv1(all, line, env, &p);
 		else
-			parsenv2(line, &p);
+			parsenv2(line, env, &p);
 		p.i++;
 	}
 	return (p.res);

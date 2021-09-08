@@ -44,7 +44,7 @@ void	echo(t_link *cmd)
 	while (cmd->command[i])
 	{
 		ft_putstr(cmd->command[i]);
-		if (cmd->command[i + 1])
+		if (cmd->command[i + 1] && ft_strlen(cmd->command[i]))
 			ft_putchar(' ');
 		i++;
 	}

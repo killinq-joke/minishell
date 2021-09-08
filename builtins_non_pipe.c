@@ -51,11 +51,8 @@ void	redirection_builtins_non_pipe(void)
 	}	
 }
 
-void	exec_builtins_non_pipe4(void)
+void	exec_builtins_non_pipe4(int i)
 {
-	int	i;
-
-	i = 0;
 	if (g_signal.actuel->command[1])
 	{
 		if (ft_strisnum(g_signal.actuel->command[1]) == 1)
@@ -84,6 +81,9 @@ void	exec_builtins_non_pipe4(void)
 
 void	exec_builtins_non_pipe(t_all *all)
 {
+	int	i;
+
+	i = 0;
 	if (g_signal.file == -1)
 	{
 		ft_puterr("minishell: ");
@@ -97,7 +97,7 @@ void	exec_builtins_non_pipe(t_all *all)
 		&& (g_signal.taille == 1))
 	{
 		ft_putstr("exit\n");
-		exec_builtins_non_pipe4();
+		exec_builtins_non_pipe4(i);
 	}
 }
 
