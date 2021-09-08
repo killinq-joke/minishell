@@ -23,8 +23,6 @@ void	counttoken_space(t_pars *parse, char *line)
 int	counttoken_space_quote(t_pars *parse, char *line)
 {
 	parse->k++;
-	if (line[parse->k] == QUOTE)
-		parse->k++;
 	while (line[parse->k])
 	{
 		if (line[parse->k] == QUOTE)
@@ -46,8 +44,6 @@ int	counttoken_space_quote(t_pars *parse, char *line)
 int	counttoken_space_dquote(t_pars *parse, char *line)
 {
 	parse->k++;
-	if (line[parse->k] == DQUOTE)
-		parse->k++;
 	while (line[parse->k])
 	{
 		if (line[parse->k] == DQUOTE)
@@ -80,7 +76,7 @@ int	counttoken(char *line)
 		if (line[parse.k] == SPACE)
 			counttoken_space(&parse, line);
 		if (line[parse.k] == DQUOTE)
-			if (counttoken_space_dquote(&parse, line) == 1)
+			if (counttoken_space_dquote(&parse, line) == -1)
 				return (-1);
 		if (line[parse.k] == QUOTE)
 			if (counttoken_space_quote(&parse, line) == -1)
