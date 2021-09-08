@@ -75,17 +75,14 @@ void	error_path_exec_command_pipe(t_all *all)
 	g_signal.tmp = ft_getenv("PATH", all->headenv);
 	g_signal.path = ft_split(g_signal.tmp, ':');
 	free(g_signal.tmp);
+	g_signal.tmpp = heredoc_non_pipe_command(g_signal.actuel,
+			g_signal.tmpp);
+	redirection_exec_command_pipe();
 	if (!g_signal.path)
 	{
 		ft_puterr("minishell:");
 		ft_puterr(g_signal.actuel->command[0]);
 		ft_puterr(" : No such file or directory\n");
-	}
-	else
-	{
-		g_signal.tmpp = heredoc_non_pipe_command(g_signal.actuel,
-				g_signal.tmpp);
-		redirection_exec_command_pipe();
 	}
 }
 
