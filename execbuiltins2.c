@@ -36,6 +36,7 @@ void	export2(char **command, t_env *env)
 {
 	int		i;
 	t_env	*current;
+	char	*name;
 
 	current = env;
 	while (current->next)
@@ -43,8 +44,19 @@ void	export2(char **command, t_env *env)
 	i = 1;
 	while (command[i])
 	{
-		current->next = envinit(getname(command[i]), getvalue(command[i]));
-		current = current->next;
+		name = getname(command[i]);
+		if (ft_strlen(name))
+		{
+			current->next = envinit(name, getvalue(command[i]));
+			current = current->next;
+		}
+		else
+		{
+			ft_puterr("minishell: export: `");
+			ft_puterr(command[i]);
+			ft_puterr("': not a valid identifier\n");
+			free(name);
+		}
 		i++;
 	}
 }
