@@ -53,17 +53,33 @@ void	redirection_builtins_non_pipe(void)
 
 void	exec_builtins_non_pipe4(void)
 {
+	int	i;
+
+	i = 0;
 	if (g_signal.actuel->command[1])
 	{
 		if (ft_strisnum(g_signal.actuel->command[1]) == 1)
-			exit(ft_atoi(g_signal.actuel->command[1]));
+		{
+			while (g_signal.actuel->command[i])
+				i++;
+			if (i == 2)
+				exit(ft_atoi(g_signal.actuel->command[1]));
+			else
+			{
+				g_signal.all->exit_status = 1;
+				ft_puterr("exit: too many arguments\n");
+			}
+		}
 		else
 		{
 			ft_puterr("minishell: ");
 			ft_puterr(g_signal.actuel->command[1]);
 			ft_puterr(": numeric argument required\n");
+			exit(0);
 		}
 	}
+	else
+		exit(0);
 }
 
 void	exec_builtins_non_pipe(t_all *all)
@@ -82,7 +98,6 @@ void	exec_builtins_non_pipe(t_all *all)
 	{
 		ft_putstr("exit\n");
 		exec_builtins_non_pipe4();
-		exit(0);
 	}
 }
 
