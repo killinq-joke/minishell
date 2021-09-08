@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execbuiltins.c                                     :+:      :+:    :+:   */
+/*   execbuiltins2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/06 15:46:53 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/08 21:44:17 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_bool	envisin(const char *name, t_env *env)
 	}
 	return (false);
 }
-/*
+
 void	export3(char *command, char *name)
 {
 	ft_puterr("minishell: export: `");
@@ -53,7 +53,6 @@ void	export3(char *command, char *name)
 	ft_puterr("': not a valid identifier\n");
 	free(name);
 }
-*/
 
 void	export2(char **command, t_env *env)
 {
@@ -62,11 +61,11 @@ void	export2(char **command, t_env *env)
 	char	*name;
 	char	*value;
 
-	current = env;
 	i = 1;
 	while (command[i])
 	{
 		name = getname(command[i]);
+		current = env;
 		while (current->next && ft_strcmp(current->name, name))
 			current = current->next;
 		if (ft_strlen(name))
@@ -85,12 +84,7 @@ void	export2(char **command, t_env *env)
 			current = current->next;
 		}
 		else
-		{
-			ft_puterr("minishell: export: `");
-			ft_puterr(command[i]);
-			ft_puterr("': not a valid identifier\n");
-			free(name);
-		}
+			export3(command[i], name);
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/08 10:29:39 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/08 22:16:54 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ void	complete_minishell(t_all *all)
 			close(STDIN_FILENO);
 			exit(0);
 		}
-		add_history(line);
+		if (ft_strlen(line))
+			add_history(line);
 		tmp = line;
 		line = ft_strtrim(line, " ");
 		free(tmp);
