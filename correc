@@ -1,9 +1,0 @@
-xexit: too many arguments if too many arguments && first is num
-xexport: if no name show error && remove from list for each error env var --> 'minishell: export: `=zak': not a valid identifier'
-xexport: replace if node already exists
-xcd: change ~ into $HOME
-echo "$$" -> echos a space when it shouldn'too
-
-cd error "" ne doit rien faire + leaks
-unset segfault when argument doesnt have value
-
