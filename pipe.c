@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 19:57:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/08 10:30:18 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/08 22:45:31by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,26 @@ int	heredoc_non_pipe_command(t_link *actuel, int tmpp)
 {
 	t_redir	*current;
 	char	*line;
-	char	*tmp;
 
 	current = actuel->redir;
 	while (current)
 	{
 		if (!ft_strcmp(current->redir, "<<"))
 		{
+			echo_control_seq(false);
 			tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
-			line = readline("> ");
-			while (line && ft_strcmp(line, current->arg))
+			while (1)
 			{
+				g_signal.heredoc = true;
+				line = readline("> ");
+				if (!line || !ft_strcmp(line, current->arg) || g_signal.interrupt)
+					break ;
 				write(tmpp, line, ft_strlen(line));
 				write(tmpp, "\n", 1);
-				tmp = line;
-				line = readline("> ");
-				free(tmp);
+				free(line);
 			}
+			g_signal.heredoc = false;
+			g_signal.interrupt = false;
 			tmpp = heredoc_non_pipe_command2(tmpp, line);
 		}
 		current = current->next;
@@ -61,6 +64,8 @@ void	fill_structure(t_link *cmd, t_all *all)
 	g_signal.redir = false;
 	g_signal.env = envtab(all->headenv);
 	g_signal.actuel = cmd;
+	g_signal.heredoc = false;
+	g_signal.interrupt = false;
 	all->exit_status = 0;
 	echo_control_seq(true);
 }
