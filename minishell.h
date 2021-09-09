@@ -57,6 +57,7 @@ typedef struct g_signal {
 	int		fdd;
 	int		taille;
 	int		file;
+	int		filee;
 	int		u;
 	t_link	*actuel;
 	t_redir	*current;
