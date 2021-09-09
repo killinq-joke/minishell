@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/08 21:44:17 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/09 02:22:59 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	export2(char **command, t_env *env)
 				free(name);
 			}
 			else
-				current->next = envinit(name, getvalue(command[i]));
+				current->next = envinit(name, value);
 			current = current->next;
 		}
 		else
