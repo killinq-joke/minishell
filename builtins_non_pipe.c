@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 19:57:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/08 10:28:09 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/09 22:56:00 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	exec_builtins_non_pipe4(int i)
 			ft_puterr("minishell: ");
 			ft_puterr(g_signal.actuel->command[1]);
 			ft_puterr(": numeric argument required\n");
-			exit(0);
+			exit(255);
 		}
 	}
 	else
