@@ -47,7 +47,7 @@ void	exec_command_pipe(t_all *all)
 {
 	exec_command_pipe2(all);
 	close(g_signal.fd[1]);
-	if (!g_signal.errorleft)
+	if (!g_signal.errorleft && g_signal.path)
 		g_signal.tmpp = g_signal.fd[0];
 	if (g_signal.co == 0 && g_signal.path)
 	{

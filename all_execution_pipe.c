@@ -37,7 +37,8 @@ void	all_exec_command_pipe(t_all *all)
 {
 	pipe(g_signal.fd);
 	error_path_exec_command_pipe(all);
-	exec_command_pipe(all);
+	if (g_signal.path)
+		exec_command_pipe(all);
 }
 
 void	all_pipe_execution(t_all *all)

@@ -26,7 +26,7 @@ void	exec_command_non_pipe(t_all *all)
 	{
 		ft_puterr("minishell: ");
 		ft_puterr(g_signal.actuel->command[0]);
-		ft_puterr(" : No such file or directooory\n");
+		ft_puterr(" : No such file or directory\n");
 		dup2(g_signal.out, STDOUT_FILENO);
 	}
 	else
