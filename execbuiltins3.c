@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execbuiltins.c                                     :+:      :+:    :+:   */
+/*   execbuiltins3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/06 15:46:53 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/09 23:49:36 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	cd2(t_env *env)
 	{
 		if (!ft_strcmp(current->name, "PWD"))
 		{
+			if (current->value && ft_strlen(current->value))
+				free(current->value);
 			current->value = getcwd(NULL, 0);
 			if (!current->value)
 			{	
@@ -70,8 +72,10 @@ void	cd(t_link *cmd, t_env *env, t_all *all)
 			return ;
 		}
 	}
+	else if (ft_strlen(cmd->command[1]))
+		path = ft_strdup(cmd->command[1]);
 	else
-		path = cmd->command[1];
+		return ;
 	if (chdir(path) == -1)
 	{
 		all->exit_status = 1;
@@ -79,4 +83,5 @@ void	cd(t_link *cmd, t_env *env, t_all *all)
 	}
 	else
 		cd2(env);
+	free(path);
 }

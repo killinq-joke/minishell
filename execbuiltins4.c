@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execbuiltins.c                                     :+:      :+:    :+:   */
+/*   execbuiltins4.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/06 15:46:53 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/09 23:32:26 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	unset3(t_all *all, int isfirst, t_env *current)
+void	unset3(t_all *all, t_env *current)
 {
 	all->headenv = current->next;
 	freeenv(current);
-	current = all->headenv;
-	isfirst = true;
 }
 
-void	unset4(t_all *all, t_env *current, t_env *tmp)
+void	unset4(t_env *current, t_env *tmp)
 {
 	tmp->next = current->next;
 	freeenv(current);
-	current = all->headenv;
 }
 
 void	unset2(t_all *all, char **namelist, t_env *current)
@@ -36,19 +33,19 @@ void	unset2(t_all *all, char **namelist, t_env *current)
 	isfirst = true;
 	while (current)
 	{
-		i = 1;
-		while (namelist[i])
+		i = 0;
+		while (namelist[++i])
 		{
 			if (!ft_strcmp(current->name, namelist[i]))
 			{
 				if (isfirst)
-					unset3(all, isfirst, current);
+					unset3(all, current);
 				else
-					unset4(all, current, tmp);
+					unset4(current, tmp);
+				current = all->headenv;
 				isfirst = true;
 				break ;
 			}
-			i++;
 		}
 		tmp = current;
 		current = current->next;
