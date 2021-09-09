@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 20:46:33 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/09 02:15:27 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/09 17:10:28 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,18 @@ char	*getname(char *envstr)
 	int		i;
 
 	if (!envstr)
-		return (NULL);
+		return (ft_strdup(""));
+	i = -1;
+	while (envstr[++i])
+	{
+		if (envstr[i] == '+')
+		{
+			if (envstr[i + 1] == '=')
+				return (ft_substr(envstr, 0, i));
+			else
+				return (ft_strdup(""));
+		}
+	}
 	i = 0;
 	while (envstr[i] && envstr[i] != SPACE && envstr[i] != '=')
 		i++;

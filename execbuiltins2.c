@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/09 02:22:59 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/09 17:59:08 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,29 @@ void	export3(char *command, char *name)
 	free(name);
 }
 
+t_bool	isplusequal(char *envstr)
+{
+	int	i;
+
+	i = -1;
+	while (envstr[++i])
+	{
+		if (!ft_strncmp(&envstr[i], "+=", 2))
+			return (true);
+		if (envstr[i] == '=')
+			return (false);
+	}
+	return (false);
+}
+
 void	export2(char **command, t_env *env)
 {
 	int		i;
 	t_env	*current;
 	char	*name;
 	char	*value;
+	char	*tmp;
+	char	*tmp1;
 
 	i = 1;
 	while (command[i])
@@ -71,7 +88,19 @@ void	export2(char **command, t_env *env)
 		if (ft_strlen(name))
 		{
 			value = getvalue(command[i]);
-			if (envisin(name, env))
+			if (envisin(name, env) && isplusequal(command[i]))
+			{
+				if (value)
+				{
+					tmp = current->value;
+					tmp1 = value;
+					current->value = ft_strjoin(tmp, tmp1);
+					free(tmp);
+					free(tmp1);
+				}
+				free(name);
+			}
+			else if (envisin(name, env))
 			{
 				if (current->value && value)
 					free(current->value);
