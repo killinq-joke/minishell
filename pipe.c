@@ -22,12 +22,8 @@ int	heredoc_non_pipe_command2(int tmpp, char *line)
 	return (tmpp);
 }
 
-int	heredoc_non_pipe_command(t_link *actuel, int tmpp)
+int	heredoc_non_pipe_command3(int tmpp, t_redir *current, char *line)
 {
-	t_redir	*current;
-	char	*line;
-
-	current = actuel->redir;
 	while (current)
 	{
 		if (!ft_strcmp(current->redir, "<<"))
@@ -38,7 +34,8 @@ int	heredoc_non_pipe_command(t_link *actuel, int tmpp)
 			{
 				g_signal.heredoc = true;
 				line = readline("> ");
-				if (!line || !ft_strcmp(line, current->arg) || g_signal.interrupt)
+				if (!line || !ft_strcmp(line, current->arg)
+					|| g_signal.interrupt)
 					break ;
 				write(tmpp, line, ft_strlen(line));
 				write(tmpp, "\n", 1);
@@ -50,6 +47,17 @@ int	heredoc_non_pipe_command(t_link *actuel, int tmpp)
 		}
 		current = current->next;
 	}
+	return (tmpp);
+}
+
+int	heredoc_non_pipe_command(t_link *actuel, int tmpp)
+{
+	t_redir	*current;
+	char	*line;
+
+	line = NULL;
+	current = actuel->redir;
+	tmpp = heredoc_non_pipe_command3(tmpp, current, line);
 	return (tmpp);
 }
 

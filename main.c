@@ -14,16 +14,15 @@
 
 t_signal	g_signal;
 
-void	echo_control_seq(t_bool c)
+void	sig_int(void)
 {
-	struct termios	conf;
-
-	ioctl(ttyslot(), TIOCGETA, &conf);
-	if (c == true)
-		conf.c_lflag |= ECHOCTL;
-	else if (c == false)
-		conf.c_lflag &= ~(ECHOCTL);
-	ioctl(ttyslot(), TIOCSETA, &conf);
+	printf("\n");
+	if (!g_signal.childpid)
+	{
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 void	signalhandler(int sig)
@@ -38,15 +37,7 @@ void	signalhandler(int sig)
 			rl_redisplay();
 		}
 		else
-		{
-			printf("\n");
-			if (!g_signal.childpid)
-			{
-				rl_on_new_line();
-				rl_replace_line("", 0);
-				rl_redisplay();
-			}
-		}
+			sig_int();
 	}
 	else if (sig == SIGQUIT && !g_signal.childpid)
 	{

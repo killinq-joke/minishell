@@ -14,6 +14,14 @@
 
 extern t_signal	g_signal;
 
+void	exec_null_path(void)
+{
+	ft_puterr("minishell: ");
+	ft_puterr(g_signal.actuel->command[0]);
+	ft_puterr(" : No such file or directory\n");
+	dup2(g_signal.out, STDOUT_FILENO);
+}
+
 void	exec_command_non_pipe(t_all *all)
 {
 	g_signal.tmp = ft_getenv("PATH", all->headenv);
@@ -23,12 +31,7 @@ void	exec_command_non_pipe(t_all *all)
 	{
 	}
 	if (!g_signal.path)
-	{
-		ft_puterr("minishell: ");
-		ft_puterr(g_signal.actuel->command[0]);
-		ft_puterr(" : No such file or directory\n");
-		dup2(g_signal.out, STDOUT_FILENO);
-	}
+		exec_null_path();
 	else
 	{
 		exec_command_non_pipe2(all);
@@ -41,5 +44,5 @@ void	exec_command_non_pipe(t_all *all)
 			ft_puterr(g_signal.actuel->command[0]);
 			ft_puterr(": command not found\n");
 		}
-	}	
+	}
 }

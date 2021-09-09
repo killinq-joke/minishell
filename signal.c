@@ -51,3 +51,15 @@ char	**envtab(t_env	*env)
 	}
 	return (tab);
 }
+
+void	echo_control_seq(t_bool c)
+{
+	struct termios	conf;
+
+	ioctl(ttyslot(), TIOCGETA, &conf);
+	if (c == true)
+		conf.c_lflag |= ECHOCTL;
+	else if (c == false)
+		conf.c_lflag &= ~(ECHOCTL);
+	ioctl(ttyslot(), TIOCSETA, &conf);
+}

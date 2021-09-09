@@ -69,59 +69,12 @@ t_bool	isplusequal(char *envstr)
 	return (false);
 }
 
-void	export2(char **command, t_env *env)
-{
-	int		i;
-	t_env	*current;
-	char	*name;
-	char	*value;
-	char	*tmp;
-	char	*tmp1;
-
-	i = 1;
-	while (command[i])
-	{
-		name = getname(command[i]);
-		current = env;
-		while (current->next && ft_strcmp(current->name, name))
-			current = current->next;
-		if (ft_strlen(name))
-		{
-			value = getvalue(command[i]);
-			if (envisin(name, env) && isplusequal(command[i]))
-			{
-				if (value)
-				{
-					tmp = current->value;
-					tmp1 = value;
-					current->value = ft_strjoin(tmp, tmp1);
-					free(tmp);
-					free(tmp1);
-				}
-				free(name);
-			}
-			else if (envisin(name, env))
-			{
-				if (current->value && value)
-					free(current->value);
-				if (value)
-					current->value = value;
-				free(name);
-			}
-			else
-				current->next = envinit(name, value);
-			current = current->next;
-		}
-		else
-			export3(command[i], name);
-		i++;
-	}
-}
-
 void	export(char **command, t_env *env)
 {
 	t_env	*current;
+	char	*tmp1;
 
+	tmp1 = NULL;
 	current = env;
 	if (splitlen(command) == 1)
 	{
@@ -135,5 +88,5 @@ void	export(char **command, t_env *env)
 		}
 	}
 	else
-		export2(command, env);
+		export2(command, env, tmp1, current);
 }

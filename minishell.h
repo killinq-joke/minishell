@@ -134,6 +134,7 @@ char	*ft_getenv(const char *name, t_env *env);
 void	exportt(char **command, t_env *env);
 void	cd(t_link *cmd, t_env *env, t_all *all);
 void	export(char **command, t_env *env);
+void	export2(char **command, t_env *env, char *tmp1, t_env *current);
 void	unset(char **namelist, t_all *all);
 void	echo(t_link *cmd);
 void	pwd(void);
@@ -188,5 +189,9 @@ void	parsenv12(t_env *env, t_pars *p);
 void	parsenv11(t_all *all, t_pars *p);
 void	minishell2(char *tmp, char *line, t_all *all);
 void	complete_minishell(t_all *all);
+char	*getvalue(const char *name);
+t_bool	envisin(const char *name, t_env *env);
+t_bool	isplusequal(char *envstr);
+void	export3(char *command, char *name);
 
 #endif
