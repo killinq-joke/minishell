@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 10:13:33 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/08 22:49:05 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/11 23:12:35 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct g_signal {
 	int		out;
 	int		fdd;
 	int		taille;
-	int 	kill;
+	int		kill;
 	int		file;
 	int		filee;
 	int		u;
@@ -194,5 +194,7 @@ char	*getvalue(const char *name);
 t_bool	envisin(const char *name, t_env *env);
 t_bool	isplusequal(char *envstr);
 void	export3(char *command, char *name);
+int		heredoc_non_pipe_command3(int tmpp, t_redir *current, char *line);
+int		heredoc_non_pipe_command2(int tmpp, char *line);
 
 #endif

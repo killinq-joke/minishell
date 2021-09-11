@@ -6,7 +6,7 @@
 #    By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/02 09:47:58 by ztouzri           #+#    #+#              #
-#    Updated: 2021/09/08 22:09:02 by ztouzri          ###   ########.fr        #
+#    Updated: 2021/09/11 23:08:27 by ztouzri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ SRCS	= 	main.c parspipe.c parspipe2.c checkerror.c utils.c env.c \
 			all_execution_pipe.c builtins_pipe.c slash_command_non_pipe.c builtins_non_pipe.c builtins_non_pipe2.c\
 			exec_command_pipe.c slash_command_pipe.c pipe.c parsline.c redir.c clean.c commandsplit.c \
 			exec_command_pipe2.c exec_command_non_pipe2.c signal.c parsline2.c parsline3.c execbuiltins5.c\
-			ft_trimquotes.c 
+			ft_trimquotes.c pipe2.c
 OBJS	= $(SRCS:c=o)
 
 .c.o:

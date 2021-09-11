@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 19:57:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/08 10:30:29 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/11 22:36:07 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,7 @@ void	exec_slash_command(t_all *all)
 		if (!g_signal.childpid)
 		{
 			if (g_signal.kill == 1)
-			{
-				printf("bonjour");
 				exit(0);
-			}
-				
 			dup2(g_signal.tmpp, STDIN_FILENO);
 			if (!g_signal.errorleft && !g_signal.redir)
 				dup2(g_signal.fd[1], STDOUT_FILENO);

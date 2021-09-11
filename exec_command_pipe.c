@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 19:57:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/08 10:29:04 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/11 22:35:20 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	error_path_exec_command_pipe(t_all *all)
 void	exec_command_pipe3(void)
 {		
 	if (g_signal.kill == 1)
-			exit(0);
+		exit(0);
 	dup2(g_signal.tmpp, STDIN_FILENO);
 	if (!g_signal.errorleft && !g_signal.redir)
 		dup2(g_signal.fd[1], STDOUT_FILENO);

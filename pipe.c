@@ -22,69 +22,6 @@ int	heredoc_non_pipe_command2(int tmpp, char *line)
 	return (tmpp);
 }
 
-void	heredocint(int sig)
-{
-	if (sig == SIGINT)
-	{
-		exit(1);
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
-
-int	heredoc_non_pipe_command3(int tmpp, t_redir *current, char *line)
-{
-	int	fd[2];
-
-	pipe(fd);
-	// tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_RDWR, 0600);
-	g_signal.heredoc = true;
-	g_signal.childpid = fork();
-	if (!g_signal.childpid)
-	{
-		// dup2(fd[1], tmpp);
-		close(fd[0]);
-		signal(SIGINT, heredocint);
-		while (current)
-		{
-			if (!ft_strcmp(current->redir, "<<"))
-			{
-				echo_control_seq(false);
-				while (1)
-				{
-					line = readline("> ");
-					if (!line || !ft_strcmp(line, current->arg))
-					{
-						heredoc_non_pipe_command2(fd[1], line);
-						exit(0);
-					}
-					write(fd[1], line, ft_strlen(line));
-					write(fd[1], "\n", 1);
-					free(line);
-				}
-				fd[1] = heredoc_non_pipe_command2(fd[1], line);
-			}
-			current = current->next;
-		}
-		close(fd[1]);
-		exit(0);
-	}
-	g_signal.heredoc = false;
-	waitpid(g_signal.childpid, &g_signal.kill, 0);
-	if(WEXITSTATUS(g_signal.kill))
-		g_signal.kill = 1;
-	else 
-		g_signal.kill = 0;
-	// char	buff[1000];
-	// read(fd[0], buff, 1000);
-	// printf("%s\n", buff);
-	close(fd[1]);	
-	tmpp = dup(fd[0]);
-	close(fd[0]);
-	printf("tmpp == %d\n", tmpp);
-	return (tmpp);
-}
-
 int	heredoc_non_pipe_command(t_link *actuel, int tmpp)
 {
 	t_redir	*current;
@@ -126,9 +63,7 @@ void	minishell(t_all *all, t_link *cmd)
 				break ;
 		}
 		else
-		{
 			all_non_pipe_execution(all);
-		}
 		g_signal.actuel = g_signal.actuel->next;
 	}
 	freetokens(g_signal.env);

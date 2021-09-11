@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 19:57:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/08 10:28:20 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/11 22:34:35 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,6 @@ void	exec_builtins_pipe(t_all *all)
 			export(g_signal.actuel->command, all->headenv);
 		if (ft_strcmp(g_signal.actuel->command[0], "unset") == 0)
 			unset(g_signal.actuel->command, all);
-		if (ft_strcmp(g_signal.actuel->command[0], "exit") == 0)
-			;
 		exit(0);
 	}
 }
