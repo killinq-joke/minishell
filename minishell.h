@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 10:13:33 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/11 23:12:35 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/11 23:34:33 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,6 @@ t_bool	envisin(const char *name, t_env *env);
 t_bool	isplusequal(char *envstr);
 void	export3(char *command, char *name);
 int		heredoc_non_pipe_command3(int tmpp, t_redir *current, char *line);
-int		heredoc_non_pipe_command2(int tmpp, char *line);
+int		heredoc_non_pipe_command2(int tmpp);
 
 #endif

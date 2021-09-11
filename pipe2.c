@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/11 23:03:42 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/11 23:07:03by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/12 00:01:08 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,29 @@ t_bool	heredocisin(t_redir *current)
 	return (false);
 }
 
+void	heredoc_fork2(int *fd, t_redir *current, char *line)
+{
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || !ft_strcmp(line, current->arg))
+		{
+			if (!heredocisin(current->next))
+			{
+				free(line);
+				exit(0);
+			}
+			break ;
+		}
+		if (!heredocisin(current->next))
+		{
+			write(fd[1], line, ft_strlen(line));
+			write(fd[1], "\n", 1);
+		}
+		free(line);
+	}
+}
+
 void	heredoc_fork(int *fd, t_redir *current, char *line)
 {
 	close(fd[0]);
@@ -44,19 +67,8 @@ void	heredoc_fork(int *fd, t_redir *current, char *line)
 		if (!ft_strcmp(current->redir, "<<"))
 		{
 			echo_control_seq(false);
-			while (1)
-			{
-				line = readline("> ");
-				if (!line || !ft_strcmp(line, current->arg))
-				{
-					heredoc_non_pipe_command2(fd[1], line);
-					exit(0);
-				}
-				write(fd[1], line, ft_strlen(line));
-				write(fd[1], "\n", 1);
-				free(line);
-			}
-			fd[1] = heredoc_non_pipe_command2(fd[1], line);
+			heredoc_fork2(fd, current, line);
+			free(line);
 		}
 		current = current->next;
 	}
