@@ -106,6 +106,8 @@ void	exec_builtins_non_pipe_3(t_all *all)
 	g_signal.childpid = fork();
 	if (!g_signal.childpid)
 	{
+		if (g_signal.kill == 1)
+			exit(0);
 		if (g_signal.file != -1)
 			close(g_signal.file);
 		dup2(g_signal.tmpp, STDIN_FILENO);

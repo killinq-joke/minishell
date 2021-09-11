@@ -56,6 +56,7 @@ typedef struct g_signal {
 	int		out;
 	int		fdd;
 	int		taille;
+	int 	kill;
 	int		file;
 	int		filee;
 	int		u;

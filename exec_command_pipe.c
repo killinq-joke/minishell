@@ -89,7 +89,9 @@ void	error_path_exec_command_pipe(t_all *all)
 }
 
 void	exec_command_pipe3(void)
-{
+{		
+	if (g_signal.kill == 1)
+			exit(0);
 	dup2(g_signal.tmpp, STDIN_FILENO);
 	if (!g_signal.errorleft && !g_signal.redir)
 		dup2(g_signal.fd[1], STDOUT_FILENO);

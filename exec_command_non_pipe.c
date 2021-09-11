@@ -72,6 +72,8 @@ void	redirection_exec_command_non_pipe(void)
 
 void	exec_command_non_pipe3(void)
 {
+	if (g_signal.kill == 1)
+		exit(0);
 	dup2(g_signal.tmpp, STDIN_FILENO);
 	if (g_signal.file != -1)
 		close(g_signal.file);

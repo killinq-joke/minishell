@@ -22,6 +22,12 @@ void	exec_slash_command(t_all *all)
 		g_signal.childpid = fork();
 		if (!g_signal.childpid)
 		{
+			if (g_signal.kill == 1)
+			{
+				printf("bonjour");
+				exit(0);
+			}
+				
 			dup2(g_signal.tmpp, STDIN_FILENO);
 			if (!g_signal.errorleft && !g_signal.redir)
 				dup2(g_signal.fd[1], STDOUT_FILENO);

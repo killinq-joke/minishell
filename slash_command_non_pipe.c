@@ -19,6 +19,8 @@ void	exec_slash_command_non_pipe2(t_all *all)
 	g_signal.childpid = fork();
 	if (!g_signal.childpid)
 	{
+		if (g_signal.kill == 1)
+			exit(0);
 		dup2(g_signal.tmpp, STDIN_FILENO);
 		if (execve(g_signal.actuel->command[0],
 				g_signal.actuel->command, g_signal.env) == -1)
