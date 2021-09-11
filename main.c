@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/09 02:08:11 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/10 22:28:49 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,7 @@ void	signalhandler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		if (g_signal.heredoc)
-		{
-			g_signal.interrupt = true;
-			printf("\n");
-			rl_on_new_line();
-			rl_redisplay();
-		}
-		else
+		if (!g_signal.heredoc)
 			sig_int();
 	}
 	else if (sig == SIGQUIT && !g_signal.childpid)

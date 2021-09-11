@@ -22,30 +22,62 @@ int	heredoc_non_pipe_command2(int tmpp, char *line)
 	return (tmpp);
 }
 
+void	heredocint(int sig)
+{
+	if (sig == SIGINT)
+	{
+		exit(0);
+		printf("\n");
+		rl_on_new_line();
+		rl_redisplay();
+	}
+}
+
 int	heredoc_non_pipe_command3(int tmpp, t_redir *current, char *line)
 {
-	while (current)
+	int	fd[2];
+
+	pipe(fd);
+	tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_RDWR, 0600);
+	dup2(tmpp, fd[1]);
+	g_signal.heredoc = true;
+	g_signal.childpid = fork();
+	if (!g_signal.childpid)
 	{
-		if (!ft_strcmp(current->redir, "<<"))
+		close(fd[0]);
+		signal(SIGINT, heredocint);
+		while (current)
 		{
-			echo_control_seq(false);
-			tmpp = open("/tmp/hd", O_CREAT | O_TRUNC | O_WRONLY, 0600);
-			while (1)
+			if (!ft_strcmp(current->redir, "<<"))
 			{
-				g_signal.heredoc = true;
-				line = readline("> ");
-				if (!line || !ft_strcmp(line, current->arg)
-					|| g_signal.interrupt)
-					break ;
-				write(tmpp, line, ft_strlen(line));
-				write(tmpp, "\n", 1);
-				free(line);
+				echo_control_seq(false);
+				while (1)
+				{
+					line = readline("> ");
+					if (!line || !ft_strcmp(line, current->arg))
+					{
+						heredoc_non_pipe_command2(fd[1], line);
+						exit(0);
+					}
+					write(fd[1], line, ft_strlen(line));
+					write(fd[1], "\n", 1);
+					free(line);
+				}
+				fd[1] = heredoc_non_pipe_command2(fd[1], line);
 			}
-			g_signal.heredoc = false;
-			g_signal.interrupt = false;
-			tmpp = heredoc_non_pipe_command2(tmpp, line);
+			current = current->next;
 		}
-		current = current->next;
+		close(fd[1]);
+	}
+	else
+	{
+		g_signal.heredoc = false;
+		close(fd[1]);
+		printf("sla\n");
+		waitpid(g_signal.childpid, NULL, 0);
+		char	*buff = ft_calloc(200, sizeof (char));
+		read(fd[0], buff, 200);
+		printf("%s\n", buff);
 	}
 	return (tmpp);
 }
