@@ -197,5 +197,6 @@ t_bool	isplusequal(char *envstr);
 void	export3(char *command, char *name);
 int		heredoc_non_pipe_command3(int tmpp, t_redir *current, char *line);
 int		heredoc_non_pipe_command2(int tmpp);
+int		is_a_num(char *c);
 
 #endif

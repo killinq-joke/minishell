@@ -63,3 +63,11 @@ void	echo_control_seq(t_bool c)
 		conf.c_lflag &= ~(ECHOCTL);
 	ioctl(ttyslot(), TIOCSETA, &conf);
 }
+
+int	is_a_num(char *c)
+{
+	if ((c[0] == '-' || c[0] == '+')
+		&& (c[1] >= '0' && c[1] <= '9'))
+		return (1);
+	return (0);
+}

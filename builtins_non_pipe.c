@@ -55,9 +55,7 @@ void	exec_builtins_non_pipe4(int i)
 {
 	if (g_signal.actuel->command[1])
 	{
-		if (ft_strisnum(g_signal.actuel->command[1]) == 1
-			|| g_signal.actuel->command[1][0] == '-' ||
-				g_signal.actuel->command[1][0] == '-')
+		if (is_a_num(g_signal.actuel->command[1]) == 1)
 		{
 			while (g_signal.actuel->command[i])
 				i++;
