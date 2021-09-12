@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/09 23:32:26 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/13 00:20:20 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,27 @@ void	unset4(t_env *current, t_env *tmp)
 	freeenv(current);
 }
 
+void	unseterror(char *name)
+{
+	ft_puterr("minishell: unset: `");
+	ft_puterr(name);
+	ft_puterr("': not a valid identifier\n");
+}
+
+t_bool	ft_isinlist(char *list, char *name)
+{
+	int	i;
+
+	i = 0;
+	while (list[i])
+	{
+		if (ft_isin(name, list[i]))
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
 void	unset2(t_all *all, char **namelist, t_env *current)
 {
 	int		i;
@@ -36,7 +57,9 @@ void	unset2(t_all *all, char **namelist, t_env *current)
 		i = 0;
 		while (namelist[++i])
 		{
-			if (!ft_strcmp(current->name, namelist[i]))
+			if (ft_isinlist("+=", namelist[i]))
+				unseterror(namelist[i]);
+			else if (!ft_strcmp(current->name, namelist[i]))
 			{
 				if (isfirst)
 					unset3(all, current);
