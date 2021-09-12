@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 19:57:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/09 22:56:00 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/12 23:32:29 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,9 @@ void	exec_builtins_non_pipe4(int i)
 {
 	if (g_signal.actuel->command[1])
 	{
-		if (ft_strisnum(g_signal.actuel->command[1]) == 1)
+		if (ft_strisnum(g_signal.actuel->command[1]) == 1
+			|| g_signal.actuel->command[1][0] == '-' ||
+				g_signal.actuel->command[1][0] == '-')
 		{
 			while (g_signal.actuel->command[i])
 				i++;
