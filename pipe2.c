@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/11 23:03:42 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/12 00:01:08 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/12 17:00:09 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ t_bool	heredocisin(t_redir *current)
 	while (current)
 	{
 		if (!ft_strcmp(current->redir, "<<"))
+		{
+			g_signal.heredocuse = true;
 			return (true);
+		}
 		current = current->next;
 	}
 	return (false);

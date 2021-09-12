@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 10:13:33 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/11 23:34:33 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/12 16:57:19 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct g_signal {
 	t_bool	errorleft;
 	t_bool	redir;
 	t_bool	heredoc;
+	t_bool	heredocuse;
 	t_bool	interrupt;
 	t_all	*all;
 }				t_signal;

@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 19:57:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/08 10:29:01 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/12 17:22:17 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	exec_command_non_pipe(t_all *all)
 		exec_command_non_pipe2(all);
 		if (g_signal.file != -1)
 			dup2(g_signal.out, STDOUT_FILENO);
-		if (g_signal.co == 0)
+		if ((g_signal.co == 0 && ft_strlen(g_signal.actuel->command[0])) || \
+		(!ft_strlen(g_signal.actuel->command[0]) && !g_signal.heredocuse))
 		{
 			all->exit_status = 127;
 			ft_puterr("minishell: ");

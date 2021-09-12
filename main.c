@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/12 00:01:31 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/12 17:27:10 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,13 @@ void	complete_minishell(t_all *all)
 	while (1)
 	{
 		echo_control_seq(false);
+		g_signal.heredocuse = false;
 		g_signal.childpid = 0;
 		g_signal.all = all;
 		line = readline("minishell> ");
 		if (!line)
 		{
 			ft_putstrnl("exit");
-			close(STDIN_FILENO);
 			exit(0);
 		}
 		if (ft_strlen(line))

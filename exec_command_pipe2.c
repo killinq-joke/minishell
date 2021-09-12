@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 19:57:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/08 10:29:06 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/12 17:21:16 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,9 @@ void	exec_command_pipe(t_all *all)
 	close(g_signal.fd[1]);
 	if (!g_signal.errorleft && g_signal.path)
 		g_signal.tmpp = g_signal.fd[0];
-	if (g_signal.co == 0 && g_signal.path)
+	if ((g_signal.co == 0 && g_signal.path
+			&& ft_strlen(g_signal.actuel->command[0]))
+		|| (!ft_strlen(g_signal.actuel->command[0]) && !g_signal.heredocuse))
 	{
 		all->exit_status = 127;
 		ft_puterr("minishell: ");
