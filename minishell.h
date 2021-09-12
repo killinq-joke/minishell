@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 10:13:33 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/12 16:57:19 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/13 01:49:40 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,5 +198,6 @@ void	export3(char *command, char *name);
 int		heredoc_non_pipe_command3(int tmpp, t_redir *current, char *line);
 int		heredoc_non_pipe_command2(int tmpp);
 int		is_a_num(char *c);
+t_bool	ft_isinlist(char *list, char *name);
 
 #endif
