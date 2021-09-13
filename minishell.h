@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 10:13:33 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/13 01:49:40 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/13 12:09:32 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ void	exec_builtins_pipe(t_all *all);
 void	exec_slash_command(void);
 void	file_error_and_close_slash_command_pipe(void);
 void	redirection_slash_command_pipe(void);
-void	exec_command_pipe(t_all *all);
+void    exec_command_pipe(void);
 void	error_path_exec_command_pipe(t_all *all);
 int		heredoc_non_pipe_command(t_link *actuel, int tmpp);
 void	redirection_builtins_non_pipe(void);
