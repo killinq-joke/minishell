@@ -96,6 +96,7 @@ void	exec_command_pipe3(void)
 	dup2(g_signal.tmpp, STDIN_FILENO);
 	if (!g_signal.errorleft && !g_signal.redir)
 		dup2(g_signal.fd[1], STDOUT_FILENO);
+	close(g_signal.fd[1]);
 	if (!g_signal.errorleft)
 	{
 		if (execve(g_signal.command, g_signal.actuel->command,
