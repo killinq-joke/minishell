@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/06 15:46:53 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/13 02:06:43 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ void	execbuiltins(t_all *all)
 	if (ft_strcmp(all->headcmd->command[0], "exit") == 0)
 	{
 		ft_putstrnl("exit");
+		echo_control_seq(true);
 		exit(0);
 	}
 }
