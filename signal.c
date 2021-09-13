@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/11 23:14:30 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/13 02:04:45 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ char	**envtab(t_env	*env)
 void	echo_control_seq(t_bool c)
 {
 	struct termios	conf;
+	(void)c;
 
 	ioctl(ttyslot(), TIOCGETA, &conf);
 	if (c == true)
