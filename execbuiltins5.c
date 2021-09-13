@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/09 17:59:08 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/13 13:50:25 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	export2(char **command, t_env *env, char *tmp1, t_env *current)
 {
 	int		i;
 	char	*name;
-	char	*value;
 
 	i = 0;
 	while (command[++i])
@@ -52,13 +51,12 @@ void	export2(char **command, t_env *env, char *tmp1, t_env *current)
 		if (ft_strlen(name) && (ft_strisnum(name) == 0
 				&& (!(name[0] >= '0' && name[0] <= '9'))))
 		{
-			value = getvalue(command[i]);
 			if (envisin(name, env) && isplusequal(command[i]))
-				export4(value, tmp1, current, name);
+				export4(getvalue(command[i]), tmp1, current, name);
 			else if (envisin(name, env))
-				export5(current, name, value);
+				export5(current, name, getvalue(command[i]));
 			else
-				current->next = envinit(name, value);
+				current->next = envinit(name, getvalue(command[i]));
 			current = current->next;
 		}
 		else

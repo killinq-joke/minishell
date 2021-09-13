@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 19:57:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/08 10:28:04 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/13 15:16:04 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ void	all_builtin_execution_pipe(t_all *all)
 	file_error_and_close_builtins_pipe(2);
 }
 
-void	all_slash_command_pipe(t_all *all)
+void	all_slash_command_pipe(void)
 {
 	pipe(g_signal.fd);
 	g_signal.tmpp = heredoc_non_pipe_command(g_signal.actuel, g_signal.tmpp);
 	redirection_slash_command_pipe();
-	exec_slash_command(all);
-	file_error_and_close_slash_command_pipe(all);
+	exec_slash_command();
+	file_error_and_close_slash_command_pipe();
 }
 
 void	all_exec_command_pipe(t_all *all)
@@ -38,7 +38,7 @@ void	all_exec_command_pipe(t_all *all)
 	pipe(g_signal.fd);
 	error_path_exec_command_pipe(all);
 	if (g_signal.path)
-		exec_command_pipe(all);
+		exec_command_pipe();
 }
 
 void	all_pipe_execution(t_all *all)
@@ -54,7 +54,7 @@ void	all_pipe_execution(t_all *all)
 	else if (ft_strncmp("/", g_signal.actuel->command[0], 1) == 0
 		|| ft_strncmp("./", g_signal.actuel->command[0], 2) == 0
 		|| ft_strncmp("../", g_signal.actuel->command[0], 3) == 0)
-		all_slash_command_pipe(all);
+		all_slash_command_pipe();
 	else
 		all_exec_command_pipe(all);
 }

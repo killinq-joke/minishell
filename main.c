@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/13 01:57:24 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/13 15:18:55 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,7 @@ void	complete_minishell(t_all *all)
 		g_signal.all = all;
 		line = readline("minishell> ");
 		if (!line)
-		{
-			ft_putstrnl("exit");
-			echo_control_seq(true);
-			exit(0);
-		}
+			quit();
 		if (ft_strlen(line))
 			add_history(line);
 		tmp = line;

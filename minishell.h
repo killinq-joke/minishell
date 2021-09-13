@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 10:13:33 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/13 12:09:32 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/13 15:19:31 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ void	exec_builtins_pipe(t_all *all);
 void	exec_slash_command(void);
 void	file_error_and_close_slash_command_pipe(void);
 void	redirection_slash_command_pipe(void);
-void    exec_command_pipe(void);
+void	exec_command_pipe(void);
 void	error_path_exec_command_pipe(t_all *all);
 int		heredoc_non_pipe_command(t_link *actuel, int tmpp);
 void	redirection_builtins_non_pipe(void);
@@ -174,7 +174,7 @@ void	redirection_exec_command_non_pipe(void);
 void	exec_command_non_pipe(t_all *all);
 void	all_pipe_execution(t_all *all);
 void	all_exec_command_pipe(t_all *all);
-void	all_slash_command_pipe(t_all *all);
+void	all_slash_command_pipe(void);
 void	all_builtin_execution_pipe(t_all *all);
 void	all_non_pipe_execution(t_all *all);
 void	all_exec_command_non_pipe(t_all *all);
@@ -199,5 +199,10 @@ int		heredoc_non_pipe_command3(int tmpp, t_redir *current, char *line);
 int		heredoc_non_pipe_command2(int tmpp);
 int		is_a_num(char *c);
 t_bool	ft_isinlist(char *list, char *name);
+t_bool	checkquotes(char *str);
+t_bool	ft_isinlist(char *list, char *name);
+void	unseterror(char *name);
+char	**cleanlist(char **namelist);
+void	quit(void);
 
 #endif
