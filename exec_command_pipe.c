@@ -89,7 +89,8 @@ void	error_path_exec_command_pipe(t_all *all)
 }
 
 void	exec_command_pipe3(void)
-{		
+{
+	close(g_signal.fd[0]);
 	if (g_signal.kill == 1)
 		exit(0);
 	dup2(g_signal.tmpp, STDIN_FILENO);
@@ -105,5 +106,4 @@ void	exec_command_pipe3(void)
 		}
 	}
 	free(g_signal.command);
-	exit(0);
 }

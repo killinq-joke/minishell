@@ -14,7 +14,7 @@
 
 extern t_signal	g_signal;
 
-void	exec_command_pipe2(t_all *all)
+void	exec_command_pipe2(void)
 {
 	if (g_signal.path)
 	{
@@ -32,9 +32,6 @@ void	exec_command_pipe2(t_all *all)
 				if (!g_signal.childpid)
 					exec_command_pipe3();
 				dup2(g_signal.out, STDOUT_FILENO);
-				waitpid(g_signal.childpid, &all->exit_status, 0);
-				if (WEXITSTATUS(all->exit_status))
-					all->exit_status = 1;
 				free(g_signal.command);
 				break ;
 			}
@@ -43,17 +40,17 @@ void	exec_command_pipe2(t_all *all)
 	}
 }	
 
-void	exec_command_pipe(t_all *all)
+void	exec_command_pipe(void)
 {
-	exec_command_pipe2(all);
+	exec_command_pipe2();
 	close(g_signal.fd[1]);
 	if (!g_signal.errorleft && g_signal.path)
 		g_signal.tmpp = g_signal.fd[0];
+	close(g_signal.fd[0]);
 	if ((g_signal.co == 0 && g_signal.path
 			&& ft_strlen(g_signal.actuel->command[0]))
 		|| (!ft_strlen(g_signal.actuel->command[0]) && !g_signal.heredocuse))
 	{
-		all->exit_status = 127;
 		ft_puterr("minishell: ");
 		ft_puterr(g_signal.actuel->command[0]);
 		ft_puterr(": command not found\n");

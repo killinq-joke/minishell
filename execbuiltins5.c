@@ -49,7 +49,8 @@ void	export2(char **command, t_env *env, char *tmp1, t_env *current)
 		current = env;
 		while (current->next && ft_strcmp(current->name, name))
 			current = current->next;
-		if (ft_strlen(name))
+		if (ft_strlen(name) && (ft_strisnum(name) == 0
+				&& (!(name[0] >= '0' && name[0] <= '9'))))
 		{
 			value = getvalue(command[i]);
 			if (envisin(name, env) && isplusequal(command[i]))

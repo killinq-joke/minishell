@@ -14,7 +14,7 @@
 
 extern t_signal	g_signal;
 
-void	exec_slash_command(t_all *all)
+void	exec_slash_command(void)
 {
 	g_signal.fdd = open(g_signal.actuel->command[0], O_RDONLY);
 	if (g_signal.fdd != -1)
@@ -22,6 +22,7 @@ void	exec_slash_command(t_all *all)
 		g_signal.childpid = fork();
 		if (!g_signal.childpid)
 		{
+			close(g_signal.fd[0]);
 			if (g_signal.kill == 1)
 				exit(0);
 			dup2(g_signal.tmpp, STDIN_FILENO);
@@ -36,24 +37,20 @@ void	exec_slash_command(t_all *all)
 			exit(0);
 		}
 		dup2(g_signal.out, STDOUT_FILENO);
-		waitpid(g_signal.childpid, &all->exit_status, 0);
-		if (WEXITSTATUS(all->exit_status))
-			all->exit_status = 1;
 	}
 }
 
-void	file_error_and_close_slash_command_pipe(t_all *all)
+void	file_error_and_close_slash_command_pipe(void)
 {
 	close(g_signal.fd[1]);
 	if (!g_signal.errorleft)
 		g_signal.tmpp = g_signal.fd[0];
-	waitpid(g_signal.childpid, &all->exit_status, 0);
+	close(g_signal.fd[0]);
 	if (WIFEXITED(g_signal.childpid))
 	{
 		ft_puterr("minishell: ");
 		ft_puterr(g_signal.actuel->command[0]);
 		ft_puterr(": No such file or directory\n");
-		all->exit_status = 127;
 	}
 }
 

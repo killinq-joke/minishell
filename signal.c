@@ -56,7 +56,6 @@ void	echo_control_seq(t_bool c)
 {
 	struct termios	conf;
 	(void)c;
-
 	ioctl(ttyslot(), TIOCGETA, &conf);
 	if (c == true)
 		conf.c_lflag |= ECHOCTL;
@@ -67,6 +66,16 @@ void	echo_control_seq(t_bool c)
 
 int	is_a_num(char *c)
 {
+	int	i ;
+	int	count;
+
+	count = 0;
+	i = -1;
+	while (c[++i])
+		if (c[i] == '-')
+			count++;
+	if (count > 1)
+		return (0);
 	if ((c[0] == '-' || c[0] == '+')
 		&& (c[1] >= '0' && c[1] <= '9'))
 		return (1);
