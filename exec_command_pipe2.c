@@ -42,8 +42,7 @@ void	exec_command_pipe2(void)
 
 void	exec_command_pipe(void)
 {
-	exec_command_pipe2();
-	close(g_signal.fd[0]);
+	exec_command_pipe2();	
 	close(g_signal.fd[1]);
 	if (g_signal.tmpp != 0)
 		close (g_signal.tmpp);

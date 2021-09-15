@@ -62,7 +62,10 @@ void	minishell(t_all *all, t_link *cmd)
 				break ;
 		}
 		else
+		{
 			all_non_pipe_execution(all);
+			close(g_signal.fd[0]);
+		}
 		g_signal.actuel = g_signal.actuel->next;
 	}
 	freetokens(g_signal.env);
