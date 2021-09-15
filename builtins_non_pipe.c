@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 19:57:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/13 01:35:45 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/16 01:16:57 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ void	exec_builtins_non_pipe4(int i)
 {
 	if (g_signal.actuel->command[1])
 	{
+		printf("%s\n", g_signal.actuel->command[1]);
 		if (is_a_num(g_signal.actuel->command[1]) == 1)
 		{
+			printf("%s\n", g_signal.actuel->command[1]);
 			while (g_signal.actuel->command[i])
 				i++;
 			if (i == 2)

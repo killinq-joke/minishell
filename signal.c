@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/13 13:44:04 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/16 01:39:21 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,17 +67,14 @@ void	echo_control_seq(t_bool c)
 int	is_a_num(char *c)
 {
 	int	i ;
-	int	count;
 
-	count = 0;
 	i = -1;
+	if (c[0] == '-' || c[0] == '+')
+		i++;
 	while (c[++i])
-		if (c[i] == '-')
-			count++;
-	if (count > 1)
-		return (0);
-	if ((c[0] == '-' || c[0] == '+')
-		&& (c[1] >= '0' && c[1] <= '9'))
-		return (1);
-	return (0);
+	{
+		if (!ft_isdigit(c[i]))
+			return (0);
+	}
+	return (1);
 }

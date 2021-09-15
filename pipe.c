@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 19:57:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/11 23:38:11 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/16 00:51:30 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ void	minishell(t_all *all, t_link *cmd)
 		else
 		{
 			all_non_pipe_execution(all);
-			close(g_signal.fd[0]);
+			if (g_signal.fd[0] != STDIN_FILENO)
+				close(g_signal.fd[0]);
 		}
 		g_signal.actuel = g_signal.actuel->next;
 	}

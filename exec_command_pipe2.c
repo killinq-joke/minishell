@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 19:57:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/12 17:21:16 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/16 00:48:24 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	exec_command_pipe2(void)
 
 void	exec_command_pipe(void)
 {
-	exec_command_pipe2();	
+	exec_command_pipe2();
 	close(g_signal.fd[1]);
 	if (g_signal.tmpp != 0)
 		close (g_signal.tmpp);
