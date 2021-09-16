@@ -28,6 +28,7 @@ void	exec_slash_command(void)
 			dup2(g_signal.tmpp, STDIN_FILENO);
 			if (!g_signal.errorleft && !g_signal.redir)
 				dup2(g_signal.fd[1], STDOUT_FILENO);
+			close(g_signal.fd[1]);
 			if (!g_signal.errorleft)
 			{
 				if (execve(g_signal.actuel->command[0],
@@ -43,9 +44,10 @@ void	exec_slash_command(void)
 void	file_error_and_close_slash_command_pipe(void)
 {
 	close(g_signal.fd[1]);
+	if (g_signal.tmpp != 0)
+		close (g_signal.tmpp);
 	if (!g_signal.errorleft)
 		g_signal.tmpp = g_signal.fd[0];
-	close(g_signal.fd[0]);
 	if (WIFEXITED(g_signal.childpid))
 	{
 		ft_puterr("minishell: ");
