@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 10:13:33 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/13 15:19:31 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/16 12:01:37 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,6 @@ size_t	linklen(t_link *head);
 size_t	envlen(t_env *head);
 void	minishell(t_all *all, t_link *cmd);
 char	*ft_getenv(const char *name, t_env *env);
-void	exportt(char **command, t_env *env);
 void	cd(t_link *cmd, t_env *env, t_all *all);
 void	export(char **command, t_env *env);
 void	export2(char **command, t_env *env, char *tmp1, t_env *current);
