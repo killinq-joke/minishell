@@ -59,10 +59,29 @@ void	file_error_and_close_builtins_pipe(int nb)
 	{
 		if (g_signal.file != -1)
 			close(g_signal.file);
+		if (g_signal.tmpp != 0)
+			close(g_signal.tmpp);
 		dup2(g_signal.out, STDOUT_FILENO);
 		close(g_signal.fd[1]);
 		g_signal.tmpp = g_signal.fd[0];
 	}
+}
+
+void	exec_builtins_pipee(t_all *all)
+{
+	if (ft_strcmp(g_signal.actuel->command[0], "pwd") == 0)
+		pwd();
+	if (ft_strcmp(g_signal.actuel->command[0], "echo") == 0)
+		echo(g_signal.actuel);
+	if (ft_strcmp(g_signal.actuel->command[0], "env") == 0)
+		printenv(all->headenv);
+	if (ft_strcmp(g_signal.actuel->command[0], "cd") == 0)
+		cd(g_signal.actuel, all->headenv, all);
+	if (ft_strcmp(g_signal.actuel->command[0], "export") == 0)
+		export(g_signal.actuel->command, all->headenv);
+	if (ft_strcmp(g_signal.actuel->command[0], "unset") == 0)
+		unset(g_signal.actuel->command, all);
+	exit(0);
 }
 
 void	exec_builtins_pipe(t_all *all)
@@ -70,25 +89,17 @@ void	exec_builtins_pipe(t_all *all)
 	g_signal.childpid = fork();
 	if (!g_signal.childpid)
 	{
+		close (g_signal.fd[0]);
 		if (g_signal.kill == 1)
 			exit(0);
 		dup2(g_signal.tmpp, STDIN_FILENO);
 		if (!g_signal.errorleft && !g_signal.redir)
+		{	
 			dup2(g_signal.fd[1], STDOUT_FILENO);
+			close (g_signal.fd[1]);
+		}
 		else if (g_signal.redir)
 			dup2(g_signal.file, STDOUT_FILENO);
-		if (ft_strcmp(g_signal.actuel->command[0], "pwd") == 0)
-			pwd();
-		if (ft_strcmp(g_signal.actuel->command[0], "echo") == 0)
-			echo(g_signal.actuel);
-		if (ft_strcmp(g_signal.actuel->command[0], "env") == 0)
-			printenv(all->headenv);
-		if (ft_strcmp(g_signal.actuel->command[0], "cd") == 0)
-			cd(g_signal.actuel, all->headenv, all);
-		if (ft_strcmp(g_signal.actuel->command[0], "export") == 0)
-			export(g_signal.actuel->command, all->headenv);
-		if (ft_strcmp(g_signal.actuel->command[0], "unset") == 0)
-			unset(g_signal.actuel->command, all);
-		exit(0);
+		exec_builtins_pipee(all);
 	}
 }
