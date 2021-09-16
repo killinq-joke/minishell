@@ -1,4 +1,3 @@
-leak only quotes
 xexit too many args doesn't get execed
-export z=wkofwe+=wefkewof --> problem 
-pipe /commands ^D
+xexport z=wkofwe+=wefkewof --> problem 
+xpipe /commands ^D

@@ -6,13 +6,13 @@
 #    By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/02 09:47:58 by ztouzri           #+#    #+#              #
-#    Updated: 2021/09/16 00:44:26 by ztouzri          ###   ########.fr        #
+#    Updated: 2021/09/16 09:52:14 by ztouzri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= minishell
 CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror -g
 LIB		= libft.a
 SRCS	= 	main.c parspipe.c parspipe2.c checkerror.c utils.c env.c \
 			exec.c execbuiltins.c execbuiltins2.c execbuiltins3.c execbuiltins4.c exec_command_non_pipe.c all_execution_non_pipe.c \
