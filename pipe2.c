@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/11 23:03:42 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/12 17:00:09 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/16 21:23:45 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ void	heredocint(int sig)
 	if (sig == SIGINT)
 	{
 		exit(1);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	if (sig == SIGQUIT)
+	{
 		rl_on_new_line();
 		rl_redisplay();
 	}
@@ -65,6 +70,7 @@ void	heredoc_fork(int *fd, t_redir *current, char *line)
 {
 	close(fd[0]);
 	signal(SIGINT, heredocint);
+	signal(SIGQUIT, heredocint);
 	while (current)
 	{
 		if (!ft_strcmp(current->redir, "<<"))
