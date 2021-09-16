@@ -43,8 +43,10 @@ void	redirection_exec_command_non_pipe2(void)
 	}
 }
 
+void	
 void	redirection_exec_command_non_pipe(void)
 {
+	g_signal.errorleft = false;
 	g_signal.current = g_signal.actuel->redir;
 	while (g_signal.current)
 	{
@@ -58,9 +60,7 @@ void	redirection_exec_command_non_pipe(void)
 			g_signal.file = open(g_signal.current->arg, O_RDONLY);
 			if (g_signal.file == -1)
 			{
-				ft_puterr("minishell: ");
-				ft_puterr(g_signal.current->arg);
-				ft_puterr(": No such file or directory\n");
+				redirection_exec_command_pipe3();
 				break ;
 			}
 			g_signal.tmpp = dup(g_signal.file);
@@ -98,7 +98,7 @@ void	exec_command_non_pipe2(t_all *all)
 		{
 			g_signal.co = 1;
 			g_signal.childpid = fork();
-			if (!g_signal.childpid)
+			if (!g_signal.childpid && g_signal.errorleft == false)
 				exec_command_non_pipe3();
 			waitpid(g_signal.childpid, &all->exit_status, 0);
 			if (WEXITSTATUS(all->exit_status))

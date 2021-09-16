@@ -43,11 +43,13 @@ void	redirection_exec_command_pipe3(void)
 	close(g_signal.file);
 	g_signal.file = open("/dev/null", O_RDONLY);
 	g_signal.tmpp = dup(g_signal.file);
+	close(g_signal.file);
 }
 
 void	redirection_exec_command_pipe(void)
 {
 	g_signal.current = g_signal.actuel->redir;
+	g_signal.errorleft = false;
 	while (g_signal.current)
 	{
 		if ((!ft_strcmp(g_signal.current->redir, ">"))
@@ -94,17 +96,19 @@ void	exec_command_pipe3(void)
 	if (g_signal.kill == 1)
 		exit(0);
 	dup2(g_signal.tmpp, STDIN_FILENO);
-	if (!g_signal.errorleft && !g_signal.redir)
+	if (!g_signal.redir)
 		dup2(g_signal.fd[1], STDOUT_FILENO);
-	close(g_signal.fd[1]);
-	if (!g_signal.errorleft)
+	if (g_signal.errorleft)
 	{
-		if (execve(g_signal.command, g_signal.actuel->command,
-				g_signal.env) == -1)
-		{
-			free(g_signal.command);
-			exit(errno);
-		}
+		dup2(g_signal.fd[1], g_signal.tmpp);
+		exit(0);
+	}
+	close(g_signal.fd[1]);
+	if (execve(g_signal.command, g_signal.actuel->command,
+			g_signal.env) == -1)
+	{
+		free(g_signal.command);
+		exit(errno);
 	}
 	free(g_signal.command);
 }
