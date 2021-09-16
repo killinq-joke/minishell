@@ -99,6 +99,8 @@ void	exec_command_non_pipe2(t_all *all)
 			g_signal.childpid = fork();
 			if (!g_signal.childpid && g_signal.errorleft == false)
 				exec_command_non_pipe3();
+			else if (!g_signal.childpid)
+				exit(1);
 			waitpid(g_signal.childpid, &all->exit_status, 0);
 			if (WEXITSTATUS(all->exit_status))
 				all->exit_status = 1;

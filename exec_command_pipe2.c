@@ -46,7 +46,7 @@ void	exec_command_pipe(void)
 	exec_command_pipe2();
 	close(g_signal.fd[1]);
 	if (g_signal.tmpp != STDIN_FILENO)
-		close (g_signal.tmpp);
+		close(g_signal.tmpp);
 	if (g_signal.path)
 		g_signal.tmpp = g_signal.fd[0];
 	if ((g_signal.co == 0 && g_signal.path
