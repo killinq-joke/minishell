@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/13 15:18:55 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/16 12:29:06 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,10 @@ void	complete_minishell(t_all *all)
 		if (checkerror(line))
 			minishell2(tmp, line, all);
 		else
+		{
 			ft_puterr("parse error\n");
+			free(line);
+		}
 	}
 }
 

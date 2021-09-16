@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 18:20:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/08 10:30:04 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/16 12:33:16 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,6 @@ int	counttoken_space_quote(t_pars *parse, char *line)
 			break ;
 		parse->k++;
 	}
-	if (!(parse->nbquote % 2))
-	{
-		ft_puterr("error: unclosed quotes not supported\n");
-		return (-1);
-	}
 	parse->count++;
 	return (0);
 }
@@ -52,11 +47,6 @@ int	counttoken_space_dquote(t_pars *parse, char *line)
 				&& (line[parse->k + 1] == SPACE || !line[parse->k + 1])))
 			break ;
 		parse->k++;
-	}
-	if (!(parse->nbquote % 2))
-	{
-		ft_puterr("error: unclosed dquotes not supported\n");
-		return (-1);
 	}
 	parse->count++;
 	return (0);
