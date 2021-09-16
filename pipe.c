@@ -6,20 +6,13 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 19:57:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/16 00:51:30 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/16 22:50:06 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 extern t_signal	g_signal;
-
-// int	heredoc_non_pipe_command2(int tmpp)
-// {
-// 	tmpp = open("/tmp/hd", O_RDONLY);
-// 	unlink("/tmp/hd");
-// 	return (tmpp);
-// }
 
 int	heredoc_non_pipe_command(t_link *actuel, int tmpp)
 {
@@ -63,6 +56,8 @@ void	minishell(t_all *all, t_link *cmd)
 		}
 		else
 		{
+			g_signal.i = -1;
+			g_signal.co = 0;
 			all_non_pipe_execution(all);
 			if (g_signal.fd[0] != STDIN_FILENO)
 				close(g_signal.fd[0]);

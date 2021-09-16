@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/14 19:57:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/08 10:28:58 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/16 22:49:12 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,6 @@ void	exec_command_non_pipe3(void)
 
 void	exec_command_non_pipe2(t_all *all)
 {
-	g_signal.i = -1;
-	g_signal.co = 0;
 	while (g_signal.path[++g_signal.i])
 	{
 		g_signal.tmp = ft_joinchar(g_signal.path[g_signal.i], '/');

@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/16 12:29:06 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/16 22:55:30 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	signalhandler(int sig)
 		rl_on_new_line();
 		rl_redisplay();
 	}
-	else if (sig == SIGQUIT)
+	else if (sig == SIGQUIT && !g_signal.heredocuse)
 		printf("Quit: 3\n");
 }
 
