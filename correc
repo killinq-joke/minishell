@@ -1,4 +1,4 @@
 leak only quotes
-exit too many args doesn't get execed
+xexit too many args doesn't get execed
 export z=wkofwe+=wefkewof --> problem 
 pipe /commands ^D

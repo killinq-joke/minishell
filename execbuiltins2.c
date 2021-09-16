@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 17:40:27 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/09 17:59:08 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/16 09:46:50 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ t_bool	isplusequal(char *envstr)
 	i = -1;
 	while (envstr[++i])
 	{
-		if (!ft_strncmp(&envstr[i], "+=", 2))
-			return (true);
 		if (envstr[i] == '=')
 			return (false);
+		if (!ft_strncmp(&envstr[i], "+=", 2))
+			return (true);
 	}
 	return (false);
 }
