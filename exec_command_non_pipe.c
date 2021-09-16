@@ -43,7 +43,6 @@ void	redirection_exec_command_non_pipe2(void)
 	}
 }
 
-void	
 void	redirection_exec_command_non_pipe(void)
 {
 	g_signal.errorleft = false;
