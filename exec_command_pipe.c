@@ -93,16 +93,22 @@ void	error_path_exec_command_pipe(t_all *all)
 void	exec_command_pipe3(void)
 {
 	close(g_signal.fd[0]);
+	dup2(g_signal.tmpp, STDIN_FILENO);
 	if (g_signal.kill == 1)
 		exit(0);
-	dup2(g_signal.tmpp, STDIN_FILENO);
-	if (!g_signal.redir)
-		dup2(g_signal.fd[1], STDOUT_FILENO);
-	if (g_signal.errorleft)
+	if (g_signal.errorleft == true)
 	{
 		dup2(g_signal.fd[1], g_signal.tmpp);
+		close(g_signal.fd[1]);
 		exit(0);
 	}
+	if (g_signal.redir == true)
+	{
+		dup2(g_signal.fd[1], g_signal.tmpp);
+		close(g_signal.fd[1]);
+	}
+	else
+		dup2(g_signal.fd[1], STDOUT_FILENO);
 	close(g_signal.fd[1]);
 	if (execve(g_signal.command, g_signal.actuel->command,
 			g_signal.env) == -1)
