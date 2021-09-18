@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 16:43:14 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/18 15:47:18 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/18 17:19:31 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ft_trimquotes2(char *str, char *tmp, char *trimmed)
 		g_signal.u++;
 	}
 	if (str[g_signal.u] == '\'')
-	 	g_signal.u++;
+		g_signal.u++;
 	return (trimmed);
 }
 
@@ -41,7 +41,7 @@ char	*ft_trimquotes3(char *str, char *tmp, char *trimmed)
 		g_signal.u++;
 	}
 	if (str[g_signal.u] == '"')
-	 	g_signal.u++;
+		g_signal.u++;
 	return (trimmed);
 }
 

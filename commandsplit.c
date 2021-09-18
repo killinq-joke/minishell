@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 18:33:09 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/18 16:36:04 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/18 17:19:19 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ char	**commandsplit(char *line)
 		j += ft_spacecount(&line[j]);
 		len = wordlen(&line[j]);
 		split[i] = ft_substr(line, j, len);
-		// printf("len == %d, %s\n %s\n", wordlen(&line[j]), line, split[i]);
 		j += len;
 		i++;
 	}

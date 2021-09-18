@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 18:26:20 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/18 16:37:18 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/18 17:15:08 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	complete_minishell(t_all *all)
 		tmp = line;
 		line = ft_strtrim(line, " ");
 		free(tmp);
-		if (checkerror(line))
+		if (checkerror(line, all))
 			minishell2(tmp, line, all);
 		else
 		{

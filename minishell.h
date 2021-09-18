@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/02 10:13:33 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/16 12:01:37 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/18 17:15:44 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ typedef struct s_pars
 	t_bool	indquote;
 }				t_pars;
 
-t_bool	checkerror(char *line);
+t_bool	checkerror(char *line, t_all *all);
 char	**commandsplit(char *line);
 char	**parstoken(char *line);
 t_link	*linkinit(char **cmd);

@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/10 11:56:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/13 15:05:10 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/18 17:18:18 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,19 +69,26 @@ t_bool	checkerror1(char *line)
 	return (true);
 }
 
-t_bool	checkerror(char *line)
+t_bool	checkerror(char *line, t_all *all)
 {
 	if (!line)
+	{
+		all->exit_status = 127;
 		return (false);
+	}
 	if (ft_strlen(line))
 	{	
 		if (ft_isin("|><", line[ft_strlen(line) - 1]))
+		{
+			all->exit_status = 258;
 			return (false);
+		}
 	}
-	if (!checkquotes(line))
+	if (!checkquotes(line) || !checkerror1(line))
+	{
+		all->exit_status = 127;
 		return (false);
-	if (!checkerror1(line))
-		return (false);
+	}
 	else
 		return (true);
 }
