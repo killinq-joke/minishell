@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/12 16:43:14 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/06 15:42:59 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/18 15:47:18 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ char	*ft_trimquotes2(char *str, char *tmp, char *trimmed)
 		free(tmp);
 		g_signal.u++;
 	}
+	if (str[g_signal.u] == '\'')
+	 	g_signal.u++;
 	return (trimmed);
 }
 
@@ -38,6 +40,8 @@ char	*ft_trimquotes3(char *str, char *tmp, char *trimmed)
 		free(tmp);
 		g_signal.u++;
 	}
+	if (str[g_signal.u] == '"')
+	 	g_signal.u++;
 	return (trimmed);
 }
 
@@ -47,10 +51,10 @@ char	*ft_trimquotes(char *str)
 	char	*trimmed;
 
 	trimmed = ft_calloc(1, sizeof (char));
-	g_signal.u = -1;
+	g_signal.u = 0;
 	if (str)
 	{
-		while (str[++g_signal.u])
+		while (str[g_signal.u])
 		{
 			if (str[g_signal.u] == '\'')
 				trimmed = ft_trimquotes2(str, tmp, trimmed);
@@ -61,6 +65,7 @@ char	*ft_trimquotes(char *str)
 				tmp = trimmed;
 				trimmed = ft_joinchar(tmp, str[g_signal.u]);
 				free(tmp);
+				g_signal.u++;
 			}
 		}
 		return (trimmed);

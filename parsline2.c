@@ -6,7 +6,7 @@
 /*   By: ztouzri <ztouzri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 18:20:44 by ztouzri           #+#    #+#             */
-/*   Updated: 2021/09/08 10:30:08 by ztouzri          ###   ########.fr       */
+/*   Updated: 2021/09/18 16:44:49 by ztouzri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,8 @@ char	*parsenv(t_all *all, char *line, t_env *env)
 			parsenv1(all, line, env, &p);
 		else
 			parsenv2(line, env, &p);
-		p.i++;
+		if (line[p.i])
+			p.i++;
 	}
 	return (p.res);
 }
